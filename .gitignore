@@ -31,6 +31,12 @@ backend/database.sqlite
 .DS_Store
 Thumbs.db
 
+# Cleanup folder (moved unwanted files)
+_cleanup/
+
+# Reverse engineering docs (local only)
+reverse_engineering/
+
 # IDE files
 .vscode/
 .idea/
