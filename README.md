@@ -94,7 +94,7 @@ acaconnect/
 │   ├── data/              # Knowledge base, PDFs
 │   ├── app.py             # Flask API (port 5002)
 │   └── requirements.txt
-└── reverse_engineering/   # Architecture & business docs
+└── reverse_engineering/   # Architecture & business doc
 ```
 
 ## Getting Started
