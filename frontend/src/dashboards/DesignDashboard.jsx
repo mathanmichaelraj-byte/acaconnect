@@ -142,20 +142,20 @@ export default function DesignDashboard({ onBackToParent }) {
   );
 
   const renderFileTable = (files, showEvent = false) => (
-    <div style={{ background: 'rgba(28, 26, 46, 0.85)', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', marginTop: '1.5rem' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead style={{ background: 'rgba(15, 14, 34, 0.8)' }}>
+    <div className="table-container" style={{ marginTop: '1.5rem' }}>
+      <table className="table" style={{ width: '100%' }}>
+        <thead>
           <tr>
             {['Name', 'Type', ...(showEvent ? ['Event'] : []), 'Uploaded', 'Actions'].map(h => (
-              <th key={h} style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#B8B6D8' }}>{h}</th>
+              <th key={h} style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-secondary)' }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {files.map(f => (
             <tr key={f._id}>
-              <td style={{ padding: '1rem', color: '#F5F7FF', fontWeight: '600' }}>{f.name}</td>
-              <td style={{ padding: '1rem', color: '#F5F7FF' }}>
+              <td style={{ padding: '1rem', color: 'var(--text-primary)', fontWeight: '600' }}>{f.name}</td>
+              <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>
                 <span style={{
                   background: f.file_type?.includes('pdf') ? 'rgba(239,68,68,0.2)' : 'rgba(59,130,246,0.2)',
                   color: f.file_type?.includes('pdf') ? '#FCA5A5' : '#93C5FD',
@@ -165,9 +165,9 @@ export default function DesignDashboard({ onBackToParent }) {
                 </span>
               </td>
               {showEvent && (
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{f.event_id?.title || '-'}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{f.event_id?.title || '-'}</td>
               )}
-              <td style={{ padding: '1rem', color: '#F5F7FF', fontSize: '0.85rem' }}>
+              <td style={{ padding: '1rem', color: 'var(--text-primary)', fontSize: '0.85rem' }}>
                 {new Date(f.createdAt).toLocaleDateString()}
               </td>
               <td style={{ padding: '1rem' }}>
@@ -224,9 +224,9 @@ export default function DesignDashboard({ onBackToParent }) {
         <h3 className="nav-title">{selectedEvent ? selectedEvent.title : 'Select an Event'}</h3>
         <button
           onClick={() => { if (selectedEvent) { setSelectedEvent(null); setUploadFiles([]); setFileNames([]); } else handleBackToOverview(); }}
-          style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}
+          className="btn btn-ghost btn-sm"
         >
-          {selectedEvent ? '← Back to Events' : '← Back to Overview'}
+          {selectedEvent ? 'Back to Events' : 'Back to Overview'}
         </button>
       </div>
 
@@ -278,9 +278,9 @@ export default function DesignDashboard({ onBackToParent }) {
           <h3 className="nav-title">General Uploads</h3>
           <button
             onClick={handleBackToOverview}
-            style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}
+            className="btn btn-ghost btn-sm"
           >
-            ← Back to Overview
+            Back to Overview
           </button>
         </div>
 
@@ -306,9 +306,9 @@ export default function DesignDashboard({ onBackToParent }) {
         <h3 className="nav-title">All Uploads ({allFiles.length})</h3>
         <button
           onClick={handleBackToOverview}
-          style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
 

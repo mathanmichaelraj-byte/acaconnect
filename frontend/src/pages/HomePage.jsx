@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import axios from '../api/axios';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
-  const [showEvents, setShowEvents] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [showContact, setShowContact] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
+  const [currentView, setCurrentView] = useState('home');
   const [photos, setPhotos] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
 
@@ -36,194 +35,232 @@ export default function HomePage() {
     }
   };
 
-  const resetViews = (view) => {
-    setShowEvents(view === 'events');
-    setShowAbout(view === 'about');
-    setShowContact(view === 'contact');
-    setShowGallery(view === 'gallery');
+  const switchView = (view) => {
+    setCurrentView(view);
     setSelectedAlbum(null);
     if (view === 'gallery') fetchPhotos();
   };
 
-  return (
-    <div className="niral-home">
-      {/* Header Navigation */}
-      <header className="niral-header">
-        <div className="niral-nav-content">
-          <div className="nav-left">
-            <img src="/nirallogo.png" alt="NIRAL Logo" className="nav-logo" />
-          </div>
-          
-          <nav className="nav-center">
-            <a href="#" className={`nav-link ${!showEvents && !showAbout && !showContact && !showGallery ? 'active' : ''}`} onClick={() => resetViews('home')}>Home</a>
-            <a href="#" className={`nav-link ${showEvents ? 'active' : ''}`} onClick={() => resetViews('events')}>Events</a>
-            <a href="#" className={`nav-link ${showGallery ? 'active' : ''}`} onClick={() => resetViews('gallery')}>Gallery</a>
-            <a href="#" className={`nav-link ${showAbout ? 'active' : ''}`} onClick={() => resetViews('about')}>About</a>
-            <a href="#" className={`nav-link ${showContact ? 'active' : ''}`} onClick={() => resetViews('contact')}>Contact</a>
-          </nav>
-          
-          <div className="nav-right">
-            <button className="btn-register-now" onClick={() => navigate('/login')}>
-              Login
-            </button>
-          </div>
-        </div>
-      </header>
+  const activeEvents = events.filter(e => !e.event_finished);
 
-      {!showEvents && !showAbout && !showContact && !showGallery ? (
+  return (
+    <div>
+      <Header showNavigation={false} showLoginButton />
+
+      {currentView === 'home' && (
         <>
-          {/* Hero Section */}
-          <section className="niral-hero" style={{
-            backgroundImage: 'url(/niralbg.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            position: 'relative'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(rgba(8, 5, 20, 0.3), rgba(8, 5, 20, 0.2))',
-              zIndex: 1
-            }}></div>
-            <div className="hero-content" style={{ position: 'relative', zIndex: 2 }}>
-              <div className="hero-left">
-                <h1 className="hero-welcome">Welcome to</h1>
-                <h1 className="hero-title">NIRAL 2026</h1>
-                <h2 className="hero-subtitle">National Level Technical Symposium</h2>
-                <h3 className="hero-org fade-in">by IST Department, CEG</h3>
-                
-                <p className="hero-description">
-                  Join us for an extraordinary journey of innovation and technology. Experience cutting-edge workshops, 
-                  competitive events, and networking opportunities at Anna University Chennai's premier technical symposium.
-                </p>
-                
-                <div className="hero-date">
-                  <span className="date-icon">⭐</span>
-                  <span className="date-text">March 12–14, 2026</span>
-                </div>
-                
-                <div className="hero-buttons" style={{ marginTop: '30px' }}>
-                  <button className="btn-explore" onClick={() => resetViews('events')}>Explore Events</button>
-                  <button className="btn-explore" onClick={() => resetViews('about')}>Info</button>
-                </div>
+          <section className="hero">
+            <div className="hero-content">
+              <h1>Welcome to NIRAL 2026</h1>
+              <p>
+                National Level Technical Symposium by the IST Department, CEG.
+                Join us for an extraordinary journey of innovation and technology —
+                cutting-edge workshops, competitive events, and networking opportunities
+                at Anna University Chennai's premier technical symposium.
+              </p>
+              <div style={{ marginBottom: '2rem', fontSize: '1.05rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                March 12–14, 2026
               </div>
-              
-              <div className="hero-right">
-                {/* Tech illustration removed to fix DOM errors */}
+              <div className="hero-actions">
+                <button className="btn btn-primary btn-lg" onClick={() => switchView('events')}>Explore Events</button>
+                <button className="btn btn-secondary btn-lg" onClick={() => switchView('about')}>About NIRAL</button>
               </div>
             </div>
           </section>
 
-          {/* Statistics */}
-          <div className="hero-stats">
-            <div className="stat-card">
-              <span className="stat-number">1500+</span>
-              <span className="stat-label">Participants</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-number">15+</span>
-              <span className="stat-label">Events</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-number">5+</span>
-              <span className="stat-label">Workshops</span>
-            </div>
-          </div>
-
-          {/* Organizer Footer */}
-          <div className="organizer-strip">
-            <span className="organizer-text">Organized By</span>
-            <div className="organizer-logos">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <img src="/istlogo.png" alt="IST Department" style={{ height: '60px', width: 'auto', opacity: '0.8' }} />
-                <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>IST Department</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <img src="/ceglogo.png" alt="CEG" style={{ height: '60px', width: 'auto', opacity: '0.8' }} />
-                <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>CEG, Anna University</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <img src="/acalogoo.png" alt="ACA" style={{ height: '60px', width: 'auto', opacity: '0.8' }} />
-                <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>ACA</span>
+          <div style={{ background: 'var(--bg-surface)', borderBottom: '1px solid var(--border-default)' }}>
+            <div className="container" style={{ padding: '2.5rem 1.5rem' }}>
+              <div className="stats-grid" style={{ maxWidth: 800, margin: '0 auto' }}>
+                <div className="stat-card">
+                  <h3>Participants</h3>
+                  <span className="stat-number">1500+</span>
+                </div>
+                <div className="stat-card">
+                  <h3>Events</h3>
+                  <span className="stat-number">15+</span>
+                </div>
+                <div className="stat-card">
+                  <h3>Workshops</h3>
+                  <span className="stat-number">5+</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div style={{ height: '60px' }}></div>
+          {activeEvents.length > 0 && (
+            <section id="events" className="features-section">
+              <div className="container">
+                <div className="section-header">
+                  <h2>Upcoming Events</h2>
+                  <p>Browse and register for exciting events at NIRAL 2026</p>
+                </div>
+                <div className="features-grid">
+                  {activeEvents.map(event => (
+                    <div key={event._id} className="feature-card" style={{ textAlign: 'left' }}>
+                      {event.cover_photo && (
+                        <img
+                          src={`http://localhost:5000/${event.cover_photo}`}
+                          alt="Event Cover"
+                          style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}
+                        />
+                      )}
+                      <h3>{event.title}</h3>
+                      <p style={{ marginBottom: '0.75rem' }}>{event.description}</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        <span>{new Date(event.date).toLocaleDateString()}</span>
+                        <span>{event.time}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                        <span className="badge badge-info">{event.type}</span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{event.duration_hours}h</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid var(--border-default)' }}>
+                        <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Prize Pool: ₹{event.prize_pool || 0}</span>
+                        <button className="btn btn-primary btn-sm" onClick={() => navigate('/login')}>Register</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
 
-          {/* Footer */}
-          <footer style={{ background: 'var(--bg-secondary)', padding: '2rem 0', textAlign: 'center', borderTop: '1px solid var(--border-soft)' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-              <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '0' }}>
-                © NIRAL 2026
-              </p>
+          <section id="about" className="about-section">
+            <div className="container">
+              <div className="section-content">
+                <div className="section-header">
+                  <h2>About NIRAL</h2>
+                </div>
+                <p style={{ fontSize: '1.05rem', lineHeight: 1.8 }}>
+                  NIRAL is the flagship technical symposium of the Information Science and Technology
+                  Department at College of Engineering Guindy, Anna University. Since its inception,
+                  NIRAL has been a beacon of innovation, bringing together brilliant minds from across
+                  the nation to showcase cutting-edge research and technological advancements.
+                </p>
+                <p style={{ fontSize: '1.05rem', lineHeight: 1.8 }}>
+                  What started as a modest technical gathering has evolved into one of South India's
+                  most prestigious technical symposiums. NIRAL has consistently pushed the boundaries
+                  of academic excellence, fostering innovation in areas such as Artificial Intelligence,
+                  Machine Learning, Cybersecurity, Data Science, and emerging technologies.
+                </p>
+              </div>
             </div>
-          </footer>
-        </>
-      ) : showEvents ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '2rem', textAlign: 'center' }}>Upcoming Events</h1>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem' }}>
-              {events.filter(e => !e.event_finished).map(event => (
-                <div key={event._id} style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '1.5rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                  {event.cover_photo && (
-                    <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                      <img 
-                        src={`http://localhost:5000/${event.cover_photo}`} 
-                        alt="Event Cover" 
-                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
-                      />
-                    </div>
-                  )}
-                  <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>{event.title}</h3>
-                  <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                    {event.description}
-                  </p>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                      <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                        📅 {new Date(event.date).toLocaleDateString()}
-                      </span>
-                      <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                        🕐 {event.time}
-                      </span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', color: 'var(--bg-main)', padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '600' }}>{event.type}</span>
-                      <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{event.duration_hours}h</span>
+          </section>
+
+          <section className="how-it-works-section">
+            <div className="container">
+              <div className="section-content">
+                <div className="section-header">
+                  <h2>How It Works</h2>
+                </div>
+                <div className="steps-list">
+                  <div className="step-item">
+                    <div className="step-number">1</div>
+                    <div className="step-content">
+                      <h4>Create Your Account</h4>
+                      <p>Sign up as a participant with your college email and basic details.</p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>💰 Prize Pool: ₹{event.prize_pool || 0}</span>
-                    <button className="btn-register-now" onClick={() => navigate('/login')}>Register</button>
+                  <div className="step-item">
+                    <div className="step-number">2</div>
+                    <div className="step-content">
+                      <h4>Browse Events</h4>
+                      <p>Explore workshops, paper presentations, coding contests, and more.</p>
+                    </div>
+                  </div>
+                  <div className="step-item">
+                    <div className="step-number">3</div>
+                    <div className="step-content">
+                      <h4>Register & Pay</h4>
+                      <p>Select events, complete registration, and confirm payment.</p>
+                    </div>
+                  </div>
+                  <div className="step-item">
+                    <div className="step-number">4</div>
+                    <div className="step-content">
+                      <h4>Attend & Compete</h4>
+                      <p>Show up on event day, participate, and win prizes.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="cta-section">
+            <div className="container">
+              <div className="cta-card">
+                <h2 style={{ fontSize: '1.75rem', marginBottom: '0.75rem' }}>Ready to Participate?</h2>
+                <p style={{ fontSize: '1.05rem', marginBottom: '1.5rem' }}>
+                  Join hundreds of students from across India at NIRAL 2026.
+                </p>
+                <div className="cta-actions">
+                  <button className="btn btn-lg" style={{ background: '#fff', color: 'var(--accent-primary)', fontWeight: 700 }} onClick={() => navigate('/login')}>
+                    Get Started
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <Footer showOrganizers />
+        </>
+      )}
+
+      {currentView === 'events' && (
+        <div className="page-container">
+          <div className="container">
+            <div className="page-header">
+              <h1>Upcoming Events</h1>
+              <p>Browse and register for events at NIRAL 2026</p>
+            </div>
+            <div className="features-grid">
+              {activeEvents.map(event => (
+                <div key={event._id} className="feature-card" style={{ textAlign: 'left' }}>
+                  {event.cover_photo && (
+                    <img
+                      src={`http://localhost:5000/${event.cover_photo}`}
+                      alt="Event Cover"
+                      style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}
+                    />
+                  )}
+                  <h3>{event.title}</h3>
+                  <p style={{ marginBottom: '0.75rem' }}>{event.description}</p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <span>{new Date(event.date).toLocaleDateString()}</span>
+                    <span>{event.time}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span className="badge badge-info">{event.type}</span>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{event.duration_hours}h</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid var(--border-default)' }}>
+                    <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Prize Pool: ₹{event.prize_pool || 0}</span>
+                    <button className="btn btn-primary btn-sm" onClick={() => navigate('/login')}>Register</button>
                   </div>
                 </div>
               ))}
             </div>
-            {events.filter(e => !e.event_finished).length === 0 && (
-              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                <p>No published events available at the moment.</p>
-              </div>
+            {activeEvents.length === 0 && (
+              <div className="no-data"><p>No published events available at the moment.</p></div>
             )}
           </div>
         </div>
-      ) : showGallery ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      )}
+
+      {currentView === 'gallery' && (
+        <div className="page-container">
+          <div className="container">
             {!selectedAlbum ? (
               <>
-                <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '2rem', textAlign: 'center' }}>Gallery</h1>
+                <div className="page-header">
+                  <h1>Gallery</h1>
+                  <p>Browse event photos from NIRAL</p>
+                </div>
                 {photos.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                    <p>No photos available yet.</p>
-                  </div>
+                  <div className="no-data"><p>No photos available yet.</p></div>
                 ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+                  <div className="features-grid">
                     {(() => {
                       const grouped = {};
                       photos.forEach(p => {
@@ -234,15 +271,16 @@ export default function HomePage() {
                       return Object.entries(grouped).map(([label, items]) => (
                         <div
                           key={label}
-                          style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', overflow: 'hidden', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', cursor: 'pointer', transition: 'transform 0.2s' }}
+                          className="card"
+                          style={{ cursor: 'pointer', transition: 'box-shadow 250ms ease' }}
                           onClick={() => setSelectedAlbum({ label, items })}
-                          onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
-                          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                          onMouseEnter={e => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
+                          onMouseLeave={e => e.currentTarget.style.boxShadow = 'var(--shadow-sm)'}
                         >
-                          <img src={`http://localhost:5000/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: '220px', objectFit: 'cover' }} />
-                          <div style={{ padding: '1.25rem' }}>
-                            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{label}</h3>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: '0' }}>{items.length} photo{items.length !== 1 ? 's' : ''}</p>
+                          <img src={`http://localhost:5000/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
+                          <div className="card-body">
+                            <h3 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{label}</h3>
+                            <p style={{ margin: 0, fontSize: '0.875rem' }}>{items.length} photo{items.length !== 1 ? 's' : ''}</p>
                           </div>
                         </div>
                       ));
@@ -253,15 +291,15 @@ export default function HomePage() {
             ) : (
               <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                  <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>{selectedAlbum.label}</h1>
-                  <button className="btn-back" onClick={() => setSelectedAlbum(null)} style={{ pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>← Back to Gallery</button>
+                  <h1 style={{ margin: 0, fontSize: '1.75rem' }}>{selectedAlbum.label}</h1>
+                  <button className="btn btn-secondary" onClick={() => setSelectedAlbum(null)}>Back to Gallery</button>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
+                <div className="features-grid">
                   {selectedAlbum.items.map(p => (
-                    <div key={p._id} style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '14px', overflow: 'hidden', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', transition: 'transform 0.2s', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} onClick={() => window.open(`http://localhost:5000/uploads/photos/${p.filename}`, '_blank')}>
-                      <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                      <div style={{ padding: '0.75rem' }}>
-                        <p style={{ color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: '600', margin: '0' }}>{p.name}</p>
+                    <div key={p._id} className="card" style={{ cursor: 'pointer' }} onClick={() => window.open(`http://localhost:5000/uploads/photos/${p.filename}`, '_blank')}>
+                      <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                      <div className="card-body" style={{ padding: '0.85rem 1rem' }}>
+                        <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem' }}>{p.name}</p>
                       </div>
                     </div>
                   ))}
@@ -270,117 +308,126 @@ export default function HomePage() {
             )}
           </div>
         </div>
-      ) : showAbout ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '3rem', textAlign: 'center' }}>About NIRAL</h1>
-            
-            <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '3rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>History & Legacy</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '18px', lineHeight: '1.8', marginBottom: '2rem' }}>
-                NIRAL is the flagship technical symposium of the Information Science and Technology Department at College of Engineering Guindy, Anna University. Since its inception, NIRAL has been a beacon of innovation, bringing together brilliant minds from across the nation to showcase cutting-edge research and technological advancements.
-              </p>
-              
-              <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Our Journey</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.7', marginBottom: '2rem' }}>
-                What started as a modest technical gathering has evolved into one of South India's most prestigious technical symposiums. NIRAL has consistently pushed the boundaries of academic excellence, fostering innovation in areas such as Artificial Intelligence, Machine Learning, Cybersecurity, Data Science, and emerging technologies.
-              </p>
-              
-              <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Vision & Mission</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.7', marginBottom: '2rem' }}>
-                Our vision is to create a platform where academic brilliance meets practical innovation. NIRAL serves as a catalyst for technological advancement, encouraging students and researchers to explore uncharted territories in computer science and information technology. We believe in nurturing the next generation of tech leaders who will shape the digital future.
-              </p>
-              
-              <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Impact & Recognition</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.7' }}>
-                Over the years, NIRAL has attracted participation from premier institutions across India, including IITs, NITs, and leading universities. The symposium has been instrumental in launching numerous successful startups, research collaborations, and career opportunities for participants. Industry leaders and academic stalwarts regularly grace NIRAL as keynote speakers and judges, adding immense value to the learning experience.
-              </p>
-            </div>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Years of Excellence</h4>
-                <p style={{ fontSize: '32px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>15+</p>
+      )}
+
+      {currentView === 'about' && (
+        <div className="page-container">
+          <div className="container">
+            <div className="about-content">
+              <div className="page-header">
+                <h1>About NIRAL</h1>
               </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Participating Colleges</h4>
-                <p style={{ fontSize: '32px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>100+</p>
-              </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Total Participants</h4>
-                <p style={{ fontSize: '32px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>10,000+</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '3rem', textAlign: 'center' }}>Contact Us</h1>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Event Coordinator</h3>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginBottom: '0.5rem' }}>Dr. D. Narashiman</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '1rem' }}>Faculty, IST Department</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>📧 narashiman@annauniv.edu</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📞 +91 98765 43210</p>
+              <div className="card" style={{ marginBottom: '2rem' }}>
+                <div className="card-body" style={{ padding: '2rem' }}>
+                  <h2 style={{ fontSize: '1.375rem', marginBottom: '1rem' }}>History & Legacy</h2>
+                  <p style={{ lineHeight: 1.8, fontSize: '1rem' }}>
+                    NIRAL is the flagship technical symposium of the Information Science and Technology
+                    Department at College of Engineering Guindy, Anna University. Since its inception,
+                    NIRAL has been a beacon of innovation, bringing together brilliant minds from across
+                    the nation to showcase cutting-edge research and technological advancements.
+                  </p>
+                  <h3 style={{ fontSize: '1.125rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>Our Journey</h3>
+                  <p style={{ lineHeight: 1.8, fontSize: '1rem' }}>
+                    What started as a modest technical gathering has evolved into one of South India's
+                    most prestigious technical symposiums. NIRAL has consistently pushed the boundaries
+                    of academic excellence, fostering innovation in areas such as Artificial Intelligence,
+                    Machine Learning, Cybersecurity, Data Science, and emerging technologies.
+                  </p>
+                  <h3 style={{ fontSize: '1.125rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>Vision & Mission</h3>
+                  <p style={{ lineHeight: 1.8, fontSize: '1rem' }}>
+                    Our vision is to create a platform where academic brilliance meets practical innovation.
+                    NIRAL serves as a catalyst for technological advancement, encouraging students and
+                    researchers to explore uncharted territories in computer science and information technology.
+                  </p>
+                  <h3 style={{ fontSize: '1.125rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>Impact & Recognition</h3>
+                  <p style={{ lineHeight: 1.8, fontSize: '1rem', marginBottom: 0 }}>
+                    Over the years, NIRAL has attracted participation from premier institutions across India,
+                    including IITs, NITs, and leading universities. Industry leaders and academic stalwarts
+                    regularly grace NIRAL as keynote speakers and judges, adding immense value to the
+                    learning experience.
+                  </p>
                 </div>
               </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Student Coordinator</h3>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginBottom: '0.5rem' }}>Arjun</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '1rem' }}>Final Year, IST</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>📧 arjun.niral2026@gmail.com</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📞 +91 87654 32109</p>
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <h3>Years of Excellence</h3>
+                  <span className="stat-number">15+</span>
                 </div>
-              </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Technical Support</h3>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginBottom: '0.5rem' }}>Rahul</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '1rem' }}>Technical Lead</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>📧 tech.niral2026@gmail.com</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📞 +91 76543 21098</p>
+                <div className="stat-card">
+                  <h3>Participating Colleges</h3>
+                  <span className="stat-number">100+</span>
                 </div>
-              </div>
-            </div>
-            
-            <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '3rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-              <h3 style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>General Information</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Official Email</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>📧 niral2026@annauniv.edu</p>
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Department Office</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>📞 +91 44 2235 8000</p>
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Address</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>IST Department<br/>College of Engineering Guindy<br/>Anna University, Chennai - 600025</p>
-                </div>
-              </div>
-              
-              <div style={{ marginTop: '2rem' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Follow Us</h4>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>🌐 Website: niral2026.annauniv.edu</span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📱 Instagram: @niral_2026</span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📘 Facebook: NIRAL 2026</span>
+                <div className="stat-card">
+                  <h3>Total Participants</h3>
+                  <span className="stat-number">10,000+</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {currentView === 'contact' && (
+        <div className="page-container">
+          <div className="container">
+            <div className="contact-content">
+              <div className="page-header">
+                <h1>Contact Us</h1>
+              </div>
+              <div className="features-grid" style={{ marginBottom: '2rem' }}>
+                <div className="card">
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <h3 style={{ marginBottom: '0.75rem' }}>Event Coordinator</h3>
+                    <p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Dr. D. Narashiman</p>
+                    <p style={{ marginBottom: '0.75rem' }}>Faculty, IST Department</p>
+                    <p style={{ fontSize: '0.875rem' }}>narashiman@annauniv.edu</p>
+                    <p style={{ fontSize: '0.875rem' }}>+91 98765 43210</p>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <h3 style={{ marginBottom: '0.75rem' }}>Student Coordinator</h3>
+                    <p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Arjun</p>
+                    <p style={{ marginBottom: '0.75rem' }}>Final Year, IST</p>
+                    <p style={{ fontSize: '0.875rem' }}>arjun.niral2026@gmail.com</p>
+                    <p style={{ fontSize: '0.875rem' }}>+91 87654 32109</p>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <h3 style={{ marginBottom: '0.75rem' }}>Technical Support</h3>
+                    <p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Rahul</p>
+                    <p style={{ marginBottom: '0.75rem' }}>Technical Lead</p>
+                    <p style={{ fontSize: '0.875rem' }}>tech.niral2026@gmail.com</p>
+                    <p style={{ fontSize: '0.875rem' }}>+91 76543 21098</p>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body" style={{ textAlign: 'center', padding: '2rem' }}>
+                  <h3 style={{ marginBottom: '1rem' }}>General Information</h3>
+                  <div className="stats-grid" style={{ marginBottom: '1.5rem' }}>
+                    <div>
+                      <h4 style={{ fontSize: '0.9rem', marginBottom: '0.35rem' }}>Official Email</h4>
+                      <p style={{ fontSize: '0.9rem' }}>niral2026@annauniv.edu</p>
+                    </div>
+                    <div>
+                      <h4 style={{ fontSize: '0.9rem', marginBottom: '0.35rem' }}>Department Office</h4>
+                      <p style={{ fontSize: '0.9rem' }}>+91 44 2235 8000</p>
+                    </div>
+                    <div>
+                      <h4 style={{ fontSize: '0.9rem', marginBottom: '0.35rem' }}>Address</h4>
+                      <p style={{ fontSize: '0.875rem' }}>IST Department, CEG<br />Anna University, Chennai - 600025</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {currentView !== 'home' && <Footer />}
     </div>
   );
 }

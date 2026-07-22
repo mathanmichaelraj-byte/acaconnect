@@ -62,37 +62,37 @@ export default function LandingPage() {
           
           <div className="features-grid">
             <div className="feature-card-landing">
-              <div className="feature-icon">🎯</div>
+              <div className="feature-icon"></div>
               <h3>Smart Workflow</h3>
               <p>Automated approval process from creation to execution with role-based access control</p>
             </div>
             
             <div className="feature-card-landing">
-              <div className="feature-icon">💰</div>
+              <div className="feature-icon"></div>
               <h3>Budget Management</h3>
               <p>AI-powered budget prediction and consolidated financial tracking across teams</p>
             </div>
             
             <div className="feature-card-landing">
-              <div className="feature-icon">📍</div>
+              <div className="feature-icon"></div>
               <h3>Smart Attendance</h3>
               <p>GPS-based location verification ensures accurate attendance tracking</p>
             </div>
             
             <div className="feature-card-landing">
-              <div className="feature-icon">🎓</div>
+              <div className="feature-icon"></div>
               <h3>Auto Certificates</h3>
               <p>Generate and distribute digital certificates automatically to verified attendees</p>
             </div>
             
             <div className="feature-card-landing">
-              <div className="feature-icon">🤖</div>
+              <div className="feature-icon"></div>
               <h3>AI Recommendations</h3>
               <p>Personalized event suggestions based on student interests and history</p>
             </div>
             
             <div className="feature-card-landing">
-              <div className="feature-icon">📊</div>
+              <div className="feature-icon"></div>
               <h3>Real-time Analytics</h3>
               <p>Comprehensive dashboards with insights for administrators and organizers</p>
             </div>
@@ -142,25 +142,25 @@ export default function LandingPage() {
           
           <div className="roles-grid">
             <div className="role-card">
-              <div className="role-icon">👨‍💼</div>
+              <div className="role-icon"></div>
               <h3>Administrators</h3>
               <p>Complete system oversight and management</p>
             </div>
             
             <div className="role-card">
-              <div className="role-icon">🎯</div>
+              <div className="role-icon"></div>
               <h3>Event Teams</h3>
               <p>Create and manage events seamlessly</p>
             </div>
             
             <div className="role-card">
-              <div className="role-icon">💼</div>
+              <div className="role-icon"></div>
               <h3>Finance Team</h3>
               <p>Budget tracking and approval workflows</p>
             </div>
             
             <div className="role-card">
-              <div className="role-icon">🎓</div>
+              <div className="role-icon"></div>
               <h3>Students</h3>
               <p>Discover, register, and participate in events</p>
             </div>

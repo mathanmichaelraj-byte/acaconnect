@@ -1,9 +1,7 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 export default function ParticipantLogin() {
   const { login } = useContext(AuthContext);
@@ -27,58 +25,43 @@ export default function ParticipantLogin() {
   };
 
   return (
-    <div>
-      <Header showNavigation={false} showLoginButton={false} showBackButton={true} backTo="/" />
-      <div className="login-container-split">
-        <div className="login-left">
-          <div className="logo-section">
-            <img src="/acalogo.png" alt="AcaConnect Logo" className="login-logo" />
-          </div>
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-header">
+          <h1>Participant Login</h1>
+          <p>Sign in to manage your registrations</p>
         </div>
-        <div className="login-right">
-          <div className="login-form-container fade-in">
-            <div className="login-form-header">
-              <h2 className="login-form-title">Participant Login</h2>
-              <p className="login-form-subtitle">Login into your account</p>
-            </div>
-            <form onSubmit={handleLogin}>
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <input 
-                  className="form-input"
-                  placeholder="Enter your email" 
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Password</label>
-                <input 
-                  className="form-input"
-                  type="password" 
-                  placeholder="Enter your password" 
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <button 
-                type="submit"
-                className="btn-login-split"
-                disabled={loading}
-              >
-                {loading ? "Logging in..." : "Login →"}
-              </button>
-              <p style={{ textAlign: 'center', marginTop: '1rem', color: 'var(--text-muted)' }}>
-                Don't have an account? <a href="/participant-signup" style={{ color: 'var(--accent-gold)', textDecoration: 'none' }}>Sign Up</a>
-              </p>
-            </form>
+        <form className="auth-form" onSubmit={handleLogin}>
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+              className="form-input"
+              placeholder="you@example.com"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
           </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              className="form-input"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+        <div className="auth-footer">
+          Don't have an account? <Link to="/participant-signup">Sign up</Link>
         </div>
       </div>
-      <Footer showLogos={true} />
     </div>
   );
 }

@@ -357,8 +357,7 @@ const TechopsDashboard = ({ onBackToEvents }) => {
         border: '1px solid var(--border-soft)',
         borderRadius: '18px',
         padding: '2rem',
-        backdropFilter: 'blur(16px)',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+        boxShadow: 'var(--shadow-sm)',
         maxWidth: '600px',
         width: '90%',
         margin: '0 auto'
@@ -719,8 +718,7 @@ const TechopsDashboard = ({ onBackToEvents }) => {
         border: '1px solid var(--border-soft)',
         borderRadius: '18px',
         padding: '1.5rem',
-        backdropFilter: 'blur(16px)',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
+        boxShadow: 'var(--shadow-sm)'
       }}>
         <h3 style={{ color: 'var(--text-primary)', marginBottom: '1.5rem' }}>All Onsite Registrations</h3>
         

@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import PaymentModal from '../components/PaymentModal';
+import Footer from '../components/Footer';
 
 // Notification Dropdown Component
 const NotificationDropdown = ({ onClose }) => {
@@ -12,14 +13,14 @@ const NotificationDropdown = ({ onClose }) => {
 
   useEffect(() => {
     fetchNotifications();
-    
+
     // Handle click outside
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         onClose();
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
@@ -41,8 +42,8 @@ const NotificationDropdown = ({ onClose }) => {
   const markAsRead = async (notificationId) => {
     try {
       await axios.patch(`/participant-notifications/${notificationId}/read`);
-      setNotifications(prev => 
-        prev.map(n => 
+      setNotifications(prev =>
+        prev.map(n =>
           n._id === notificationId ? { ...n, is_read: true } : n
         )
       );
@@ -54,7 +55,7 @@ const NotificationDropdown = ({ onClose }) => {
   const markAllAsRead = async () => {
     try {
       await axios.patch('/participant-notifications/mark-all-read');
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.map(n => ({ ...n, is_read: true }))
       );
     } catch (error) {
@@ -62,15 +63,11 @@ const NotificationDropdown = ({ onClose }) => {
     }
   };
 
-  const getNotificationIcon = (type) => {
-    return '';
-  };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = (now - date) / (1000 * 60 * 60);
-    
+
     if (diffInHours < 1) {
       return 'Just now';
     } else if (diffInHours < 24) {
@@ -83,69 +80,59 @@ const NotificationDropdown = ({ onClose }) => {
   };
 
   return (
-    <div 
+    <div
       ref={dropdownRef}
       style={{
-      position: 'absolute',
-      top: '100%',
-      right: '0',
-      background: 'var(--bg-glass)',
-      border: '1px solid var(--border-soft)',
-      borderRadius: '12px',
-      padding: '1rem',
-      minWidth: '300px',
-      maxHeight: '400px',
-      overflowY: 'auto',
-      backdropFilter: 'blur(16px)',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-      zIndex: 1000
-    }}>
+        position: 'absolute',
+        top: '100%',
+        right: '0',
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border-default)',
+        borderRadius: 'var(--radius-md)',
+        padding: '1rem',
+        minWidth: '300px',
+        maxHeight: '400px',
+        overflowY: 'auto',
+        boxShadow: 'var(--shadow-lg)',
+        zIndex: 1000
+      }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h4 style={{ color: 'var(--text-primary)', margin: '0' }}>Notifications</h4>
         {notifications.some(n => !n.is_read) && (
           <button
             onClick={markAllAsRead}
-            style={{
-              background: 'linear-gradient(135deg, #667eea, #764ba2)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '0.25rem 0.5rem',
-              fontSize: '11px',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}
+            className="btn btn-primary btn-sm"
           >
             Mark All Read
           </button>
         )}
       </div>
-      
+
       {loading ? (
         <p style={{ color: 'var(--text-muted)', textAlign: 'center' }}>Loading...</p>
       ) : notifications.length === 0 ? (
         <p style={{ color: 'var(--text-muted)', textAlign: 'center' }}>No notifications</p>
       ) : (
         notifications.map((notif) => (
-          <div 
-            key={notif._id} 
+          <div
+            key={notif._id}
             onClick={() => !notif.is_read && markAsRead(notif._id)}
             style={{
               padding: '0.75rem',
               marginBottom: '0.5rem',
-              background: notif.is_read ? 'rgba(255,255,255,0.05)' : 'rgba(0, 229, 255, 0.1)',
-              borderRadius: '8px',
-              borderLeft: notif.is_read ? '3px solid var(--border-soft)' : '3px solid var(--accent-gold)',
+              background: notif.is_read ? 'var(--bg-surface-alt)' : 'var(--accent-primary-light)',
+              borderRadius: 'var(--radius-sm)',
+              borderLeft: notif.is_read ? '3px solid var(--border-default)' : '3px solid var(--accent-primary)',
               cursor: notif.is_read ? 'default' : 'pointer',
-              transition: 'all 0.3s ease',
+              transition: 'all 0.2s ease',
               position: 'relative'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
               <div style={{ flex: 1 }}>
-                <p style={{ 
-                  color: 'var(--text-primary)', 
-                  fontSize: '13px', 
+                <p style={{
+                  color: 'var(--text-primary)',
+                  fontSize: '13px',
                   margin: '0 0 0.25rem 0',
                   fontWeight: notif.is_read ? '400' : '500',
                   lineHeight: '1.3'
@@ -157,14 +144,7 @@ const NotificationDropdown = ({ onClose }) => {
                     {formatDate(notif.createdAt)}
                   </small>
                   {notif.event_id && (
-                    <span style={{
-                      background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)',
-                      color: 'var(--bg-main)',
-                      padding: '0.125rem 0.375rem',
-                      borderRadius: '6px',
-                      fontSize: '9px',
-                      fontWeight: '600'
-                    }}>
+                    <span className="badge badge-info" style={{ fontSize: '9px', padding: '0.125rem 0.375rem' }}>
                       {notif.event_id.title}
                     </span>
                   )}
@@ -174,7 +154,7 @@ const NotificationDropdown = ({ onClose }) => {
                 <div style={{
                   width: '6px',
                   height: '6px',
-                  background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                  background: 'var(--danger)',
                   borderRadius: '50%',
                   flexShrink: 0,
                   marginTop: '0.25rem'
@@ -308,14 +288,14 @@ export default function ParticipantHomePage() {
       console.log('Fetching events...');
       console.log('User:', user);
       console.log('Token:', localStorage.getItem('token'));
-      
+
       const response = await axios.get('/events/published-with-registration');
       console.log('Events response:', response.data);
-      
+
       // Also fetch all registrations to check verification status
       const allRegsResponse = await axios.get('/registrations/my-registrations');
       const allRegistrations = allRegsResponse.data.registrations || [];
-      
+
       // Map events with their registration status
       const eventsWithStatus = response.data.map(event => {
         const registration = allRegistrations.find(reg => reg.event_id?._id === event._id);
@@ -325,7 +305,7 @@ export default function ParticipantHomePage() {
           verificationStatus: registration ? registration.verification_status : null
         };
       });
-      
+
       console.log('Events with status:', eventsWithStatus);
       setEvents(eventsWithStatus);
     } catch (error) {
@@ -333,7 +313,7 @@ export default function ParticipantHomePage() {
       console.error('Error response:', error.response);
       console.error('Error status:', error.response?.status);
       console.error('Error data:', error.response?.data);
-      
+
       // Fallback: try to fetch published events without authentication
       try {
         console.log('Trying fallback: fetching published events without registration status...');
@@ -372,8 +352,8 @@ export default function ParticipantHomePage() {
   };
 
   const handleTagToggle = (tag) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
@@ -405,15 +385,15 @@ export default function ParticipantHomePage() {
 
     try {
       const response = await axios.post('/chatbot/chat', { query: inputMessage });
-      const botMessage = { 
-        role: 'assistant', 
-        content: response.data.response || 'Sorry, I could not process that.' 
+      const botMessage = {
+        role: 'assistant',
+        content: response.data.response || 'Sorry, I could not process that.'
       };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      const errorMessage = { 
-        role: 'assistant', 
-        content: 'Chatbot service is currently unavailable. Please try again later.' 
+      const errorMessage = {
+        role: 'assistant',
+        content: 'Chatbot service is currently unavailable. Please try again later.'
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -421,19 +401,21 @@ export default function ParticipantHomePage() {
     }
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="niral-home">
+    <div>
       {/* Header Navigation */}
-      <header className="niral-header">
-        <div className="niral-nav-content">
-          <div className="nav-left">
-            <img src="/nirallogo.png" alt="NIRAL Logo" className="nav-logo" />
-            <span style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginLeft: '1rem' }}>
-              Welcome, {user?.name}
+      <header className="header">
+        <div className="header-content">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <img src="/nirallogo.png" alt="NIRAL Logo" style={{ height: 36, width: 'auto' }} />
+            <span style={{ color: 'var(--accent-primary)', fontSize: '1.4rem', fontWeight: '800', letterSpacing: '-0.5px' }}>
+              ACAConnect
             </span>
           </div>
-          
-          <nav className="nav-center">
+
+          <nav className="header-nav">
             <button className={`nav-link ${!showEvents && !showAbout && !showContact && !showMyRegistrations && !showMyCertificates && !showGallery ? 'active' : ''}`} onClick={() => resetParticipantViews('home')}>Home</button>
             <button className={`nav-link ${showEvents ? 'active' : ''}`} onClick={() => resetParticipantViews('events')}>Events</button>
             <button className={`nav-link ${showMyRegistrations ? 'active' : ''}`} onClick={() => resetParticipantViews('registrations')}>My Registrations</button>
@@ -442,37 +424,38 @@ export default function ParticipantHomePage() {
             <button className={`nav-link ${showAbout ? 'active' : ''}`} onClick={() => resetParticipantViews('about')}>About</button>
             <button className={`nav-link ${showContact ? 'active' : ''}`} onClick={() => resetParticipantViews('contact')}>Contact</button>
           </nav>
-          
-          <div className="nav-right">
-            <div style={{ position: 'relative', marginRight: '1rem' }}>
-              <button 
-                className="btn-back" 
+
+          <div className="header-actions">
+            <div style={{ position: 'relative', marginRight: '0.5rem' }}>
+              <button
+                className="btn btn-ghost btn-icon"
                 onClick={() => setShowNotifications(!showNotifications)}
-                style={{ position: 'relative' }}
+                style={{ position: 'relative', fontSize: '1.1rem' }}
               >
-                🔔
+                &#128276;
                 {unreadNotificationCount > 0 && (
                   <span style={{
                     position: 'absolute',
-                    top: '-5px',
-                    right: '-5px',
-                    background: 'var(--accent-danger)',
+                    top: '-2px',
+                    right: '-2px',
+                    background: 'var(--danger)',
                     color: 'white',
                     borderRadius: '50%',
-                    width: '20px',
-                    height: '20px',
-                    fontSize: '12px',
+                    width: '18px',
+                    height: '18px',
+                    fontSize: '11px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    fontWeight: '600'
                   }}>
                     {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
                   </span>
                 )}
               </button>
-              
+
               {showNotifications && (
-                <NotificationDropdown 
+                <NotificationDropdown
                   onClose={() => {
                     setShowNotifications(false);
                     fetchUnreadNotificationCount();
@@ -480,8 +463,9 @@ export default function ParticipantHomePage() {
                 />
               )}
             </div>
-            
-            <button className="btn-back" onClick={logout}>
+
+            <span className="user-greeting">Welcome, {user?.name}</span>
+            <button className="btn btn-ghost btn-sm" onClick={logout}>
               Logout
             </button>
           </div>
@@ -491,12 +475,11 @@ export default function ParticipantHomePage() {
       {!showEvents && !showAbout && !showContact && !showMyRegistrations && !showMyCertificates && !showGallery ? (
         <>
           {/* Hero Section */}
-          <section className="niral-hero" style={{
+          <section className="hero" style={{
             backgroundImage: 'url(/niralbg.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            position: 'relative'
+            backgroundRepeat: 'no-repeat'
           }}>
             <div style={{
               position: 'absolute',
@@ -504,234 +487,167 @@ export default function ParticipantHomePage() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'linear-gradient(rgba(8, 5, 20, 0.3), rgba(8, 5, 20, 0.2))',
+              background: 'linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.9))',
               zIndex: 1
             }}></div>
             <div className="hero-content" style={{ position: 'relative', zIndex: 2 }}>
-              <div className="hero-left">
-                <h1 className="hero-welcome">Welcome to</h1>
-                <h1 className="hero-title">NIRAL 2026</h1>
-                <h2 className="hero-subtitle">National Level Technical Symposium</h2>
-                <h3 className="hero-org fade-in">by IST Department, CEG</h3>
-                
-                <p className="hero-description">
-                  Join us for an extraordinary journey of innovation and technology. Experience cutting-edge workshops, 
+              <div>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Welcome to</h1>
+                <h1>NIRAL 2026</h1>
+                <h2 style={{ fontSize: '1.375rem', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>National Level Technical Symposium</h2>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '500', color: 'var(--text-muted)' }}>by IST Department, CEG</h3>
+
+                <p style={{ marginTop: '1rem', fontSize: '1.15rem', color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+                  Join us for an extraordinary journey of innovation and technology. Experience cutting-edge workshops,
                   competitive events, and networking opportunities at Anna University Chennai's premier technical symposium.
                 </p>
-                
-                <div className="hero-date">
-                  <span className="date-icon">⭐</span>
-                  <span className="date-text">March 12–14, 2026</span>
+
+                <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  <span style={{ color: 'var(--accent-primary)', fontWeight: '700', fontSize: '1.1rem' }}>March 12–14, 2026</span>
                 </div>
-                
-                <div className="hero-buttons" style={{ marginTop: '30px' }}>
-                  <button className="btn-explore" onClick={() => {setShowEvents(true); setShowAbout(false); setShowContact(false)}}>Explore Events</button>
-                  <button className="btn-explore" onClick={() => {setShowAbout(true); setShowEvents(false); setShowContact(false)}}>Info</button>
+
+                <div className="hero-actions" style={{ marginTop: '2rem' }}>
+                  <button className="btn btn-primary btn-lg" onClick={() => { setShowEvents(true); setShowAbout(false); setShowContact(false) }}>Explore Events</button>
+                  <button className="btn btn-outline btn-lg" onClick={() => { setShowAbout(true); setShowEvents(false); setShowContact(false) }}>Info</button>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Statistics */}
-          <div className="hero-stats">
+          <div className="stats-grid" style={{ maxWidth: '800px', margin: '-1.5rem auto 0', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
             <div className="stat-card">
+              <h3>Participants</h3>
               <span className="stat-number">1500+</span>
-              <span className="stat-label">Participants</span>
             </div>
             <div className="stat-card">
+              <h3>Events</h3>
               <span className="stat-number">15+</span>
-              <span className="stat-label">Events</span>
             </div>
             <div className="stat-card">
+              <h3>Workshops</h3>
               <span className="stat-number">5+</span>
-              <span className="stat-label">Workshops</span>
-            </div>
-          </div>
-
-          {/* Organizer Footer */}
-          <div className="organizer-strip">
-            <span className="organizer-text">Organized By</span>
-            <div className="organizer-logos">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <img src="/istlogo.png" alt="IST Department" style={{ height: '60px', width: 'auto', opacity: '0.8' }} />
-                <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>IST Department</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <img src="/ceglogo.png" alt="CEG" style={{ height: '60px', width: 'auto', opacity: '0.8' }} />
-                <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>CEG, Anna University</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <img src="/acalogoo.png" alt="ACA" style={{ height: '60px', width: 'auto', opacity: '0.8' }} />
-                <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>ACA</span>
-              </div>
             </div>
           </div>
 
           <div style={{ height: '60px' }}></div>
 
           {/* Footer */}
-          <footer style={{ background: 'var(--bg-secondary)', padding: '2rem 0', textAlign: 'center', borderTop: '1px solid var(--border-soft)' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-              <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '0' }}>
-                © NIRAL 2026
-              </p>
-            </div>
-          </footer>
+          <Footer showOrganizers={true} />
         </>
       ) : showEvents ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div className="page-container">
+          <div className="container">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-              <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>
-                Available Events
-              </h1>
-              <button 
+              <div className="page-header" style={{ textAlign: 'left', marginBottom: '0' }}>
+                <h1>Available Events</h1>
+              </div>
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   console.log('Find Events button clicked!');
                   setShowFindEvents(true);
                 }}
-                style={{ 
-                  background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '25px',
-                  padding: '12px 24px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-                  zIndex: 10,
-                  position: 'relative'
-                }}
+                className="btn btn-primary"
               >
                 Find Events
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
               {events.filter(event => !event.event_finished).map(event => (
-                <div key={event._id} style={{ 
-                  background: 'var(--bg-glass)', 
-                  border: '1px solid var(--border-soft)', 
-                  borderRadius: '18px', 
-                  padding: '1.5rem', 
-                  backdropFilter: 'blur(16px)', 
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%'
-                }}>
+                <div key={event._id} className="event-card">
                   {event.cover_photo && (
                     <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                      <img 
-                        src={`http://localhost:5000/${event.cover_photo}`} 
-                        alt="Event Cover" 
-                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
+                      <img
+                        src={`http://localhost:5000/${event.cover_photo}`}
+                        alt="Event Cover"
+                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
                       />
                     </div>
                   )}
-                  <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>{event.title}</h3>
-                  <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem', lineHeight: '1.5', flex: '1' }}>
-                    {event.description}
-                  </p>
-                  <div style={{ marginBottom: '1rem' }}>
+                  <div className="event-header">
+                    <h3>{event.title}</h3>
+                  </div>
+                  <div className="event-details">
+                    <p>{event.description}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                       <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                        📅 {new Date(event.date).toLocaleDateString()}
+                        {new Date(event.date).toLocaleDateString()}
                       </span>
                       <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                        🕐 {event.time}
+                        {event.time}
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', color: 'var(--bg-main)', padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '600' }}>{event.type}</span>
+                      <span className="badge badge-info">{event.type}</span>
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{event.duration_hours}h</span>
                     </div>
                     {event.hospitality?.venue_allocated && (
                       <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                        📍 <strong>Venue:</strong> {event.hospitality.venue_details}
+                        <strong>Venue:</strong> {event.hospitality.venue_details}
                       </div>
                     )}
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                     <div>
-                      <span style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '1.1rem' }}>💰 Prize: ₹{event.prize_pool || 0}</span>
+                      <span style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '1.1rem' }}>Prize: &#8377;{event.prize_pool || 0}</span>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ 
-                        color: event.registration_fee > 0 ? 'var(--accent-gold)' : '#4ade80', 
+                      <div style={{
+                        color: event.registration_fee > 0 ? 'var(--accent-primary)' : 'var(--success)',
                         fontWeight: '700',
                         fontSize: '1.2rem',
                         marginBottom: '0.25rem'
                       }}>
-                        {event.registration_fee > 0 ? `₹${event.registration_fee}` : 'FREE'}
+                        {event.registration_fee > 0 ? `\u20B9${event.registration_fee}` : 'FREE'}
                       </div>
                       <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Registration Fee</div>
                     </div>
                   </div>
-                  {event.registrationStatus === 'COMPLETED' ? (
-                    <button 
-                      className="btn-register-now" 
-                      style={{ 
-                        width: '100%', 
-                        background: 'linear-gradient(135deg, #4ade80, #22c55e)',
-                        cursor: 'default',
-                        marginTop: 'auto'
-                      }}
-                      disabled
-                    >
-                      Registered
-                    </button>
-                  ) : event.registrationStatus === 'VERIFICATION_PENDING' ? (
-                    <button 
-                      className="btn-register-now" 
-                      style={{ 
-                        width: '100%', 
-                        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                        cursor: 'default',
-                        marginTop: 'auto'
-                      }}
-                      disabled
-                    >
-                      Awaiting Verification
-                    </button>
-                  ) : event.registration_status === 'CLOSED' ? (
-                    <button 
-                      className="btn-register-now" 
-                      style={{ 
-                        width: '100%', 
-                        background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                        cursor: 'default',
-                        marginTop: 'auto'
-                      }}
-                      disabled
-                    >
-                      Registration Closed
-                    </button>
-                  ) : event.registration_status === 'PAUSED' ? (
-                    <button 
-                      className="btn-register-now" 
-                      style={{ 
-                        width: '100%', 
-                        background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                        cursor: 'default',
-                        marginTop: 'auto'
-                      }}
-                      disabled
-                    >
-                      Registration Paused
-                    </button>
-                  ) : (
-                    <button className="btn-register-now" onClick={() => handleRegister(event)} style={{ width: '100%', marginTop: 'auto' }}>Register Now</button>
-                  )}
+                  <div className="event-actions">
+                    {event.registrationStatus === 'COMPLETED' ? (
+                      <button
+                        className="btn btn-success"
+                        style={{ width: '100%', cursor: 'default' }}
+                        disabled
+                      >
+                        Registered
+                      </button>
+                    ) : event.registrationStatus === 'VERIFICATION_PENDING' ? (
+                      <button
+                        className="btn btn-secondary"
+                        style={{ width: '100%', cursor: 'default' }}
+                        disabled
+                      >
+                        Awaiting Verification
+                      </button>
+                    ) : event.registration_status === 'CLOSED' ? (
+                      <button
+                        className="btn btn-danger"
+                        style={{ width: '100%', cursor: 'default' }}
+                        disabled
+                      >
+                        Registration Closed
+                      </button>
+                    ) : event.registration_status === 'PAUSED' ? (
+                      <button
+                        className="btn btn-danger"
+                        style={{ width: '100%', cursor: 'default' }}
+                        disabled
+                      >
+                        Registration Paused
+                      </button>
+                    ) : (
+                      <button className="btn btn-primary" onClick={() => handleRegister(event)} style={{ width: '100%' }}>Register Now</button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
             {events.filter(e => !e.event_finished).length === 0 && (
-              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+              <div className="no-data">
                 <p>No available events at the moment.</p>
               </div>
             )}
@@ -739,48 +655,37 @@ export default function ParticipantHomePage() {
             {events.filter(e => e.event_finished).length > 0 && (
               <>
                 <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', marginTop: '3rem', marginBottom: '1.5rem' }}>Past Events</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
                   {events.filter(e => e.event_finished).map(event => (
-                    <div key={event._id} style={{ 
-                      background: 'var(--bg-glass)', 
-                      border: '1px solid var(--border-soft)', 
-                      borderRadius: '18px', 
-                      padding: '1.5rem', 
-                      backdropFilter: 'blur(16px)', 
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: '100%'
-                    }}>
+                    <div key={event._id} className="event-card" style={{ opacity: 0.75 }}>
                       {event.cover_photo && (
                         <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                          <img src={`http://localhost:5000/${event.cover_photo}`} alt="Event Cover" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }} />
+                          <img src={`http://localhost:5000/${event.cover_photo}`} alt="Event Cover" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
                         </div>
                       )}
-                      <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>{event.title}</h3>
-                      <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem', lineHeight: '1.5', flex: '1' }}>{event.description}</p>
-                      <div style={{ marginBottom: '1rem' }}>
+                      <div className="event-header">
+                        <h3>{event.title}</h3>
+                      </div>
+                      <div className="event-details">
+                        <p>{event.description}</p>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                           <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>{new Date(event.date).toLocaleDateString()}</span>
                           <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>{event.time}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', color: 'var(--bg-main)', padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '600' }}>{event.type}</span>
+                          <span className="badge badge-secondary">{event.type}</span>
                           <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{event.duration_hours}h</span>
                         </div>
                       </div>
-                      <button 
-                        className="btn-register-now" 
-                        style={{ 
-                          width: '100%', 
-                          background: 'linear-gradient(135deg, #6b7280, #4b5563)',
-                          cursor: 'default',
-                          marginTop: 'auto'
-                        }}
-                        disabled
-                      >
-                        Event Finished
-                      </button>
+                      <div className="event-actions">
+                        <button
+                          className="btn btn-secondary"
+                          style={{ width: '100%', cursor: 'default' }}
+                          disabled
+                        >
+                          Event Finished
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -796,134 +701,122 @@ export default function ParticipantHomePage() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(0, 0, 0, 0.8)',
+              background: 'rgba(15, 23, 42, 0.5)',
               zIndex: 1000,
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
               paddingTop: '120px'
             }}>
-              <div style={{
-                background: 'var(--bg-glass)',
-                border: '1px solid var(--border-soft)',
-                borderRadius: '18px',
-                padding: '2rem',
-                backdropFilter: 'blur(16px)',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                maxWidth: '800px',
-                width: '90%',
-                maxHeight: '80vh',
-                overflowY: 'auto'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--text-primary)', margin: '0', fontSize: '24px', fontWeight: '600' }}>Select Your Interests</h3>
-                  <button 
+              <div className="modal" style={{ maxWidth: '800px', width: '90%', maxHeight: '80vh', overflowY: 'auto' }}>
+                <div className="modal-header">
+                  <h3>Select Your Interests</h3>
+                  <button
                     onClick={() => setShowFindEvents(false)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--text-primary)',
-                      fontSize: '24px',
-                      cursor: 'pointer',
-                      padding: '0.5rem'
-                    }}
+                    className="modal-close"
                   >
-                    ✕
+                    &times;
                   </button>
                 </div>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-                  {allTags.map(tag => (
-                    <label key={tag} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--text-primary)', padding: '0.5rem', borderRadius: '8px', background: selectedTags.includes(tag) ? 'rgba(0, 229, 255, 0.1)' : 'transparent', border: selectedTags.includes(tag) ? '1px solid rgba(0, 229, 255, 0.3)' : '1px solid transparent' }}>
-                      <input
-                        type="checkbox"
-                        checked={selectedTags.includes(tag)}
-                        onChange={() => handleTagToggle(tag)}
-                        style={{ accentColor: 'var(--accent-gold)' }}
-                      />
-                      <span style={{ fontSize: '14px' }}>{tag}</span>
-                    </label>
-                  ))}
-                </div>
-                
-                <div style={{ textAlign: 'center' }}>
-                  <button 
-                    className="btn-register-now" 
-                    onClick={suggestEvents}
-                    style={{ fontSize: '16px', padding: '12px 32px', cursor: 'pointer' }}
-                  >
-                    Suggest Events
-                  </button>
-                </div>
-                
-                {suggestedEvents.length > 0 && (
-                  <div style={{ marginTop: '2rem' }}>
-                    <h4 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontSize: '20px', fontWeight: '600' }}>Suggested Events for You:</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      {suggestedEvents.filter(event => event.similarity > 0).map((event, index) => (
-                        <div key={event._id} style={{ 
-                          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))',
-                          border: '1px solid rgba(102, 126, 234, 0.3)',
-                          padding: '1rem 1.5rem', 
-                          borderRadius: '12px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '1rem',
-                          transition: 'all 0.3s ease'
-                        }}>
-                          <div style={{
-                            background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                            color: 'white',
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
+
+                <div className="modal-body">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+                    {allTags.map(tag => (
+                      <label key={tag} className="form-checkbox" style={{
+                        padding: '0.5rem',
+                        borderRadius: 'var(--radius-sm)',
+                        background: selectedTags.includes(tag) ? 'var(--accent-primary-light)' : 'transparent',
+                        border: selectedTags.includes(tag) ? '1px solid var(--accent-primary)' : '1px solid transparent'
+                      }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedTags.includes(tag)}
+                          onChange={() => handleTagToggle(tag)}
+                        />
+                        <span style={{ fontSize: '14px' }}>{tag}</span>
+                      </label>
+                    ))}
+                  </div>
+
+                  <div style={{ textAlign: 'center' }}>
+                    <button
+                      className="btn btn-primary btn-lg"
+                      onClick={suggestEvents}
+                    >
+                      Suggest Events
+                    </button>
+                  </div>
+
+                  {suggestedEvents.length > 0 && (
+                    <div style={{ marginTop: '2rem' }}>
+                      <h4 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontSize: '20px', fontWeight: '600' }}>Suggested Events for You:</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {suggestedEvents.filter(event => event.similarity > 0).map((event, index) => (
+                          <div key={event._id} style={{
+                            background: 'var(--accent-primary-light)',
+                            border: '1px solid var(--accent-primary)',
+                            padding: '1rem 1.5rem',
+                            borderRadius: 'var(--radius-md)',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '18px',
-                            fontWeight: '700',
-                            flexShrink: 0
+                            gap: '1rem'
                           }}>
-                            #{index + 1}
-                          </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
-                              {event.title}
+                            <div style={{
+                              background: 'var(--accent-primary)',
+                              color: 'white',
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '50%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '18px',
+                              fontWeight: '700',
+                              flexShrink: 0
+                            }}>
+                              #{index + 1}
                             </div>
-                            {event.similarity !== undefined && event.similarity !== null ? (
-                              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                                Match Score: {(event.similarity * 100).toFixed(1)}%
-                                {event.user_similarity && event.pattern_similarity && (
-                                  <span style={{ marginLeft: '0.5rem', opacity: 0.7 }}>
-                                    (Direct: {(event.user_similarity * 100).toFixed(0)}% | Pattern: {(event.pattern_similarity * 100).toFixed(0)}%)
-                                  </span>
-                                )}
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
+                                {event.title}
                               </div>
-                            ) : (
-                              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                                Match Score: 0.0%
-                              </div>
-                            )}
+                              {event.similarity !== undefined && event.similarity !== null ? (
+                                <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                                  Match Score: {(event.similarity * 100).toFixed(1)}%
+                                  {event.user_similarity && event.pattern_similarity && (
+                                    <span style={{ marginLeft: '0.5rem', opacity: 0.7 }}>
+                                      (Direct: {(event.user_similarity * 100).toFixed(0)}% | Pattern: {(event.pattern_similarity * 100).toFixed(0)}%)
+                                    </span>
+                                  )}
+                                </div>
+                              ) : (
+                                <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                                  Match Score: 0.0%
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           )}
         </div>
       ) : showGallery ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div className="page-container">
+          <div className="container">
             {!selectedAlbum ? (
               <>
-                <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '2rem', textAlign: 'center' }}>Gallery</h1>
+                <div className="page-header">
+                  <h1>Gallery</h1>
+                </div>
                 {galleryPhotos.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}><p>No photos available yet.</p></div>
+                  <div className="no-data"><p>No photos available yet.</p></div>
                 ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
                     {(() => {
                       const grouped = {};
                       galleryPhotos.forEach(p => {
@@ -932,12 +825,10 @@ export default function ParticipantHomePage() {
                         grouped[label].push(p);
                       });
                       return Object.entries(grouped).map(([label, items]) => (
-                        <div key={label} style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', overflow: 'hidden', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', cursor: 'pointer', transition: 'transform 0.2s' }} onClick={() => setSelectedAlbum({ label, items })} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
-                          <img src={`http://localhost:5000/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: '220px', objectFit: 'cover' }} />
-                          <div style={{ padding: '1.25rem' }}>
-                            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{label}</h3>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: '0' }}>{items.length} photo{items.length !== 1 ? 's' : ''}</p>
-                          </div>
+                        <div key={label} className="event-card" style={{ cursor: 'pointer' }} onClick={() => setSelectedAlbum({ label, items })}>
+                          <img src={`http://localhost:5000/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: '220px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }} />
+                          <h3 style={{ fontSize: '1.2rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{label}</h3>
+                          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: '0' }}>{items.length} photo{items.length !== 1 ? 's' : ''}</p>
                         </div>
                       ));
                     })()}
@@ -947,12 +838,12 @@ export default function ParticipantHomePage() {
             ) : (
               <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                  <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>{selectedAlbum.label}</h1>
-                  <button className="btn-back" onClick={() => setSelectedAlbum(null)} style={{ pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>← Back to Gallery</button>
+                  <h1 style={{ fontSize: '40px', fontWeight: '700', color: 'var(--accent-primary)', margin: '0' }}>{selectedAlbum.label}</h1>
+                  <button className="btn btn-outline" onClick={() => setSelectedAlbum(null)} style={{ pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>Back to Gallery</button>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
                   {selectedAlbum.items.map(p => (
-                    <div key={p._id} style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '14px', overflow: 'hidden', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', transition: 'transform 0.2s', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} onClick={() => window.open(`http://localhost:5000/uploads/photos/${p.filename}`, '_blank')}>
+                    <div key={p._id} className="event-card" style={{ cursor: 'pointer', padding: 0, overflow: 'hidden' }} onClick={() => window.open(`http://localhost:5000/uploads/photos/${p.filename}`, '_blank')}>
                       <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                       <div style={{ padding: '0.75rem' }}>
                         <p style={{ color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: '600', margin: '0' }}>{p.name}</p>
@@ -965,109 +856,104 @@ export default function ParticipantHomePage() {
           </div>
         </div>
       ) : showAbout ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '3rem', textAlign: 'center' }}>About NIRAL</h1>
-            
-            <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '3rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>History & Legacy</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '18px', lineHeight: '1.8', marginBottom: '2rem' }}>
-                NIRAL (National Innovative Research and Academic League) is the flagship technical symposium of the Information Science and Technology Department at College of Engineering Guindy, Anna University. Since its inception, NIRAL has been a beacon of innovation, bringing together brilliant minds from across the nation to showcase cutting-edge research and technological advancements.
-              </p>
-              
-              <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Our Journey</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.7', marginBottom: '2rem' }}>
-                What started as a modest technical gathering has evolved into one of South India's most prestigious technical symposiums. NIRAL has consistently pushed the boundaries of academic excellence, fostering innovation in areas such as Artificial Intelligence, Machine Learning, Cybersecurity, Data Science, and emerging technologies.
-              </p>
-              
-              <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Vision & Mission</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.7', marginBottom: '2rem' }}>
-                Our vision is to create a platform where academic brilliance meets practical innovation. NIRAL serves as a catalyst for technological advancement, encouraging students and researchers to explore uncharted territories in computer science and information technology. We believe in nurturing the next generation of tech leaders who will shape the digital future.
-              </p>
-              
-              <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Impact & Recognition</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.7' }}>
-                Over the years, NIRAL has attracted participation from premier institutions across India, including IITs, NITs, and leading universities. The symposium has been instrumental in launching numerous successful startups, research collaborations, and career opportunities for participants. Industry leaders and academic stalwarts regularly grace NIRAL as keynote speakers and judges, adding immense value to the learning experience.
-              </p>
+        <div className="page-container">
+          <div className="container">
+            <div className="page-header">
+              <h1>About NIRAL</h1>
             </div>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Years of Excellence</h4>
-                <p style={{ fontSize: '32px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>15+</p>
+
+            <div className="card" style={{ marginBottom: '2rem' }}>
+              <div className="card-body" style={{ padding: '3rem' }}>
+                <h2 style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>History & Legacy</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '18px', lineHeight: '1.8', marginBottom: '2rem' }}>
+                  NIRAL (National Innovative Research and Academic League) is the flagship technical symposium of the Information Science and Technology Department at College of Engineering Guindy, Anna University. Since its inception, NIRAL has been a beacon of innovation, bringing together brilliant minds from across the nation to showcase cutting-edge research and technological advancements.
+                </p>
+
+                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Our Journey</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '16px', lineHeight: '1.7', marginBottom: '2rem' }}>
+                  What started as a modest technical gathering has evolved into one of South India's most prestigious technical symposiums. NIRAL has consistently pushed the boundaries of academic excellence, fostering innovation in areas such as Artificial Intelligence, Machine Learning, Cybersecurity, Data Science, and emerging technologies.
+                </p>
+
+                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Vision & Mission</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '16px', lineHeight: '1.7', marginBottom: '2rem' }}>
+                  Our vision is to create a platform where academic brilliance meets practical innovation. NIRAL serves as a catalyst for technological advancement, encouraging students and researchers to explore uncharted territories in computer science and information technology. We believe in nurturing the next generation of tech leaders who will shape the digital future.
+                </p>
+
+                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Impact & Recognition</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '16px', lineHeight: '1.7' }}>
+                  Over the years, NIRAL has attracted participation from premier institutions across India, including IITs, NITs, and leading universities. The symposium has been instrumental in launching numerous successful startups, research collaborations, and career opportunities for participants. Industry leaders and academic stalwarts regularly grace NIRAL as keynote speakers and judges, adding immense value to the learning experience.
+                </p>
               </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Participating Colleges</h4>
-                <p style={{ fontSize: '32px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>100+</p>
+            </div>
+
+            <div className="stats-grid">
+              <div className="stat-card">
+                <h3>Years of Excellence</h3>
+                <span className="stat-number">15+</span>
               </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Total Participants</h4>
-                <p style={{ fontSize: '32px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: '0' }}>10,000+</p>
+              <div className="stat-card">
+                <h3>Participating Colleges</h3>
+                <span className="stat-number">100+</span>
+              </div>
+              <div className="stat-card">
+                <h3>Total Participants</h3>
+                <span className="stat-number">10,000+</span>
               </div>
             </div>
           </div>
         </div>
       ) : showMyRegistrations ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '3rem', textAlign: 'center' }}>My Registrations</h1>
-            
+        <div className="page-container">
+          <div className="container">
+            <div className="page-header">
+              <h1>My Registrations</h1>
+            </div>
+
             {registrations.length > 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+              <div className="registrations-list">
                 {registrations.map(reg => (
-                  <div key={reg._id} style={{ 
-                    background: 'var(--bg-glass)', 
-                    border: '1px solid var(--border-soft)', 
-                    borderRadius: '18px', 
-                    padding: '1.5rem', 
-                    backdropFilter: 'blur(16px)', 
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100%',
-                    alignSelf: 'stretch'
-                  }}>
+                  <div key={reg._id} className="registration-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
                     {reg.event_id?.cover_photo && (
                       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                        <img 
-                          src={`http://localhost:5000/${reg.event_id.cover_photo}`} 
-                          alt="Event Cover" 
-                          style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
+                        <img
+                          src={`http://localhost:5000/${reg.event_id.cover_photo}`}
+                          alt="Event Cover"
+                          style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
                         />
                       </div>
                     )}
-                    <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>{reg.event_id?.title}</h3>
-                    <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem', lineHeight: '1.5', flex: '1' }}>
-                      {reg.event_id?.description}
-                    </p>
+                    <div className="registration-info">
+                      <h3>{reg.event_id?.title}</h3>
+                      <p style={{ lineHeight: '1.5', flex: '1' }}>
+                        {reg.event_id?.description}
+                      </p>
+                    </div>
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          📅 {reg.event_id?.date ? new Date(reg.event_id.date).toLocaleDateString() : 'Date not available'}
+                          {reg.event_id?.date ? new Date(reg.event_id.date).toLocaleDateString() : 'Date not available'}
                         </span>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          🕐 {reg.event_id?.time || 'Time not available'}
+                          {reg.event_id?.time || 'Time not available'}
                         </span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                        <span style={{ background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', color: 'var(--bg-main)', padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '600' }}>{reg.event_id?.type}</span>
+                        <span className="badge badge-info">{reg.event_id?.type}</span>
                         <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{reg.event_id?.duration_hours}h</span>
                       </div>
                       {reg.event_id?.hospitality?.venue_allocated && (
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                          📍 <strong>Venue:</strong> {reg.event_id.hospitality.venue_details}
+                          <strong>Venue:</strong> {reg.event_id.hospitality.venue_details}
                         </div>
                       )}
                       {reg.event_id?.hr?.volunteers_allocated && (
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                          👥 <strong>Event Volunteers:</strong>
+                          <strong>Event Volunteers:</strong>
                           {reg.event_id.hr.allocated_volunteers?.length > 0 && (
                             <div style={{ marginLeft: '1rem', fontSize: '0.8rem', marginTop: '0.25rem' }}>
                               {reg.event_id.hr.allocated_volunteers.map((vol, idx) => (
                                 <div key={idx} style={{ marginBottom: '0.2rem' }}>
-                                  • {vol.volunteer_name} - {vol.volunteer_role}
+                                  {vol.volunteer_name} - {vol.volunteer_role}
                                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.5rem' }}>
                                     {vol.volunteer_contact} | {vol.volunteer_department}
                                   </div>
@@ -1080,7 +966,7 @@ export default function ParticipantHomePage() {
                               <strong>Judges:</strong>
                               {reg.event_id.hr.allocated_judges.map((judge, idx) => (
                                 <div key={idx} style={{ marginBottom: '0.2rem' }}>
-                                  • {judge.judge_name} - {judge.judge_expertise}
+                                  {judge.judge_name} - {judge.judge_expertise}
                                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.5rem' }}>
                                     {judge.judge_contact} | {judge.judge_designation}
                                   </div>
@@ -1093,109 +979,82 @@ export default function ParticipantHomePage() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                       <div>
-                        <span style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '1.1rem' }}>💰 Prize: ₹{reg.event_id?.prize_pool || 0}</span>
+                        <span style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '1.1rem' }}>Prize: &#8377;{reg.event_id?.prize_pool || 0}</span>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ 
-                          color: reg.event_id?.registration_fee > 0 ? 'var(--accent-gold)' : '#4ade80', 
+                        <div style={{
+                          color: reg.event_id?.registration_fee > 0 ? 'var(--accent-primary)' : 'var(--success)',
                           fontWeight: '700',
                           fontSize: '1.2rem',
                           marginBottom: '0.25rem'
                         }}>
-                          {reg.event_id?.registration_fee > 0 ? `₹${reg.event_id.registration_fee}` : 'FREE'}
+                          {reg.event_id?.registration_fee > 0 ? `\u20B9${reg.event_id.registration_fee}` : 'FREE'}
                         </div>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Registration Fee</div>
                       </div>
                     </div>
-                    
+
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Registered: {new Date(reg.registration_date).toLocaleDateString()}</span>
-                      <span 
-                        style={{
-                          background: reg.payment_status === 'COMPLETED' ? 'linear-gradient(135deg, #4ade80, #22c55e)' : 
-                                     reg.payment_status === 'PENDING' ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 
-                                     'linear-gradient(135deg, #ef4444, #dc2626)',
-                          color: 'white',
-                          padding: '0.4rem 0.8rem',
-                          borderRadius: '20px',
-                          fontSize: '0.75rem',
-                          fontWeight: '600',
-                          cursor: reg.payment_status === 'PENDING' ? 'pointer' : 'default'
-                        }}
+                      <span
+                        className={`badge ${reg.payment_status === 'COMPLETED' ? 'badge-success' : reg.payment_status === 'PENDING' ? 'badge-warning' : 'badge-danger'}`}
+                        style={{ cursor: reg.payment_status === 'PENDING' ? 'pointer' : 'default' }}
                         onClick={(e) => reg.payment_status === 'PENDING' && handlePendingPaymentClick(e, reg)}
                       >
                         {reg.payment_status}
                       </span>
                     </div>
-                    
-                    {/* Payment Details Toggle - Always show for consistency */}
+
+                    {/* Payment Details Toggle */}
                     <div>
                       <button
                         onClick={() => setExpandedPayment(expandedPayment === reg._id ? null : reg._id)}
+                        className="btn btn-ghost btn-block"
                         style={{
-                          width: '100%',
-                          background: reg.payment_id ? 'rgba(0, 229, 255, 0.1)' : 'rgba(128, 128, 128, 0.1)',
-                          border: reg.payment_id ? '1px solid rgba(0, 229, 255, 0.3)' : '1px solid rgba(128, 128, 128, 0.3)',
-                          borderRadius: '8px',
-                          padding: '0.75rem',
-                          color: reg.payment_id ? 'var(--text-primary)' : 'var(--text-muted)',
-                          fontSize: '0.85rem',
-                          fontWeight: '600',
-                          cursor: reg.payment_id ? 'pointer' : 'default',
-                          display: 'flex',
                           justifyContent: 'space-between',
-                          alignItems: 'center',
-                          transition: 'all 0.3s ease',
                           opacity: reg.payment_id ? 1 : 0.6
                         }}
                         disabled={!reg.payment_id}
                       >
                         <span>{reg.payment_id ? 'View Payment Details' : 'No Payment Required'}</span>
                         {reg.payment_id && (
-                          <span style={{ transform: expandedPayment === reg._id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}>▼</span>
+                          <span style={{ transform: expandedPayment === reg._id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}>&#9660;</span>
                         )}
                       </button>
-                      
+
                       {expandedPayment === reg._id && reg.payment_id && (
-                        <div style={{ 
-                          background: 'rgba(0, 229, 255, 0.05)', 
-                          border: '1px solid rgba(0, 229, 255, 0.2)', 
-                          borderRadius: '0 0 8px 8px', 
-                          padding: '1rem',
-                          marginTop: '-1px'
-                        }}>
-                          <div style={{ display: 'grid', gap: '0.5rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Payment ID:</span>
-                              <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem', fontFamily: 'monospace' }}>{reg.payment_id}</span>
-                            </div>
-                            {reg.payment_date && (
+                        <div className="card" style={{ marginTop: '-1px', borderRadius: '0 0 var(--radius-md) var(--radius-md)' }}>
+                          <div className="card-body" style={{ padding: '1rem' }}>
+                            <div style={{ display: 'grid', gap: '0.5rem' }}>
                               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Payment Date:</span>
-                                <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}>{new Date(reg.payment_date).toLocaleString()}</span>
+                                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Payment ID:</span>
+                                <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem', fontFamily: 'monospace' }}>{reg.payment_id}</span>
                               </div>
-                            )}
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Amount Paid:</span>
-                              <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: '600' }}>₹{reg.registration_fee}</span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Payment Method:</span>
-                              <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}>{reg.payment_method}</span>
-                            </div>
-                            {reg.verification_status && (
+                              {reg.payment_date && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                  <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Payment Date:</span>
+                                  <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}>{new Date(reg.payment_date).toLocaleString()}</span>
+                                </div>
+                              )}
                               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Verification:</span>
-                                <span style={{ 
-                                  color: reg.verification_status === 'APPROVED' ? '#4ade80' : 
-                                         reg.verification_status === 'REJECTED' ? '#ef4444' : '#f59e0b',
-                                  fontSize: '0.8rem',
-                                  fontWeight: '600'
-                                }}>
-                                  {reg.verification_status}
-                                </span>
+                                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Amount Paid:</span>
+                                <span style={{ color: 'var(--accent-primary)', fontSize: '0.8rem', fontWeight: '600' }}>&#8377;{reg.registration_fee}</span>
                               </div>
-                            )}
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Payment Method:</span>
+                                <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}>{reg.payment_method}</span>
+                              </div>
+                              {reg.verification_status && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                  <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Verification:</span>
+                                  <span
+                                    className={`badge ${reg.verification_status === 'APPROVED' ? 'badge-success' : reg.verification_status === 'REJECTED' ? 'badge-danger' : 'badge-warning'}`}
+                                  >
+                                    {reg.verification_status}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -1204,12 +1063,12 @@ export default function ParticipantHomePage() {
                 ))}
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+              <div className="no-data">
                 <p style={{ fontSize: '18px', marginBottom: '1rem' }}>No registrations found.</p>
                 <p>Register for events to see them here!</p>
-                <button 
-                  className="btn-register-now" 
-                  onClick={() => {setShowEvents(true); setShowMyRegistrations(false); setShowAbout(false); setShowContact(false); setShowMyCertificates(false)}}
+                <button
+                  className="btn btn-primary"
+                  onClick={() => { setShowEvents(true); setShowMyRegistrations(false); setShowAbout(false); setShowContact(false); setShowMyCertificates(false) }}
                   style={{ marginTop: '1rem' }}
                 >
                   Browse Events
@@ -1219,71 +1078,64 @@ export default function ParticipantHomePage() {
           </div>
         </div>
       ) : showMyCertificates ? (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '3rem', textAlign: 'center' }}>My Certificates</h1>
-            
+        <div className="page-container">
+          <div className="container">
+            <div className="page-header">
+              <h1>My Certificates</h1>
+            </div>
+
             {certificates.length > 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
                 {certificates.map(cert => (
-                  <div key={cert._id} style={{ 
-                    background: 'var(--bg-glass)', 
-                    border: '1px solid var(--border-soft)', 
-                    borderRadius: '18px', 
-                    padding: '1.5rem', 
-                    backdropFilter: 'blur(16px)', 
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100%',
-                    alignSelf: 'stretch'
-                  }}>
+                  <div key={cert._id} className="event-card">
                     <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                       <div style={{
                         width: '80px',
                         height: '80px',
-                        background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)',
+                        background: 'var(--accent-primary-light)',
                         borderRadius: '50%',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         margin: '0 auto 1rem',
-                        fontSize: '32px'
+                        fontSize: '24px',
+                        color: 'var(--accent-primary)',
+                        fontWeight: '700'
                       }}>
-                        📜
+                        C
                       </div>
                       <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Certificate of Participation</h3>
                       <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>NIRAL 2026 Technical Symposium</p>
                     </div>
-                    
+
                     <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-                      <h4 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--accent-gold)', marginBottom: '0.5rem' }}>{cert.event_name}</h4>
+                      <h4 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--accent-primary)', marginBottom: '0.5rem' }}>{cert.event_name}</h4>
                       <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Participant: {cert.participant_name}</p>
                       <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>College: {cert.participant_college}</p>
                       <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Event Date: {new Date(cert.event_date).toLocaleDateString()}</p>
                     </div>
-                    
+
                     <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
                       <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>Generated: {new Date(cert.generated_at).toLocaleDateString()}</p>
                       {cert.downloaded_at && (
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Last Downloaded: {new Date(cert.downloaded_at).toLocaleDateString()}</p>
                       )}
                     </div>
-                    
-                    <button 
-                      className="btn-register-now" 
+
+                    <button
+                      className="btn btn-primary"
                       onClick={async () => {
                         try {
                           const eventId = cert.event_id?._id || cert.event_id;
                           console.log('Downloading certificate for:', cert.participant_id, eventId);
-                          
+
                           // Try to download the certificate file directly
                           const response = await axios.get(`/certificates/download/${cert._id}`, {
                             responseType: 'blob'
                           });
-                          
+
                           console.log('Download response:', response);
-                          
+
                           // Create blob link to download
                           const url = window.URL.createObjectURL(new Blob([response.data]));
                           const link = document.createElement('a');
@@ -1299,41 +1151,35 @@ export default function ParticipantHomePage() {
                           alert('Failed to download certificate. Please try again.');
                         }
                       }}
-                      style={{ 
-                        width: '100%', 
-                        marginTop: 'auto',
-                        background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.5rem'
-                      }}
+                      style={{ width: '100%', marginTop: 'auto' }}
                     >
-                      📄 Download Certificate
+                      Download Certificate
                     </button>
                   </div>
                 ))}
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+              <div className="no-data">
                 <div style={{
                   width: '120px',
                   height: '120px',
-                  background: 'rgba(255, 215, 0, 0.1)',
+                  background: 'var(--accent-primary-light)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 2rem',
-                  fontSize: '48px'
+                  fontSize: '36px',
+                  color: 'var(--accent-primary)',
+                  fontWeight: '700'
                 }}>
-                  📜
+                  C
                 </div>
                 <p style={{ fontSize: '18px', marginBottom: '1rem' }}>No certificates available yet.</p>
                 <p style={{ marginBottom: '2rem' }}>Certificates are generated automatically after your attendance is marked as present by the techops team.</p>
-                <button 
-                  className="btn-register-now" 
-                  onClick={() => {setShowEvents(true); setShowMyCertificates(false); setShowMyRegistrations(false); setShowAbout(false); setShowContact(false)}}
+                <button
+                  className="btn btn-primary"
+                  onClick={() => { setShowEvents(true); setShowMyCertificates(false); setShowMyRegistrations(false); setShowAbout(false); setShowContact(false) }}
                   style={{ marginTop: '1rem' }}
                 >
                   Browse Events
@@ -1343,65 +1189,69 @@ export default function ParticipantHomePage() {
           </div>
         </div>
       ) : (
-        <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '40px', fontWeight: '700', background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '3rem', textAlign: 'center' }}>Contact Us</h1>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Event Coordinator</h3>
-                <div style={{ textAlign: 'center' }}>
+        <div className="page-container">
+          <div className="container">
+            <div className="page-header">
+              <h1>Contact Us</h1>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+              <div className="card">
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Event Coordinator</h3>
                   <p style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginBottom: '0.5rem' }}>Dr. D. Narashiman</p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '1rem' }}>Faculty, IST Department</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>📧 narashiman@annauniv.edu</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📞 +91 98765 43210</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>narashiman@annauniv.edu</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>+91 98765 43210</p>
                 </div>
               </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Student Coordinator</h3>
-                <div style={{ textAlign: 'center' }}>
+
+              <div className="card">
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Student Coordinator</h3>
                   <p style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginBottom: '0.5rem' }}>Arjun</p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '1rem' }}>Final Year, IST</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>📧 arjun.niral2026@gmail.com</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📞 +91 87654 32109</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>arjun.niral2026@gmail.com</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>+91 87654 32109</p>
                 </div>
               </div>
-              
-              <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '2rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Technical Support</h3>
-                <div style={{ textAlign: 'center' }}>
+
+              <div className="card">
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  <h3 style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Technical Support</h3>
                   <p style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginBottom: '0.5rem' }}>Rahul</p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '1rem' }}>Technical Lead</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>📧 tech.niral2026@gmail.com</p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📞 +91 76543 21098</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>tech.niral2026@gmail.com</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>+91 76543 21098</p>
                 </div>
               </div>
             </div>
-            
-            <div style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '3rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', textAlign: 'center' }}>
-              <h3 style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>General Information</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Official Email</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>📧 niral2026@annauniv.edu</p>
+
+            <div className="card">
+              <div className="card-body" style={{ padding: '3rem', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>General Information</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+                  <div>
+                    <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Official Email</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>niral2026@annauniv.edu</p>
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Department Office</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>+91 44 2235 8000</p>
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Address</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>IST Department<br />College of Engineering Guindy<br />Anna University, Chennai - 600025</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Department Office</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>📞 +91 44 2235 8000</p>
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Address</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>IST Department<br/>College of Engineering Guindy<br/>Anna University, Chennai - 600025</p>
-                </div>
-              </div>
-              
-              <div style={{ marginTop: '2rem' }}>
-                <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Follow Us</h4>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>🌐 Website: niral2026.annauniv.edu</span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📱 Instagram: @niral_2026</span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>📘 Facebook: NIRAL 2026</span>
+
+                <div style={{ marginTop: '2rem' }}>
+                  <h4 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>Follow Us</h4>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Website: niral2026.annauniv.edu</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Instagram: @niral_2026</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Facebook: NIRAL 2026</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1417,26 +1267,25 @@ export default function ParticipantHomePage() {
           right: '20px',
           width: '350px',
           height: '500px',
-          backgroundColor: 'var(--bg-glass)',
-          border: '1px solid var(--border-soft)',
-          borderRadius: '12px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-          backdropFilter: 'blur(16px)',
+          backgroundColor: 'var(--bg-surface)',
+          border: '1px solid var(--border-default)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--shadow-lg)',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 1000
         }}>
           <div style={{
             padding: '15px',
-            background: 'linear-gradient(135deg, #667eea, #764ba2)',
+            background: 'var(--accent-primary)',
             color: 'white',
-            borderRadius: '12px 12px 0 0',
+            borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
             <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600' }}>NIRAL Assistant</h3>
-            <button 
+            <button
               onClick={() => setChatOpen(false)}
               style={{
                 background: 'transparent',
@@ -1446,15 +1295,14 @@ export default function ParticipantHomePage() {
                 cursor: 'pointer',
                 fontWeight: '600'
               }}
-            >×</button>
+            >&times;</button>
           </div>
-          
+
           <div style={{
             flex: 1,
             overflowY: 'auto',
             padding: '15px',
-            backgroundColor: 'var(--bg-glass)',
-            backdropFilter: 'blur(16px)'
+            backgroundColor: 'var(--bg-surface-alt)'
           }}>
             {messages.length === 0 && (
               <div style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '20px' }}>
@@ -1471,12 +1319,11 @@ export default function ParticipantHomePage() {
                 <div style={{
                   maxWidth: '80%',
                   padding: '10px 15px',
-                  borderRadius: '12px',
-                  backgroundColor: msg.role === 'user' ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'var(--bg-main)',
-                  background: msg.role === 'user' ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'var(--bg-main)',
+                  borderRadius: 'var(--radius-md)',
+                  backgroundColor: msg.role === 'user' ? 'var(--accent-primary)' : 'var(--bg-surface)',
                   color: msg.role === 'user' ? 'white' : 'var(--text-primary)',
-                  border: msg.role === 'user' ? 'none' : '1px solid var(--border-soft)',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                  border: msg.role === 'user' ? 'none' : '1px solid var(--border-default)',
+                  boxShadow: 'var(--shadow-sm)',
                   whiteSpace: 'pre-wrap'
                 }}>
                   {msg.content}
@@ -1489,14 +1336,14 @@ export default function ParticipantHomePage() {
               </div>
             )}
           </div>
-          
+
           <div style={{
             padding: '15px',
-            borderTop: '1px solid var(--border-soft)',
-            backgroundColor: 'var(--bg-secondary)',
+            borderTop: '1px solid var(--border-default)',
+            backgroundColor: 'var(--bg-surface)',
             display: 'flex',
             gap: '10px',
-            borderRadius: '0 0 12px 12px'
+            borderRadius: '0 0 var(--radius-lg) var(--radius-lg)'
           }}>
             <input
               type="text"
@@ -1504,29 +1351,13 @@ export default function ParticipantHomePage() {
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Ask me anything..."
-              style={{
-                flex: 1,
-                padding: '10px',
-                border: '1px solid var(--border-soft)',
-                borderRadius: '8px',
-                outline: 'none',
-                backgroundColor: 'var(--bg-main)',
-                color: 'var(--text-primary)'
-              }}
+              className="form-input"
+              style={{ flex: 1 }}
             />
             <button
               onClick={sendMessage}
               disabled={loading || !inputMessage.trim()}
-              style={{
-                padding: '10px 20px',
-                background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading || !inputMessage.trim() ? 0.6 : 1,
-                fontWeight: '600'
-              }}
+              className="btn btn-primary btn-sm"
             >Send</button>
           </div>
         </div>
@@ -1542,27 +1373,25 @@ export default function ParticipantHomePage() {
           width: '60px',
           height: '60px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #667eea, #764ba2)',
+          background: 'var(--accent-primary)',
           color: 'white',
           border: 'none',
-          fontSize: '1.8rem',
+          fontSize: '1.5rem',
           fontWeight: '600',
           cursor: 'pointer',
-          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+          boxShadow: 'var(--shadow-lg)',
           zIndex: 999,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
         }}
       >
-        {chatOpen ? '×' : '💬'}
+        {chatOpen ? '\u00D7' : 'AI'}
       </button>
-
-
 
       {/* Payment Modal */}
       {showPaymentModal && selectedEvent && (
-        <PaymentModal 
+        <PaymentModal
           event={selectedEvent}
           onClose={() => {
             setShowPaymentModal(false);

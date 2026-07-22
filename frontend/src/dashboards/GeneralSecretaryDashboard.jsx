@@ -44,13 +44,13 @@ export default function GeneralSecretaryDashboard() {
       };
       
       await axios.put(`/events/${eventId}/gen-sec-approve`, requestBody);
-      alert(`✅ Event ${action}d successfully!`);
+      alert(`Event ${action}d successfully!`);
       fetchPendingEvents();
       setActiveView('overview');
       setSelectedEvent(null);
       setEditingEvent(null);
     } catch (error) {
-      alert(`❌ Failed to ${action}: ` + (error.response?.data?.message || 'Unknown error'));
+      alert(`Failed to ${action}: ` + (error.response?.data?.message || 'Unknown error'));
     }
   };
 
@@ -128,37 +128,14 @@ export default function GeneralSecretaryDashboard() {
         <h3 className="nav-title">Pending General Secretary Approvals</h3>
         <button 
           onClick={handleBackToOverview}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 10,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
-      <div className="table-container" style={{
-        background: 'rgba(28, 26, 46, 0.85)',
-        borderRadius: '18px',
-        overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.08)'
-      }}>
-        <table className="table" style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          background: 'transparent'
-        }}>
-          <thead style={{
-            background: 'rgba(15, 14, 34, 0.8)'
-          }}>
+      <div className="table-container">
+        <table className="table" style={{ width: '100%' }}>
+          <thead>
             <tr>
               <th style={{
                 padding: '1rem',
@@ -167,7 +144,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Event</th>
               <th style={{
                 padding: '1rem',
@@ -176,7 +153,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Type</th>
               <th style={{
                 padding: '1rem',
@@ -185,7 +162,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Date</th>
               <th style={{
                 padding: '1rem',
@@ -194,7 +171,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Prize Pool</th>
               <th style={{
                 padding: '1rem',
@@ -203,7 +180,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Total Budget</th>
               <th style={{
                 padding: '1rem',
@@ -212,7 +189,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Status</th>
               <th style={{
                 padding: '1rem',
@@ -221,19 +198,19 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {events.filter(e => e.status === 'TREASURER_APPROVED').map(event => (
               <tr key={event._id}>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.prize_pool || 0}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.registration_fee || 0}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.total_budget || 'Not set'}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.prize_pool || 0}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.registration_fee || 0}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.total_budget || 'Not set'}</td>
                 <td style={{ padding: '1rem' }}><span className="status-badge status-pending">PENDING REVIEW</span></td>
                 <td style={{ padding: '1rem' }}>
                   <button className="btn btn-info" onClick={() => handleViewEvent(event)} style={{ margin: '0.25rem' }}>
@@ -263,19 +240,9 @@ export default function GeneralSecretaryDashboard() {
         <h3 className="nav-title">Event Details</h3>
         <button 
           onClick={() => setActiveView(previousView)}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 10,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to {previousView === 'pending' ? 'Pending' : 'Approved'}
+          Back to {previousView === 'pending' ? 'Pending' : 'Approved'}
         </button>
       </div>
       <div className="card">
@@ -431,19 +398,9 @@ export default function GeneralSecretaryDashboard() {
         <h3 className="nav-title">Edit Event</h3>
         <button 
           onClick={() => setActiveView('pending')}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 10,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Pending
+          Back to Pending
         </button>
       </div>
       <div className="card">
@@ -459,7 +416,7 @@ export default function GeneralSecretaryDashboard() {
           )}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Event Name:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Event Name:</label>
               <input 
                 type="text" 
                 value={editingEvent.title} 
@@ -468,7 +425,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Type:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Type:</label>
               <select 
                 value={editingEvent.type} 
                 onChange={(e) => setEditingEvent({...editingEvent, type: e.target.value})}
@@ -482,7 +439,7 @@ export default function GeneralSecretaryDashboard() {
               </select>
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Date:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Date:</label>
               <input 
                 type="date" 
                 value={editingEvent.date?.split('T')[0]} 
@@ -491,7 +448,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Time:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Time:</label>
               <input 
                 type="time" 
                 value={editingEvent.time} 
@@ -500,7 +457,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Duration (hours):</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Duration (hours):</label>
               <input 
                 type="number" 
                 value={editingEvent.duration_hours} 
@@ -509,7 +466,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Expected Participants:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Expected Participants:</label>
               <input 
                 type="number" 
                 value={editingEvent.expected_participants} 
@@ -518,7 +475,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Description:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Description:</label>
               <textarea 
                 value={editingEvent.description} 
                 onChange={(e) => setEditingEvent({...editingEvent, description: e.target.value})}
@@ -527,7 +484,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Volunteers Needed:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Volunteers Needed:</label>
               <input 
                 type="number" 
                 value={editingEvent.requirements?.volunteers_needed || editingEvent.volunteers_needed || 0} 
@@ -536,7 +493,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Refreshments:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Refreshments:</label>
               <input 
                 type="number" 
                 value={editingEvent.requirements?.refreshments_needed || editingEvent.refreshments_needed || 0} 
@@ -545,7 +502,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Stationary:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Stationary:</label>
               <input 
                 type="number" 
                 value={editingEvent.requirements?.stationary_needed || editingEvent.stationary_needed || 0} 
@@ -554,7 +511,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Goodies:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Goodies:</label>
               <input 
                 type="number" 
                 value={editingEvent.requirements?.goodies_needed || editingEvent.goodies_needed || 0} 
@@ -563,7 +520,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Certificates:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Certificates:</label>
               <input 
                 type="number" 
                 value={editingEvent.requirements?.certificates_needed || editingEvent.certificates_needed || 0} 
@@ -572,7 +529,7 @@ export default function GeneralSecretaryDashboard() {
               />
             </div>
             <div>
-              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Trophies:</label>
+              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Trophies:</label>
               <input 
                 type="number" 
                 value={editingEvent.requirements?.trophies_needed || editingEvent.trophies_needed || 0} 
@@ -600,37 +557,14 @@ export default function GeneralSecretaryDashboard() {
         <h3 className="nav-title">Approved Events</h3>
         <button 
           onClick={handleBackToOverview}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 10,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
-      <div className="table-container" style={{
-        background: 'rgba(28, 26, 46, 0.85)',
-        borderRadius: '18px',
-        overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.08)'
-      }}>
-        <table className="table" style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          background: 'transparent'
-        }}>
-          <thead style={{
-            background: 'rgba(15, 14, 34, 0.8)'
-          }}>
+      <div className="table-container">
+        <table className="table" style={{ width: '100%' }}>
+          <thead>
             <tr>
               <th style={{
                 padding: '1rem',
@@ -639,7 +573,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Event</th>
               <th style={{
                 padding: '1rem',
@@ -648,7 +582,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Type</th>
               <th style={{
                 padding: '1rem',
@@ -657,7 +591,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Date</th>
               <th style={{
                 padding: '1rem',
@@ -666,7 +600,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Prize Pool</th>
               <th style={{
                 padding: '1rem',
@@ -675,7 +609,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Total Budget</th>
               <th style={{
                 padding: '1rem',
@@ -684,7 +618,7 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Status</th>
               <th style={{
                 padding: '1rem',
@@ -693,19 +627,19 @@ export default function GeneralSecretaryDashboard() {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {events.filter(e => ['GENSEC_APPROVED', 'CHAIRPERSON_APPROVED', 'PUBLISHED'].includes(e.status)).map(event => (
               <tr key={event._id}>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.prize_pool || 0}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.registration_fee || 0}</td>
-                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.total_budget || 'Not set'}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.prize_pool || 0}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.registration_fee || 0}</td>
+                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.total_budget || 'Not set'}</td>
                 <td style={{ padding: '1rem' }}>
                   <span className={`status-badge ${
                     event.status === 'PUBLISHED' ? 'status-published' : 

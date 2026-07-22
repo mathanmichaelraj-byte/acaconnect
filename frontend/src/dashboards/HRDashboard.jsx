@@ -224,19 +224,9 @@ export default function HRDashboard({ onBackToParent }) {
         <h3 className="nav-title">Volunteer Requirements</h3>
         <button 
           onClick={handleBackToOverview}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 999999,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
       
@@ -267,7 +257,7 @@ export default function HRDashboard({ onBackToParent }) {
                   </button>
                 ) : (
                   <div>
-                    <p style={{ color: '#4CAF50', marginBottom: '0.5rem' }}>✓ Requirements Acknowledged</p>
+                    <p style={{ color: '#4CAF50', marginBottom: '0.5rem' }}>Requirements Acknowledged</p>
                     <button 
                       className="btn btn-primary"
                       onClick={() => handleAutoAllocate(event)}
@@ -298,19 +288,9 @@ export default function HRDashboard({ onBackToParent }) {
         <h3 className="nav-title">Allocate Volunteers - {selectedEvent?.title}</h3>
         <button 
           onClick={() => setActiveView('requirements')}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 999999,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Requirements
+          Back to Requirements
         </button>
       </div>
 
@@ -456,19 +436,9 @@ export default function HRDashboard({ onBackToParent }) {
         <h3 className="nav-title">Allocated Volunteers</h3>
         <button 
           onClick={handleBackToOverview}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 999999,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
       
@@ -537,19 +507,9 @@ export default function HRDashboard({ onBackToParent }) {
         <h3 className="nav-title">Volunteer List ({volunteerPool.length})</h3>
         <button 
           onClick={handleBackToOverview}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 999999,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
 
@@ -589,26 +549,26 @@ export default function HRDashboard({ onBackToParent }) {
         <h3 className="card-title">Available Volunteers</h3>
         <div className="card-content">
           {volunteerPool.length === 0 ? (
-            <p style={{ color: '#B8B6D8' }}>No volunteers in pool. Add volunteers above.</p>
+            <p style={{ color: 'var(--text-secondary)' }}>No volunteers in pool. Add volunteers above.</p>
           ) : (
             <div className="table-container">
               <table className="table" style={{ width: '100%' }}>
                 <thead>
                   <tr>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', color: '#B8B6D8' }}>#</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', color: '#B8B6D8' }}>Name</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', color: '#B8B6D8' }}>Department</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', color: '#B8B6D8' }}>Contact</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', color: '#B8B6D8' }}>Actions</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left', color: 'var(--text-secondary)' }}>#</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left', color: 'var(--text-secondary)' }}>Name</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left', color: 'var(--text-secondary)' }}>Department</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left', color: 'var(--text-secondary)' }}>Contact</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left', color: 'var(--text-secondary)' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {volunteerPool.map((v, idx) => (
                     <tr key={v._id}>
-                      <td style={{ padding: '0.75rem', color: '#F5F7FF' }}>{idx + 1}</td>
-                      <td style={{ padding: '0.75rem', color: '#F5F7FF' }}>{v.name}</td>
-                      <td style={{ padding: '0.75rem', color: '#F5F7FF' }}>{v.department}</td>
-                      <td style={{ padding: '0.75rem', color: '#F5F7FF' }}>{v.contact || '-'}</td>
+                      <td style={{ padding: '0.75rem', color: 'var(--text-primary)' }}>{idx + 1}</td>
+                      <td style={{ padding: '0.75rem', color: 'var(--text-primary)' }}>{v.name}</td>
+                      <td style={{ padding: '0.75rem', color: 'var(--text-primary)' }}>{v.department}</td>
+                      <td style={{ padding: '0.75rem', color: 'var(--text-primary)' }}>{v.contact || '-'}</td>
                       <td style={{ padding: '0.75rem' }}>
                         <button 
                           className="btn btn-danger"

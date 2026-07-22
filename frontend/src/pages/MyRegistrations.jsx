@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const MyRegistrations = () => {
   const { user, logout } = useContext(AuthContext);
@@ -35,14 +37,14 @@ const MyRegistrations = () => {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'COMPLETED': 
-        return 'status-badge' + ' ' + 'status-published';
-      case 'PENDING': 
-        return 'status-badge' + ' ' + 'status-pending';
-      case 'FAILED': 
-        return 'status-badge' + ' ' + 'status-rejected';
-      default: 
-        return 'status-badge' + ' ' + 'status-created';
+      case 'COMPLETED':
+        return 'badge badge-success';
+      case 'PENDING':
+        return 'badge badge-warning';
+      case 'FAILED':
+        return 'badge badge-danger';
+      default:
+        return 'badge badge-secondary';
     }
   };
 
@@ -57,145 +59,70 @@ const MyRegistrations = () => {
 
   if (loading) {
     return (
-      <div className="niral-home">
-        <div style={{ 
-          padding: '140px 60px 80px', 
-          background: 'var(--bg-main)', 
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <div style={{ 
-            color: 'var(--text-primary)', 
-            fontSize: '1.5rem',
-            textAlign: 'center'
-          }}>
-            <div style={{ marginBottom: '1rem', fontSize: '3rem' }}>⏳</div>
+      <div>
+        <Header showNavigation={true} />
+        <div className="page-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="loading">
             Loading your registrations...
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="niral-home">
-      {/* Header Navigation */}
-      <header className="niral-header">
-        <div className="niral-nav-content">
-          <div className="nav-left">
-            <img src="/nirallogo.png" alt="NIRAL Logo" className="nav-logo" />
-            <span style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600', marginLeft: '1rem' }}>
-              Welcome, {user?.name}
-            </span>
-          </div>
-          
-          <nav className="nav-center">
-            <a href="#" className="nav-link" onClick={() => navigate('/participant-home')}>Home</a>
-            <a href="#" className="nav-link" onClick={() => navigate('/participant-home')}>Events</a>
-            <a href="#" className="nav-link active">My Registrations</a>
-            <a href="#" className="nav-link" onClick={() => navigate('/participant-home')}>About</a>
-            <a href="#" className="nav-link" onClick={() => navigate('/participant-home')}>Contact</a>
-          </nav>
-          
-          <div className="nav-right">
-            <button className="btn-back" onClick={logout}>
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div>
+      <Header showNavigation={true} />
 
-      <div style={{ padding: '140px 60px 80px', background: 'var(--bg-main)', minHeight: '100vh' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <h1 style={{ 
-            fontSize: '40px', 
-            fontWeight: '700', 
-            background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', 
-            WebkitBackgroundClip: 'text', 
-            WebkitTextFillColor: 'transparent', 
-            marginBottom: '2rem', 
-            textAlign: 'center',
-            letterSpacing: '1.5px'
-          }}>
-            My Registrations
-          </h1>
+      <div className="page-container">
+        <div className="container">
+          <div className="page-header">
+            <h1>My Registrations</h1>
+            <p>Your registered events and their status</p>
+          </div>
 
           {registrations.length === 0 ? (
-            <div style={{
-              background: 'var(--bg-glass)',
-              border: '1px solid var(--border-soft)',
-              borderRadius: '18px',
-              padding: '3rem',
-              textAlign: 'center',
-              backdropFilter: 'blur(16px)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
-            }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📝</div>
-              <h3 style={{ 
-                color: 'var(--text-primary)', 
-                fontSize: '1.5rem', 
-                marginBottom: '0.5rem',
-                fontWeight: '600'
-              }}>
-                No Registrations Yet
-              </h3>
-              <p style={{ 
-                color: 'var(--text-muted)', 
-                fontSize: '1.1rem',
-                margin: '0'
-              }}>
-                Complete your payments to see registered events here!
-              </p>
+            <div className="card" style={{ textAlign: 'center' }}>
+              <div className="card-body" style={{ padding: '3rem' }}>
+                <h3 style={{ color: 'var(--text-primary)', fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: '600' }}>
+                  No Registrations Yet
+                </h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', margin: '0' }}>
+                  Complete your payments to see registered events here!
+                </p>
+              </div>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem' }}>
+            <div className="registrations-list">
               {registrations.map((reg) => (
-                <div key={reg._id} style={{
-                  background: 'var(--bg-glass)',
-                  border: '1px solid var(--border-soft)',
-                  borderRadius: '18px',
-                  padding: '1.5rem',
-                  backdropFilter: 'blur(16px)',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%'
-                }}>
+                <div key={reg._id} className="registration-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
                   {reg.event_id.cover_photo && (
                     <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                      <img 
-                        src={`http://localhost:5000/${reg.event_id.cover_photo}`} 
-                        alt="Event Cover" 
-                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
+                      <img
+                        src={`http://localhost:5000/${reg.event_id.cover_photo}`}
+                        alt="Event Cover"
+                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
                       />
                     </div>
                   )}
-                  <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>
-                    {reg.event_id.title}
-                  </h3>
-                  <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem', lineHeight: '1.5', flex: '1' }}>
-                    {reg.event_id.description}
-                  </p>
+                  <div className="registration-info">
+                    <h3>{reg.event_id.title}</h3>
+                    <p style={{ lineHeight: '1.5', flex: '1' }}>
+                      {reg.event_id.description}
+                    </p>
+                  </div>
                   <div style={{ marginBottom: '1rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                       <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                        📅 {formatDate(reg.event_id.date)}
+                        {formatDate(reg.event_id.date)}
                       </span>
                       <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                        🕐 {reg.event_id.time || 'TBA'}
+                        {reg.event_id.time || 'TBA'}
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ 
-                        background: 'linear-gradient(135deg, var(--accent-gold), #FF8C00)', 
-                        color: 'var(--bg-main)', 
-                        padding: '0.4rem 0.8rem', 
-                        borderRadius: '20px', 
-                        fontSize: '0.75rem', 
-                        fontWeight: '600' 
-                      }}>
+                      <span className="badge badge-info">
                         {reg.event_id.event_type}
                       </span>
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
@@ -205,16 +132,9 @@ const MyRegistrations = () => {
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
                     <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
-                      💰 Prize Pool: ₹{reg.event_id.prize_pool || 0}
+                      Prize Pool: &#8377;{reg.event_id.prize_pool || 0}
                     </span>
-                    <span style={{
-                      background: 'linear-gradient(135deg, #4ade80, #22c55e)',
-                      color: 'white',
-                      padding: '0.4rem 0.8rem',
-                      borderRadius: '20px',
-                      fontSize: '0.75rem',
-                      fontWeight: '600'
-                    }}>
+                    <span className="badge badge-success">
                       REGISTERED
                     </span>
                   </div>
@@ -224,6 +144,8 @@ const MyRegistrations = () => {
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

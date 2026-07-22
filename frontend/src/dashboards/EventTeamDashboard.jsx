@@ -384,19 +384,9 @@ export default function EventTeamDashboard({ onBackToParent }) {
           <h3 className="nav-title">Create New Event</h3>
           <button 
             onClick={handleBackToOverview}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: '#00E5FF', 
-              fontSize: '0.85rem', 
-              cursor: 'pointer',
-              padding: '0.25rem 0',
-              pointerEvents: 'auto',
-              zIndex: 10,
-              position: 'relative'
-            }}
+            className="btn btn-ghost btn-sm"
           >
-            ← Back to Overview
+            Back to Overview
           </button>
         </div>
         <form onSubmit={handleCreateEvent} className="form-container">
@@ -512,7 +502,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
             </div>
           )}
           {!eventForm.type && (
-            <p style={{ color: '#B8B6D8', fontStyle: 'italic' }}>Please select an event type first to see available tags</p>
+            <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>Please select an event type first to see available tags</p>
           )}
         </div>
 
@@ -550,7 +540,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
             <span>Registration Fee Required</span>
           </label>
           {eventForm.registration_fee_required && (
-            <p style={{ color: '#B8B6D8', fontSize: '0.9rem', marginTop: '0.5rem', fontStyle: 'italic' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem', fontStyle: 'italic' }}>
               Note: The registration fee amount will be set by the Treasurer during approval.
             </p>
           )}
@@ -580,7 +570,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                         {scheduleCheck.conflicts.map((conflict, idx) => (
                           <div key={idx} style={{ marginBottom: '0.5rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: '6px' }}>
                             <strong>{conflict.title}</strong> ({conflict.type})<br/>
-                            <span style={{ fontSize: '0.9rem', color: '#B8B6D8' }}>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                               Time: {conflict.time} | Duration: {conflict.duration}h
                             </span>
                           </div>
@@ -606,7 +596,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                           </div>
                         )}
                         
-                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#B8B6D8', fontStyle: 'italic' }}>
+                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
                           You can still proceed with your chosen time, but conflicts may need to be resolved.
                         </p>
                       </div>
@@ -615,7 +605,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                     <div className="card" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
                       <div className="card-content">
                         <h4 style={{ color: '#22c55e', marginBottom: '0.5rem' }}>No Conflicts Found</h4>
-                        <p style={{ fontSize: '0.9rem', color: '#B8B6D8' }}>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                           Your selected time slot is available. You can proceed with event creation.
                         </p>
                       </div>
@@ -767,9 +757,9 @@ export default function EventTeamDashboard({ onBackToParent }) {
             border: '1px solid rgba(0, 229, 255, 0.2)',
             gridColumn: '1 / -1'
           }}>
-            <h5 style={{ marginBottom: '1.5rem', color: '#00E5FF', fontSize: '1.1rem' }}>Select Stationery Items</h5>
+            <h5 style={{ marginBottom: '1.5rem', color: 'var(--accent-primary)', fontSize: '1.1rem' }}>Select Stationery Items</h5>
             {stationeryItems.length === 0 ? (
-              <p style={{ color: '#B8B6D8', fontStyle: 'italic' }}>Loading stationery items...</p>
+              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>Loading stationery items...</p>
             ) : (
               <>
                 <div style={{ 
@@ -817,7 +807,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                         />
                         <span style={{ 
                           flex: 1, 
-                          color: '#F5F7FF',
+                          color: 'var(--text-primary)',
                           fontSize: '0.95rem',
                           fontWeight: '500'
                         }}>{item.name}</span>
@@ -842,7 +832,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                               background: 'rgba(255,255,255,0.15)',
                               border: '1px solid rgba(0, 229, 255, 0.3)',
                               borderRadius: '6px',
-                              color: '#F5F7FF',
+                              color: 'var(--text-primary)',
                               fontSize: '0.9rem',
                               textAlign: 'center'
                             }}
@@ -851,7 +841,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                       </div>
                     );
                   }) : (
-                    <p style={{ color: '#B8B6D8', fontStyle: 'italic' }}>Loading stationery items...</p>
+                    <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>Loading stationery items...</p>
                   )}}
                 </div>
                 
@@ -864,7 +854,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 }}>
                   <label className="form-label" style={{ 
                     marginBottom: '0.75rem',
-                    color: '#00E5FF',
+                    color: 'var(--accent-primary)',
                     fontSize: '1rem',
                     fontWeight: '500'
                   }}>Additional Items</label>
@@ -881,7 +871,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                       background: 'rgba(255,255,255,0.08)',
                       border: '1px solid rgba(0, 229, 255, 0.2)',
                       borderRadius: '8px',
-                      color: '#F5F7FF',
+                      color: 'var(--text-primary)',
                       fontSize: '0.95rem',
                       resize: 'vertical'
                     }}
@@ -947,7 +937,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                     />
                     <span style={{ 
                       flex: 1, 
-                      color: '#F5F7FF',
+                      color: 'var(--text-primary)',
                       fontSize: '0.95rem',
                       fontWeight: '500'
                     }}>{item.name}</span>
@@ -972,7 +962,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                           background: 'rgba(255,255,255,0.15)',
                           border: '1px solid rgba(103, 126, 234, 0.3)',
                           borderRadius: '6px',
-                          color: '#F5F7FF',
+                          color: 'var(--text-primary)',
                           fontSize: '0.9rem',
                           textAlign: 'center'
                         }}
@@ -1009,7 +999,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid rgba(103, 126, 234, 0.2)',
                   borderRadius: '8px',
-                  color: '#F5F7FF',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
                   resize: 'vertical'
                 }}
@@ -1073,7 +1063,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                     />
                     <span style={{ 
                       flex: 1, 
-                      color: '#F5F7FF',
+                      color: 'var(--text-primary)',
                       fontSize: '0.95rem',
                       fontWeight: '500'
                     }}>{item.name}</span>
@@ -1098,7 +1088,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                           background: 'rgba(255,255,255,0.15)',
                           border: '1px solid rgba(34, 197, 94, 0.3)',
                           borderRadius: '6px',
-                          color: '#F5F7FF',
+                          color: 'var(--text-primary)',
                           fontSize: '0.9rem',
                           textAlign: 'center'
                         }}
@@ -1135,7 +1125,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid rgba(34, 197, 94, 0.2)',
                   borderRadius: '8px',
-                  color: '#F5F7FF',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
                   resize: 'vertical'
                 }}
@@ -1162,37 +1152,14 @@ export default function EventTeamDashboard({ onBackToParent }) {
         <h3 className="nav-title">My Events</h3>
         <button 
           onClick={handleBackToOverview}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 10,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
-      <div className="table-container" style={{
-        background: 'rgba(28, 26, 46, 0.85)',
-        borderRadius: '18px',
-        overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.08)'
-      }}>
-        <table className="table" style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          background: 'transparent'
-        }}>
-          <thead style={{
-            background: 'rgba(15, 14, 34, 0.8)'
-          }}>
+      <div className="table-container">
+        <table className="table" style={{ width: '100%' }}>
+          <thead>
             <tr>
               <th style={{
                 padding: '1rem',
@@ -1201,7 +1168,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Title</th>
               <th style={{
                 padding: '1rem',
@@ -1210,7 +1177,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Type</th>
               <th style={{
                 padding: '1rem',
@@ -1219,7 +1186,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Date</th>
               <th style={{
                 padding: '1rem',
@@ -1228,7 +1195,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Participants</th>
               <th style={{
                 padding: '1rem',
@@ -1237,7 +1204,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Status</th>
               <th style={{
                 padding: '1rem',
@@ -1246,7 +1213,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 fontSize: '0.9rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                color: '#B8B6D8'
+                color: 'var(--text-secondary)'
               }}>Actions</th>
             </tr>
           </thead>
@@ -1256,7 +1223,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 <td colSpan="6" style={{ 
                   textAlign: 'center', 
                   padding: '2rem', 
-                  color: '#B8B6D8'
+                  color: 'var(--text-secondary)'
                 }}>
                   No events created yet. Click "Create New Event" to get started!
                 </td>
@@ -1264,18 +1231,18 @@ export default function EventTeamDashboard({ onBackToParent }) {
             ) : (
               events.map(event => (
                 <tr key={event._id}>
-                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>
+                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>
                     <button 
                       className="btn-link"
                       onClick={() => handleEventClick(event)}
-                      style={{ background: 'none', border: 'none', color: '#00E5FF', textDecoration: 'underline', cursor: 'pointer' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', textDecoration: 'underline', cursor: 'pointer' }}
                     >
                       {event.title}
                     </button>
                   </td>
-                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
-                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
-                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.expected_participants}</td>
+                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
+                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
+                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.expected_participants}</td>
                   <td style={{ padding: '1rem' }}>
                     <span className={`status-badge ${
                       event.status === 'PUBLISHED' ? 'status-published' : 
@@ -1345,19 +1312,9 @@ export default function EventTeamDashboard({ onBackToParent }) {
         <h3 className="nav-title">Event Details - {selectedEvent?.title}</h3>
         <button 
           onClick={() => setActiveView('events')}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 10,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Events
+          Back to Events
         </button>
       </div>
       
@@ -1385,7 +1342,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                     e.target.nextSibling.style.display = 'block';
                   }}
                 />
-                <p style={{ display: 'none', color: '#B8B6D8', fontStyle: 'italic' }}>Image not available</p>
+                <p style={{ display: 'none', color: 'var(--text-secondary)', fontStyle: 'italic' }}>Image not available</p>
               </div>
             )}
           </div>
@@ -1399,7 +1356,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 {selectedEvent.tags.map(tag => (
                   <span key={tag} style={{
                     background: 'rgba(0, 229, 255, 0.1)',
-                    color: '#00E5FF',
+                    color: 'var(--accent-primary)',
                     padding: '0.25rem 0.5rem',
                     borderRadius: '12px',
                     fontSize: '0.8rem',
@@ -1445,7 +1402,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 <strong>Refreshment Items:</strong>
                 <ul style={{ marginTop: '0.25rem', paddingLeft: '1rem' }}>
                   {selectedEvent.requirements.refreshment_items.map((item, index) => (
-                    <li key={index} style={{ color: '#B8B6D8', fontSize: '0.9rem' }}>
+                    <li key={index} style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                       {item.item_name} - Quantity: {item.quantity}
                     </li>
                   ))}
@@ -1455,7 +1412,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
             {selectedEvent?.requirements?.custom_refreshment_items && (
               <div style={{ marginTop: '0.5rem' }}>
                 <strong>Additional Refreshment Items:</strong>
-                <p style={{ color: '#B8B6D8', fontSize: '0.9rem', marginTop: '0.25rem', whiteSpace: 'pre-wrap' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.25rem', whiteSpace: 'pre-wrap' }}>
                   {selectedEvent.requirements.custom_refreshment_items}
                 </p>
               </div>
@@ -1466,7 +1423,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 <strong>Stationery Items:</strong>
                 <ul style={{ marginTop: '0.25rem', paddingLeft: '1rem' }}>
                   {selectedEvent.requirements.stationary_items.map((item, index) => (
-                    <li key={index} style={{ color: '#B8B6D8', fontSize: '0.9rem' }}>
+                    <li key={index} style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                       {item.item_name} - Quantity: {item.quantity}
                     </li>
                   ))}
@@ -1476,7 +1433,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
             {selectedEvent?.requirements?.custom_stationary_items && (
               <div style={{ marginTop: '0.5rem' }}>
                 <strong>Additional Stationery Items:</strong>
-                <p style={{ color: '#B8B6D8', fontSize: '0.9rem', marginTop: '0.25rem', whiteSpace: 'pre-wrap' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.25rem', whiteSpace: 'pre-wrap' }}>
                   {selectedEvent.requirements.custom_stationary_items}
                 </p>
               </div>
@@ -1487,7 +1444,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
                 <strong>Technical Items:</strong>
                 <ul style={{ marginTop: '0.25rem', paddingLeft: '1rem' }}>
                   {selectedEvent.requirements.technical_items.map((item, index) => (
-                    <li key={index} style={{ color: '#B8B6D8', fontSize: '0.9rem' }}>
+                    <li key={index} style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                       {item.item_name} - Quantity: {item.quantity}
                     </li>
                   ))}
@@ -1497,7 +1454,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
             {selectedEvent?.requirements?.custom_technical_items && (
               <div style={{ marginTop: '0.5rem' }}>
                 <strong>Additional Technical Items:</strong>
-                <p style={{ color: '#B8B6D8', fontSize: '0.9rem', marginTop: '0.25rem', whiteSpace: 'pre-wrap' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.25rem', whiteSpace: 'pre-wrap' }}>
                   {selectedEvent.requirements.custom_technical_items}
                 </p>
               </div>
@@ -1707,8 +1664,8 @@ export default function EventTeamDashboard({ onBackToParent }) {
           <h3 className="card-title">Event Status</h3>
           <div className="card-content">
             <p><strong>Status:</strong> <span style={{ color: '#4CAF50' }}>Event Finished</span></p>
-            <p style={{ color: '#B8B6D8', fontSize: '0.9rem' }}>Finished at: {new Date(selectedEvent.finished_at).toLocaleString()}</p>
-            <p style={{ color: '#B8B6D8', fontSize: '0.9rem' }}>All volunteers and venues have been freed.</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Finished at: {new Date(selectedEvent.finished_at).toLocaleString()}</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>All volunteers and venues have been freed.</p>
           </div>
         </div>
       )}

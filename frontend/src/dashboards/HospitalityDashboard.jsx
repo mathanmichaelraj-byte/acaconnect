@@ -80,9 +80,9 @@ export default function HospitalityDashboard() {
           venueType: venue?.type,
           venueCapacity: venue?.capacity
         });
-        alert(`✅ Suggested Venue: ${venue?.name || assignment.venueName}\nUtilization: ${assignment.utilization}%\nPriority Score: ${assignment.priority}`);
+        alert(`Suggested Venue: ${venue?.name || assignment.venueName}\nUtilization: ${assignment.utilization}%\nPriority Score: ${assignment.priority}`);
       } else {
-        alert('⚠️ ' + (assignment?.error || 'No suitable venue found'));
+        alert(assignment?.error || 'No suitable venue found');
       }
     } catch (error) {
       alert('Failed to generate venue suggestion: ' + (error.response?.data?.message || 'Unknown error'));
@@ -98,7 +98,7 @@ export default function HospitalityDashboard() {
         venue_details: suggestedVenue.venueName,
         lab_allocated: suggestedVenue.venueType === 'Computer Lab' ? suggestedVenue.venueName : venueData.lab_allocated
       });
-      alert('✅ Venue suggestion accepted! You can modify details before submitting.');
+        alert('Venue suggestion accepted! You can modify details before submitting.');
     }
   };
 
@@ -117,7 +117,7 @@ export default function HospitalityDashboard() {
       const successful = res.data.schedule.filter(s => s.venue).length;
       const failed = res.data.schedule.filter(s => !s.venue).length;
       
-      alert(`✅ Bulk scheduling complete!\n\nSuccessful: ${successful}\nFailed: ${failed}\n\nYou can now review and allocate venues individually.`);
+      alert(`Bulk scheduling complete!\n\nSuccessful: ${successful}\nFailed: ${failed}\n\nYou can now review and allocate venues individually.`);
       fetchEvents();
     } catch (error) {
       alert('Failed to generate bulk schedule: ' + (error.response?.data?.message || 'Unknown error'));
@@ -215,37 +215,18 @@ export default function HospitalityDashboard() {
       <div className="nav-header">
         <h3 className="nav-title">Venue Requirements</h3>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <button 
-            onClick={handleBulkAutoGenerate}
-            disabled={loadingSchedule || events.filter(e => !e.hospitality?.venue_allocated).length === 0}
-            style={{ 
-              background: loadingSchedule ? '#666' : 'linear-gradient(135deg, #F5B301, #FF8C00)',
-              color: '#0B061A',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '0.5rem 1rem',
-              cursor: loadingSchedule ? 'not-allowed' : 'pointer',
-              fontWeight: '600',
-              fontSize: '0.85rem'
-            }}
-          >
-            {loadingSchedule ? 'Generating...' : `Auto-Generate All (${events.filter(e => !e.hospitality?.venue_allocated).length})`}
-          </button>
-          <button 
-            onClick={handleBackToOverview}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: '#00E5FF', 
-              fontSize: '0.85rem', 
-              cursor: 'pointer',
-              padding: '0.25rem 0',
-              pointerEvents: 'auto',
-              zIndex: 999999,
-              position: 'relative'
-            }}
-          >
-            ← Back to Overview
+            <button 
+              onClick={handleBulkAutoGenerate}
+              disabled={loadingSchedule || events.filter(e => !e.hospitality?.venue_allocated).length === 0}
+              className="btn btn-primary"
+            >
+              {loadingSchedule ? 'Generating...' : `Auto-Generate All (${events.filter(e => !e.hospitality?.venue_allocated).length})`}
+            </button>
+            <button 
+              onClick={handleBackToOverview}
+              className="btn btn-ghost btn-sm"
+            >
+              Back to Overview
           </button>
         </div>
       </div>
@@ -310,17 +291,9 @@ export default function HospitalityDashboard() {
         <h3 className="nav-title">Allocate Venue - {selectedEvent?.title}</h3>
         <button 
           onClick={() => setActiveView('requirements')} 
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            zIndex: 999999,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Requirements
+          Back to Requirements
         </button>
       </div>
       <div className="card">
@@ -432,19 +405,9 @@ export default function HospitalityDashboard() {
         <h3 className="nav-title">Allocated Venues</h3>
         <button 
           onClick={() => setActiveView('overview')}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: '#00E5FF', 
-            fontSize: '0.85rem', 
-            cursor: 'pointer',
-            padding: '0.25rem 0',
-            pointerEvents: 'auto',
-            zIndex: 999999,
-            position: 'relative'
-          }}
+          className="btn btn-ghost btn-sm"
         >
-          ← Back to Overview
+          Back to Overview
         </button>
       </div>
       <div className="events-grid">

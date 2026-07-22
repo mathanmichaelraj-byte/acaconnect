@@ -56,7 +56,7 @@ export default function TechopsEventsPage() {
           <div className="nav-right">
             <div style={{ position: 'relative', marginRight: '1rem' }}>
               <button className="btn-back" onClick={() => setShowNotifications(!showNotifications)} style={{ position: 'relative' }}>
-                🔔 Notifications
+                Notifications
                 {notifications.length > 0 && (
                   <span style={{
                     position: 'absolute', top: '-5px', right: '-5px', background: 'var(--accent-danger)',
@@ -98,11 +98,11 @@ export default function TechopsEventsPage() {
             </div>
             
             <button className="btn-back" onClick={() => setShowDashboard(true)} style={{ marginRight: '1rem' }}>
-              📊 Dashboard
+              Dashboard
             </button>
             
             <button className="btn-back" onClick={logout}>
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
@@ -158,10 +158,10 @@ export default function TechopsEventsPage() {
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          📅 {new Date(event.date).toLocaleDateString()}
+                          {new Date(event.date).toLocaleDateString()}
                         </span>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          🕐 {event.time}
+                          {event.time}
                         </span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
@@ -177,16 +177,16 @@ export default function TechopsEventsPage() {
                         </span>
                       </div>
                       <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>
-                        👥 Expected: {event.expected_participants} participants
+                        Expected: {event.expected_participants} participants
                       </div>
                       {event.hospitality?.venue_allocated && (
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                          📍 <strong>Venue:</strong> {event.hospitality.venue_details}
+                          <strong>Venue:</strong> {event.hospitality.venue_details}
                         </div>
                       )}
                       {event.hr?.volunteers_allocated && (
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                          👥 <strong>Volunteers:</strong>
+                          <strong>Volunteers:</strong>
                           {event.hr.allocated_volunteers?.length > 0 && (
                             <div style={{ marginLeft: '1rem', fontSize: '0.8rem', marginTop: '0.25rem' }}>
                               {event.hr.allocated_volunteers.map((vol, idx) => (
@@ -200,7 +200,7 @@ export default function TechopsEventsPage() {
                     <div style={{ marginTop: 'auto' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
-                          💰 Prize Pool: ₹{event.prize_pool || 0}
+                          Prize Pool: ₹{event.prize_pool || 0}
                         </span>
                         <span style={{ 
                           background: 'var(--bg-secondary)', color: 'var(--text-primary)', 
