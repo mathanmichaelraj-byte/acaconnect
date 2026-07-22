@@ -2,7 +2,7 @@
 
 ## System Overview
 
-ACAConnect is a multi-service application with a React frontend, Node.js/Express backend, and two Python microservices for ML recommendations and chatbot functionality. All services communicate via REST APIs.
+ACAConnect is a multi-service application with a React frontend, Node.js/Express backend, and a Python chatbot microservice. All services communicate via REST APIs.
 
 ## Architecture Diagram
 
@@ -18,13 +18,6 @@ graph TB
         FS[File Storage<br/>uploads/]
     end
 
-    subgraph "ML Service (Render)"
-        ML[Flask API<br/>Port 5001]
-        KNN[KNN Model<br/>10L dataset]
-        CF[Collaborative Filtering]
-        BM[Budget Predictor<br/>sklearn]
-    end
-
     subgraph "Chatbot Service (Render)"
         CB[Flask API<br/>Port 5002]
         EMB[Sentence Transformers<br/>all-MiniLM-L6-v2]
@@ -33,16 +26,13 @@ graph TB
     end
 
     subgraph "External Services"
-        RZ[Razorpay<br/>Payments]
         NM[Nodemailer<br/>Email/SMTP]
     end
 
     FE -->|REST API| BE
     BE --> DB
     BE --> FS
-    BE -->|/ml/*| ML
     BE -->|/chatbot/*| CB
-    BE --> RZ
     BE --> NM
     CB --> DB
     CB --> VDB
@@ -64,12 +54,6 @@ graph TB
 - **Database**: MongoDB (Mongoose ODM)
 - **Key patterns**: MVC, FSM service, predicate-based routing, role middleware
 
-### ML Service (Flask)
-- **Purpose**: Event recommendation engine & budget prediction
-- **Responsibilities**: KNN recommendations, collaborative filtering, hybrid scoring, budget estimation
-- **Deployment**: Render
-- **Key patterns**: Pre-trained model serving, cosine similarity scoring
-
 ### Chatbot Service (Flask)
 - **Purpose**: RAG-based Q&A assistant for NIRAL
 - **Responsibilities**: Intent detection, knowledge retrieval, LLM-powered response generation
@@ -84,27 +68,16 @@ sequenceDiagram
     participant FE as Frontend
     participant BE as Backend
     participant DB as MongoDB
-    participant ML as ML Service
-    participant RZ as Razorpay
-
-    %% Event Recommendation Flow
-    P->>FE: Browse Events
-    FE->>BE: GET /events (published)
-    BE->>DB: Query published events
-    BE->>ML: POST /recommend-hybrid-cf (interests + events)
-    ML-->>BE: Scored recommendations
-    BE-->>FE: Events with scores
-    FE-->>P: Personalized event list
 
     %% Registration + Payment Flow
     P->>FE: Register for paid event
     FE->>BE: POST /registrations
-    BE->>RZ: Create payment order
-    RZ-->>FE: Payment page
-    P->>RZ: Complete payment
-    RZ->>BE: Payment webhook/verification
-    BE->>DB: Save registration (CONFIRMED)
-    BE-->>FE: Registration success
+    BE->>DB: Save registration (PENDING)
+    BE-->>FE: Show QR code for payment
+    P->>FE: Upload payment screenshot
+    FE->>BE: POST /registrations/:id/upload-screenshot
+    BE->>DB: Save screenshot, mark VERIFICATION_PENDING
+    BE-->>FE: Awaiting treasurer verification
 ```
 
 ## API Route Map
@@ -119,7 +92,6 @@ sequenceDiagram
 | `/notifications` | Backend | Role-based notifications |
 | `/participant-notifications` | Backend | Participant notifications |
 | `/admin` | Backend | Admin operations |
-| `/ml` | Backend → ML | Proxy to ML service |
 | `/chatbot` | Backend → Chatbot | Proxy to chatbot service |
 | `/logistics` | Backend | Expense/procurement management |
 | `/hospitality` | Backend | Venue allocation |
@@ -139,7 +111,6 @@ sequenceDiagram
 
 ## Integration Points
 
-- **Razorpay**: Payment gateway for event registration fees
 - **MongoDB Atlas**: Primary data store (events, users, registrations, notifications)
 - **ChromaDB**: Vector database for chatbot RAG retrieval
 - **Groq/Ollama**: LLM provider for chatbot response generation

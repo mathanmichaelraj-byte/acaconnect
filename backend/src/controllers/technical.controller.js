@@ -11,7 +11,9 @@ exports.getAllTechnicalItems = async (req, res) => {
 
 exports.createTechnicalItem = async (req, res) => {
   try {
-    const item = await TechnicalItem.create(req.body);
+    const { name, description, unit } = req.body;
+    if (!name) return res.status(400).json({ message: "Name is required" });
+    const item = await TechnicalItem.create({ name, description, unit });
     res.json(item);
   } catch (error) {
     res.status(500).json({ message: "Failed to create technical item", error: error.message });
@@ -20,7 +22,8 @@ exports.createTechnicalItem = async (req, res) => {
 
 exports.updateTechnicalItem = async (req, res) => {
   try {
-    const item = await TechnicalItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { name, description, unit } = req.body;
+    const item = await TechnicalItem.findByIdAndUpdate(req.params.id, { name, description, unit }, { new: true });
     if (!item) return res.status(404).json({ message: "Technical item not found" });
     res.json(item);
   } catch (error) {

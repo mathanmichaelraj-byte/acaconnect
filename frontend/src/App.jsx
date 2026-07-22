@@ -8,7 +8,7 @@ import HomePage from "./pages/HomePage";
 import ParticipantHomePage from "./pages/ParticipantHomePage";
 import MyRegistrations from "./pages/MyRegistrations";
 import MockPaymentPage from "./pages/MockPaymentPage";
-import RazorpayPaymentPage from "./pages/RazorpayPaymentPage";
+import QRPaymentPage from "./pages/QRPaymentPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import TreasurerPaymentVerification from "./pages/TreasurerPaymentVerification";
 import AboutPage from "./pages/AboutPage";
@@ -162,7 +162,7 @@ export default function App() {
             } />
             <Route path="/payment" element={
               <ProtectedRoute>
-                <RazorpayPaymentPage />
+                <QRPaymentPage />
               </ProtectedRoute>
             } />
             <Route path="/mock-payment" element={

@@ -12,7 +12,6 @@ const budgetRoutes = require("./routes/budget.routes");
 const notificationRoutes = require("./routes/notification.routes");
 const participantNotificationRoutes = require("./routes/participantNotification.routes");
 const adminRoutes = require("./routes/admin.routes");
-const mlRoutes = require("./routes/ml");
 const chatbotRoutes = require("./routes/chatbot.routes");
 const registrationRoutes = require("./routes/registration.routes");
 const stationeryRoutes = require("./routes/stationery.routes");
@@ -32,7 +31,8 @@ const designRoutes = require("./routes/design.routes");
 const photoRoutes = require("./routes/photo.routes");
 
 const app = express();
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:3000'];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Ensure upload directories exist
@@ -46,11 +46,6 @@ uploadDirs.forEach(dir => {
 // Log all incoming requests
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  if (req.method === 'POST' && req.url.includes('/logistics/expense/')) {
-    console.log('EXPENSE SUBMISSION REQUEST RECEIVED!');
-    console.log('Headers:', req.headers);
-    console.log('Body keys:', Object.keys(req.body || {}));
-  }
   next();
 });
 
@@ -64,7 +59,6 @@ app.use("/budgets", budgetRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/participant-notifications", participantNotificationRoutes);
 app.use("/admin", adminRoutes);
-app.use("/ml", mlRoutes);
 app.use("/chatbot", chatbotRoutes);
 app.use("/registrations", registrationRoutes);
 app.use("/stationery", stationeryRoutes);
@@ -88,7 +82,7 @@ connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Backend running on port ${PORT}`);
     console.log('Environment:', process.env.NODE_ENV);
-    console.log('Razorpay Key ID:', process.env.RAZORPAY_KEY_ID ? 'Present' : 'Missing');
+    console.log('Chatbot Service URL:', process.env.CHATBOT_SERVICE_URL || 'http://localhost:5002');
   });
 }).catch(err => {
   console.error('Database connection failed:', err);

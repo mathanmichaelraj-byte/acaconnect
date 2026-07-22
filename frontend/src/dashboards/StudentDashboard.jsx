@@ -83,7 +83,6 @@ export default function StudentDashboard() {
           <ul style={{ marginTop: '1rem', paddingLeft: '1.5rem' }}>
             <li>📝 Event Registration System</li>
             <li>📍 Location-based Attendance</li>
-            <li>🤖 AI-powered Event Recommendations</li>
             <li>💬 Event Chat & Q&A</li>
             <li>📜 Digital Certificate Generation</li>
           </ul>

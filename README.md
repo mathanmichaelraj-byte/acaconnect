@@ -14,16 +14,14 @@
 
 ACAConnect is a full-stack event management platform built for **NIRAL 2026**, the annual technical symposium of the Department of Information Science and Technology (IST), College of Engineering Guindy (CEG), Anna University, Chennai.
 
-It automates the complete event lifecycle — from proposal creation and multi-level approval to participant registration, payment processing, resource allocation, attendance tracking, and certificate generation — all powered by ML-driven recommendations and a RAG-based chatbot.
+It automates the complete event lifecycle — from proposal creation and multi-level approval to participant registration, payment processing, resource allocation, attendance tracking, and certificate generation — powered by a RAG-based chatbot assistant.
 
 ## Key Features
 
 - **FSM-Based Event Workflow** — Multi-level approval pipeline (Event Team → Treasurer → Gen Sec → Chairperson)
 - **Role-Based Dashboards** — 14 distinct roles with dedicated views and permissions
-- **ML Event Recommendations** — Hybrid KNN + Collaborative Filtering trained on 10L+ dataset
-- **Budget Prediction** — ML model estimates expense breakdown before event creation
 - **RAG Chatbot** — AI assistant (Sentence Transformers + ChromaDB + LLM) for event queries
-- **Payment Integration** — Razorpay for registration fees with verification workflow
+- **Payment Integration** — QR code-based UPI payment with verification workflow
 - **Predicate-Based Routing** — Intelligent requirement distribution to departments
 - **Scheduling & Conflict Detection** — Priority scoring and venue conflict resolution
 - **Certificate Generation** — Auto-generated PDF certificates post-event
@@ -39,13 +37,13 @@ It automates the complete event lifecycle — from proposal creation and multi-l
 ┌──────────────────────────────▼──────────────────────────────────┐
 │                   Backend (Express — Render)                      │
 │  Auth │ Events │ FSM │ Budgets │ Registrations │ Notifications   │
-└────┬─────────────────────┬──────────────────────────┬───────────┘
-     │                     │                          │
-     ▼                     ▼                          ▼
-┌─────────┐    ┌───────────────────┐    ┌──────────────────────┐
-│ MongoDB │    │ ML Service (Flask) │    │ Chatbot Service (Flask)│
-│  Atlas  │    │ KNN + CF + Budget  │    │ RAG + ChromaDB + LLM  │
-└─────────┘    └───────────────────┘    └──────────────────────┘
+└────┬─────────────────────────────────────────┬───────────────────┘
+     │                                         │
+     ▼                                         ▼
+┌─────────┐                      ┌──────────────────────┐
+│ MongoDB │                      │ Chatbot Service (Flask)│
+│  Atlas  │                      │ RAG + ChromaDB + LLM  │
+└─────────┘                      └──────────────────────┘
 ```
 
 ## Tech Stack
@@ -54,12 +52,11 @@ It automates the complete event lifecycle — from proposal creation and multi-l
 |---|---|
 | Frontend | React 18, React Router 6, Axios |
 | Backend | Node.js, Express, Mongoose, JWT |
-| ML Service | Flask, scikit-learn, pandas, numpy |
 | Chatbot | Flask, LangChain, ChromaDB, Sentence Transformers, Groq/Ollama |
 | Database | MongoDB Atlas |
-| Payments | Razorpay |
+| Payments | QR Code / UPI |
 | Email | Nodemailer |
-| Deployment | Netlify (frontend), Render (backend + services) |
+| Deployment | Netlify (frontend), Render (backend + chatbot) |
 
 ## Project Structure
 
@@ -85,11 +82,6 @@ acaconnect/
 │   │   ├── services/      # FSM, Notifications, Scheduling, Analytics
 │   │   └── utils/         # Constants, Logger
 │   └── package.json
-├── ml-service/        # ML Recommendation Engine (Render)
-│   ├── model/             # KNN, CF, Budget models
-│   ├── data/              # Training datasets
-│   ├── app.py             # Flask API (port 5001)
-│   └── requirements.txt
 ├── chatbot-service/   # RAG Chatbot (Render)
 │   ├── data/              # Knowledge base, PDFs
 │   ├── app.py             # Flask API (port 5002)
@@ -104,7 +96,6 @@ acaconnect/
 - Node.js 18+
 - Python 3.x
 - MongoDB Atlas account
-- Razorpay account (for payments)
 
 ### Environment Variables
 
@@ -115,12 +106,9 @@ Create `.env` files:
 PORT=5000
 MONGODB_URI=<your_mongodb_atlas_uri>
 JWT_SECRET=<your_jwt_secret>
-RAZORPAY_KEY_ID=<your_razorpay_key>
-RAZORPAY_KEY_SECRET=<your_razorpay_secret>
-EMAIL_HOST=<smtp_host>
-EMAIL_USER=<smtp_user>
-EMAIL_PASS=<smtp_password>
-ML_SERVICE_URL=http://localhost:5001
+EMAIL_USER=<your_email@gmail.com>
+EMAIL_PASSWORD=<google_app_password>
+ALLOWED_ORIGINS=http://localhost:3000
 CHATBOT_SERVICE_URL=http://localhost:5002
 ```
 
@@ -142,11 +130,6 @@ npm run dev
 cd frontend
 npm install
 npm start
-
-# ML Service
-cd ml-service
-pip install -r requirements.txt
-python app.py
 
 # Chatbot Service
 cd chatbot-service
@@ -192,22 +175,9 @@ npm run seed-event-types  # Seed event types
 | `POST /events` | Create new event |
 | `PATCH /events/:id/status` | FSM state transition |
 | `POST /registrations` | Register for event |
-| `POST /ml/recommend-hybrid-cf` | Get ML recommendations |
 | `POST /chatbot/chat` | Chatbot query |
 | `GET /financial/analytics` | Financial dashboard data |
 | `POST /certificates/generate` | Generate certificates |
-
-## ML Models
-
-### Event Recommendation (Hybrid)
-- **KNN**: Pre-trained on 10L+ synthetic student-event interaction dataset
-- **Collaborative Filtering**: Item-based CF using tag similarity matrix
-- **Hybrid Score**: `0.6 × KNN + 0.4 × CF` (configurable)
-
-### Budget Prediction
-- **Model**: scikit-learn regressor
-- **Input**: Event type, participants, duration, requirements flags
-- **Output**: Predicted expense breakdown by category
 
 ## Documentation
 
@@ -222,8 +192,20 @@ Detailed documentation available in `reverse_engineering/`:
 |---|---|---|
 | Frontend | Netlify | Deployed via Git push |
 | Backend | Render | Auto-deploy from main branch |
-| ML Service | Render | Auto-deploy from main branch |
 | Chatbot | Render | Auto-deploy from main branch |
+
+## Security
+
+- **Rate limiting** on all authentication endpoints (login, register, OTP, forgot/reset password) via `express-rate-limit`
+- **Protected admin registration** — `/auth/register` requires admin JWT token + ADMIN role; role restricted to allowed staff roles only
+- **JWT expiration** — Staff tokens expire after 8 hours; participant tokens expire after 7 days
+- **CORS restricted** — Backend accepts requests only from configured `ALLOWED_ORIGINS` (defaults to `http://localhost:3000`)
+- **Mass assignment prevention** — All controllers whitelist allowed fields instead of passing `req.body` directly to database operations
+- **Input validation** — Server-side password length enforcement (min 6 chars), required field checks, status enum validation
+- **Secure file uploads** — Multer configured with file type filters, size limits, and random filenames (no original filenames stored)
+- **No sensitive data in logs** — Request bodies, headers, and tokens are not logged to console
+- **Production DB safety** — MongoDB URI is required in production (no silent localhost fallback)
+- **Flask debug mode disabled** — Chatbot service runs with `debug=False`
 
 ## Contributing
 

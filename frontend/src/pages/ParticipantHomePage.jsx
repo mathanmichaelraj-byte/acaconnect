@@ -203,7 +203,6 @@ export default function ParticipantHomePage() {
   const [showFindEvents, setShowFindEvents] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [suggestedEvents, setSuggestedEvents] = useState([]);
-  const [recommendationMethod, setRecommendationMethod] = useState('knn'); // Default to existing KNN
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -380,119 +379,20 @@ export default function ParticipantHomePage() {
     );
   };
 
-  const suggestEvents = async () => {
+  const suggestEvents = () => {
     if (selectedTags.length === 0) {
       alert('Please select at least one tag to get suggestions');
       return;
     }
-
-    try {
-      let response;
-      
-      // Choose endpoint based on selected method
-      if (recommendationMethod === 'knn') {
-        response = await axios.post('/ml/recommend', {
-          interests: selectedTags
-        });
-      } else if (recommendationMethod === 'cf') {
-        // Use new Collaborative Filtering endpoint
-        console.log('[CF] Selected tags:', selectedTags);
-        console.log('[CF] Events being sent:', events.map(e => ({ id: e._id.toString(), tags: e.tags, title: e.title })));
-        
-        response = await axios.post('/ml/recommend-cf', {
-          interests: selectedTags,
-          events: events.map(e => ({
-            id: e._id.toString(),
-            tags: e.tags || [],
-            title: e.title
-          })),
-          method: 'item',
-          k: 5
-        });
-        
-        console.log('[CF] Response:', response.data);
-        console.log('[CF] Recommendations detail:', JSON.stringify(response.data.recommendations, null, 2));
-        console.log('[CF] First recommendation similarity:', response.data.recommendations[0]?.similarity);
-        console.log('[CF] First recommendation event_id:', response.data.recommendations[0]?.event_id);
-      } else if (recommendationMethod === 'hybrid') {
-        // Use hybrid KNN + CF endpoint
-        response = await axios.post('/ml/recommend-hybrid-cf', {
-          interests: selectedTags,
-          events: events.map(e => ({
-            id: e._id.toString(),
-            tags: e.tags || [],
-            title: e.title
-          })),
-          k: 5,
-          knn_weight: 0.6,
-          cf_weight: 0.4
-        });
-      } else {
-        // Fallback to original endpoint for backward compatibility
-        response = await axios.post('/ml/recommend', {
-          interests: selectedTags
-        });
-      }
-
-      if (response.data.success) {
-        let recommendedEvents = response.data.events || response.data.recommendations || [];
-        
-        console.log('[DEBUG] Recommended events type:', typeof recommendedEvents[0]);
-        console.log('[DEBUG] First event keys:', recommendedEvents[0] ? Object.keys(recommendedEvents[0]) : 'none');
-        console.log('[DEBUG] First event similarity value:', recommendedEvents[0]?.similarity);
-        console.log('[DEBUG] First event full object:', JSON.stringify(recommendedEvents[0], null, 2));
-        
-        // Check if recommendations already have full event data (with _id field)
-        // or if they just have event_id references
-        const hasFullEventData = recommendedEvents.length > 0 && recommendedEvents[0]._id;
-        
-        if (!hasFullEventData && (recommendationMethod === 'cf' || recommendationMethod === 'hybrid')) {
-          // Map event_ids to full events
-          console.log('[CF] Mapping event_ids to full events');
-          recommendedEvents = recommendedEvents
-            .map(rec => {
-              const fullEvent = events.find(e => e._id.toString() === rec.event_id);
-              if (fullEvent) {
-                return {
-                  ...fullEvent,
-                  similarity: rec.similarity,
-                  knn_score: rec.knn_score,
-                  cf_score: rec.cf_score
-                };
-              }
-              return null;
-            })
-            .filter(e => e !== null);
-        }
-        
-        console.log('[DEBUG] Setting suggested events:', recommendedEvents.map(e => ({ title: e.title, similarity: e.similarity })));
-        setSuggestedEvents(recommendedEvents);
-        
-        const methodName = {
-          'knn': 'Hybrid KNN',
-          'cf': 'Collaborative Filtering',
-          'hybrid': 'Hybrid (KNN + CF)'
-        }[recommendationMethod] || 'ML';
-        
-        // Count only events with similarity > 0
-        const relevantEventsCount = recommendedEvents.filter(e => e.similarity > 0).length;
-        
-        const message = response.data.fallback 
-          ? `Found ${relevantEventsCount} events using tag matching (ML service unavailable)`
-          : `${methodName} suggested ${relevantEventsCount} events matching your interests!`;
-        alert(message);
-      } else {
-        alert('Failed to get recommendations. Please try again.');
-      }
-    } catch (error) {
-      console.error('ML recommendation error:', error);
-      // Fallback to local filtering
-      const suggested = events.filter(event => 
-        event.tags && event.tags.some(tag => selectedTags.includes(tag))
-      );
-      setSuggestedEvents(suggested);
-      alert(`Found ${suggested.length} events matching your interests (using local search)`);
-    }
+    const suggested = events
+      .filter(event => event.tags && event.tags.some(tag => selectedTags.includes(tag)))
+      .map(event => ({
+        ...event,
+        similarity: event.tags.filter(tag => selectedTags.includes(tag)).length / selectedTags.length
+      }))
+      .sort((a, b) => b.similarity - a.similarity);
+    setSuggestedEvents(suggested);
+    alert(`Found ${suggested.length} events matching your interests!`);
   };
 
   const sendMessage = async () => {
@@ -930,46 +830,6 @@ export default function ParticipantHomePage() {
                   >
                     ✕
                   </button>
-                </div>
-                
-                {/* Recommendation Method Selection */}
-                <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(0, 229, 255, 0.05)', borderRadius: '12px', border: '1px solid rgba(0, 229, 255, 0.2)' }}>
-                  <h4 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontSize: '18px', fontWeight: '600' }}>Choose Recommendation Method:</h4>
-                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--text-primary)', padding: '0.5rem 1rem', borderRadius: '8px', background: recommendationMethod === 'knn' ? 'rgba(0, 229, 255, 0.2)' : 'transparent', border: '1px solid rgba(0, 229, 255, 0.3)' }}>
-                      <input
-                        type="radio"
-                        name="recommendationMethod"
-                        value="knn"
-                        checked={recommendationMethod === 'knn'}
-                        onChange={(e) => setRecommendationMethod(e.target.value)}
-                        style={{ accentColor: 'var(--accent-gold)' }}
-                      />
-                      <span style={{ fontSize: '14px', fontWeight: '500' }}>Hybrid KNN (Default)</span>
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--text-primary)', padding: '0.5rem 1rem', borderRadius: '8px', background: recommendationMethod === 'cf' ? 'rgba(0, 229, 255, 0.2)' : 'transparent', border: '1px solid rgba(0, 229, 255, 0.3)' }}>
-                      <input
-                        type="radio"
-                        name="recommendationMethod"
-                        value="cf"
-                        checked={recommendationMethod === 'cf'}
-                        onChange={(e) => setRecommendationMethod(e.target.value)}
-                        style={{ accentColor: 'var(--accent-gold)' }}
-                      />
-                      <span style={{ fontSize: '14px', fontWeight: '500' }}>Collaborative Filtering</span>
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: 'var(--text-primary)', padding: '0.5rem 1rem', borderRadius: '8px', background: recommendationMethod === 'hybrid' ? 'rgba(0, 229, 255, 0.2)' : 'transparent', border: '1px solid rgba(0, 229, 255, 0.3)' }}>
-                      <input
-                        type="radio"
-                        name="recommendationMethod"
-                        value="hybrid"
-                        checked={recommendationMethod === 'hybrid'}
-                        onChange={(e) => setRecommendationMethod(e.target.value)}
-                        style={{ accentColor: 'var(--accent-gold)' }}
-                      />
-                      <span style={{ fontSize: '14px', fontWeight: '500' }}>Hybrid (KNN + CF)</span>
-                    </label>
-                  </div>
                 </div>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

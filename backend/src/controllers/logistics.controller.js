@@ -110,13 +110,7 @@ exports.submitExpense = async (req, res) => {
     const { expense_breakdown, gst_number, gst_verified, no_gst_reason } = req.body;
     const billPath = req.file ? req.file.path : null;
 
-    console.log('=== BACKEND EXPENSE SUBMISSION DEBUG ===');
     console.log('Event ID:', eventId);
-    console.log('Request body:', req.body);
-    console.log('Expense breakdown:', expense_breakdown);
-    console.log('GST Number received:', gst_number);
-    console.log('GST Verified received:', gst_verified, 'Type:', typeof gst_verified);
-    console.log('No GST Reason received:', no_gst_reason);
     console.log('File received:', req.file ? 'Yes' : 'No');
 
     if (!expense_breakdown) {

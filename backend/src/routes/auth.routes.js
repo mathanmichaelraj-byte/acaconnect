@@ -1,16 +1,37 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
 const nodemailer = require('nodemailer');
 const User = require("../models/User");
 const Role = require("../models/Role");
 const Participant = require("../models/Participant");
+const authenticate = require("../middleware/auth.middleware");
+const requireRole = require("../middleware/role.middleware");
 
-router.post("/register", async (req, res) => {
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: { message: "Too many requests, please try again later" } });
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: { message: "Too many login attempts, please try again later" } });
+const otpLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: { message: "Too many OTP requests, please try again later" } });
+
+const ALLOWED_STAFF_ROLES = ['ADMIN', 'EVENT_TEAM', 'TREASURER', 'GENERAL_SECRETARY', 'CHAIRPERSON', 'LOGISTICS', 'HR', 'HOSPITALITY', 'TECHOPS', 'DESIGN', 'MARKETING', 'PHOTOGRAPHY', 'ALUMNI'];
+
+router.post("/register", authenticate, requireRole('ADMIN'), async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ message: "Name, email, password, and role are required" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    if (!ALLOWED_STAFF_ROLES.includes(role)) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
     const roleObj = await Role.findOne({ name: role });
-    
     if (!roleObj) {
       return res.status(400).json({ message: "Invalid role" });
     }
@@ -33,9 +54,13 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
 
     // Try to find in User collection first (staff)
     let user = await User.findOne({ email }).populate("role_id");
@@ -48,7 +73,8 @@ router.post("/login", async (req, res) => {
 
       const token = jwt.sign(
         { id: user._id, role: user.role_id.name },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET,
+        { expiresIn: '8h' }
       );
 
       return res.json({ 
@@ -102,7 +128,7 @@ router.post("/login", async (req, res) => {
 });
 
 // Forgot Password - Send OTP
-router.post("/forgot-password", async (req, res) => {
+router.post("/forgot-password", otpLimiter, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -150,9 +176,17 @@ router.post("/forgot-password", async (req, res) => {
 });
 
 // Reset Password
-router.post("/reset-password", async (req, res) => {
+router.post("/reset-password", otpLimiter, async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "Email, OTP, and new password are required" });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
 
     const user = await User.findOne({ email });
     if (!user) {

@@ -2,9 +2,11 @@ import pymongo
 from datetime import datetime
 from typing import Dict, List
 import json
+import os
 
 class DatabaseConnector:
-    def __init__(self, mongo_uri: str = "mongodb://localhost:27017/college_events"):
+    def __init__(self, mongo_uri: str = None):
+        mongo_uri = mongo_uri or os.getenv('MONGODB_URI', 'mongodb://localhost:27017/college_events')
         self.client = pymongo.MongoClient(mongo_uri)
         self.db = self.client.college_events
         

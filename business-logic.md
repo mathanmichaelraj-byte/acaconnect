@@ -40,48 +40,41 @@ Each department: Acknowledges requirements → Fulfills allocation → Marks com
 ### 3. Participant Registration & Payment
 
 - Participants sign up, select interests (tags), and register for events
-- Events can be free or paid (registration fee via Razorpay integration)
+- Events can be free or paid (registration fee via QR code / UPI payment with screenshot verification)
 - Registration status: OPEN / CLOSED / PAUSED
 - Onsite registration supported
 
 ### 4. Budget & Financial Management
 
-- Event Team proposes budget with ML-predicted breakdown
+- Event Team proposes budget during event creation
 - Treasurer reviews and approves
 - Logistics submits actual expenses with bill attachments and GST details
 - Financial analytics: income (registration fees) vs expenses, budget variance tracking
 
-### 5. ML-Powered Event Recommendations
-
-- **KNN Model**: Trained on 10 lakh synthetic dataset, scores published events against participant interests
-- **Collaborative Filtering**: User-based, item-based, and matrix factorization CF
-- **Hybrid Scoring**: 60% KNN + 40% CF (configurable weights)
-- **Budget Prediction**: ML model predicts expense breakdown based on event parameters
-
-### 6. Chatbot (RAG-Based)
+### 5. Chatbot (RAG-Based)
 
 - NIRAL Assistant answers queries about events, rules, registration, history
 - Uses RAG pipeline: Sentence Transformers embeddings + ChromaDB vector store + Groq/Ollama LLM
 - Data sources: JSON knowledge base + PDF documents + live MongoDB event data
 
-### 7. Certificate Generation
+### 6. Certificate Generation
 
 - Auto-generated certificates for event participants post-event
 - Uses PDF templates with dynamic fields (participant name, event, date)
 - Bulk generation supported
 
-### 8. Attendance Tracking
+### 7. Attendance Tracking
 
 - Techops marks attendance for registered participants
 - Attendance data feeds into certificate eligibility
 
-### 9. Notifications
+### 8. Notifications
 
 - Role-based notifications triggered by FSM transitions
 - Participant notifications for registration confirmations, event updates
 - Email notifications via Nodemailer
 
-### 10. Scheduling & Venue Conflict Resolution
+### 9. Scheduling & Venue Conflict Resolution
 
 - Priority scoring for events
 - Automatic venue suggestion with conflict detection
@@ -93,7 +86,7 @@ Each department: Acknowledges requirements → Fulfills allocation → Marks com
 - Multi-level approval is mandatory (no stage can be skipped)
 - Rejected events can be resubmitted by Event Team
 - Registration fee and prize pool are optional per event
-- Events are tagged with domains (16 categories) for ML recommendations
+- Events are tagged with domains (16 categories) for interest-based filtering
 - Expense submission requires GST number or a no-GST reason
 - Volunteers and judges are allocated from a pre-seeded pool
 

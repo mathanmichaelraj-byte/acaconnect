@@ -3,8 +3,6 @@ const Event = require('../models/Events');
 const Participant = require('../models/Participant');
 const ParticipantNotificationService = require('../services/participantNotification.service');
 const NotificationService = require('../services/notification.service');
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 
@@ -32,21 +30,6 @@ const upload = multer({
 });
 
 exports.uploadScreenshotMiddleware = upload.single('payment_screenshot');
-
-// Initialize Razorpay
-if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-  console.error('RAZORPAY credentials missing in environment variables');
-  console.error('RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID);
-  console.error('RAZORPAY_KEY_SECRET exists:', !!process.env.RAZORPAY_KEY_SECRET);
-  throw new Error('Razorpay configuration incomplete');
-}
-
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-console.log('Razorpay initialized with Key ID:', process.env.RAZORPAY_KEY_ID);
 
 // Register for event
 exports.registerForEvent = async (req, res) => {
@@ -154,111 +137,6 @@ exports.processMockPayment = async (req, res) => {
   } catch (error) {
     console.error('Payment error:', error);
     res.status(500).json({ message: 'Payment failed', error: error.message });
-  }
-};
-
-// Create Razorpay order
-exports.createRazorpayOrder = async (req, res) => {
-  try {
-    const { registrationId } = req.params;
-    console.log('Creating Razorpay order for registration:', registrationId);
-    console.log('Razorpay Key ID:', process.env.RAZORPAY_KEY_ID);
-    console.log('Razorpay Key Secret exists:', !!process.env.RAZORPAY_KEY_SECRET);
-
-    const registration = await Registration.findById(registrationId).populate('event_id');
-    if (!registration) {
-      return res.status(404).json({ message: 'Registration not found' });
-    }
-
-    if (registration.payment_status === 'COMPLETED') {
-      return res.status(400).json({ message: 'Payment already completed' });
-    }
-
-    // Validate amount
-    if (!registration.registration_fee || registration.registration_fee <= 0) {
-      return res.status(400).json({ message: 'Invalid registration fee' });
-    }
-
-    const options = {
-      amount: registration.registration_fee * 100, // Amount in paise
-      currency: 'INR',
-      receipt: `receipt_${registrationId}`,
-      notes: {
-        registration_id: registrationId,
-        event_id: registration.event_id._id.toString(),
-        participant_id: registration.participant_id.toString()
-      }
-    };
-
-    console.log('Razorpay order options:', options);
-    
-    // Test Razorpay connection
-    try {
-      const order = await razorpay.orders.create(options);
-      console.log('Razorpay order created successfully:', order.id);
-      
-      res.json({
-        success: true,
-        order,
-        key_id: process.env.RAZORPAY_KEY_ID
-      });
-    } catch (razorpayError) {
-      console.error('Razorpay API Error:', {
-        message: razorpayError.message,
-        statusCode: razorpayError.statusCode,
-        error: razorpayError.error
-      });
-      
-      return res.status(500).json({ 
-        message: 'Razorpay service error', 
-        error: razorpayError.message,
-        details: razorpayError.error?.description || 'Check your Razorpay credentials'
-      });
-    }
-  } catch (error) {
-    console.error('Razorpay order creation error:', error);
-    res.status(500).json({ message: 'Failed to create payment order', error: error.message });
-  }
-};
-
-// Verify Razorpay payment
-exports.verifyRazorpayPayment = async (req, res) => {
-  try {
-    const { registrationId } = req.params;
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-
-    // Verify signature
-    const body = razorpay_order_id + '|' + razorpay_payment_id;
-    const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(body.toString())
-      .digest('hex');
-
-    if (expectedSignature !== razorpay_signature) {
-      return res.status(400).json({ message: 'Invalid payment signature' });
-    }
-
-    // Update registration
-    const registration = await Registration.findById(registrationId);
-    if (!registration) {
-      return res.status(404).json({ message: 'Registration not found' });
-    }
-
-    registration.payment_status = 'VERIFICATION_PENDING';
-    registration.payment_method = 'RAZORPAY';
-    registration.payment_id = razorpay_payment_id;
-    registration.razorpay_order_id = razorpay_order_id;
-    registration.payment_date = new Date();
-    await registration.save();
-
-    res.json({
-      success: true,
-      message: 'Payment verified! Please upload payment screenshot for final verification.',
-      registration
-    });
-  } catch (error) {
-    console.error('Payment verification error:', error);
-    res.status(500).json({ message: 'Payment verification failed', error: error.message });
   }
 };
 

@@ -1,13 +1,1 @@
-const express = require('express');
-const router = express.Router();
-const mlController = require('../controllers/mlController');
-const auth = require('../middleware/auth.middleware');
-
-
-router.post('/recommend', auth, mlController.getRecommendations);
-router.post('/recommend-knn', auth, mlController.getKNNRecommendations);
-router.post('/recommend-cf', auth, mlController.getCFRecommendations);
-router.post('/recommend-hybrid-cf', auth, mlController.getHybridCFRecommendations);
-router.post('/predict-budget', auth, mlController.predictBudget);
-
-module.exports = router;
+// ML service removed. This file is no longer used.

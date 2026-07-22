@@ -88,9 +88,7 @@ const getEventParticipants = async (req, res) => {
 const markAttendance = async (req, res) => {
   try {
     console.log('=== MARK ATTENDANCE REQUEST ===');
-    console.log('Request body:', req.body);
     console.log('Event ID:', req.params.eventId);
-    console.log('User:', req.user);
     
     const { eventId } = req.params;
     const { participantId, attendanceStatus, notes } = req.body;
@@ -422,8 +420,7 @@ const bulkMarkAttendance = async (req, res) => {
 const onsiteRegistration = async (req, res) => {
   try {
     console.log('=== ONSITE REGISTRATION REQUEST ===');
-    console.log('Request body:', req.body);
-    console.log('User:', req.user);
+    console.log('User ID:', req.user?.id);
     
     const { participantDetails, eventIds } = req.body;
     const techopsUserId = req.user.id;

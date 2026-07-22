@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from '../api/axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export default function RazorpayPaymentPage() {
+export default function QRPaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [paymentData, setPaymentData] = useState(null);
-  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     if (location.state?.paymentData) {
@@ -18,108 +16,6 @@ export default function RazorpayPaymentPage() {
     }
   }, [location.state, navigate]);
 
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      // Check if Razorpay is already loaded
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
-      
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => {
-        console.error('Failed to load Razorpay script');
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
-  };
-
-  const handleRazorpayPayment = async () => {
-    setProcessing(true);
-
-    try {
-      // Load Razorpay script
-      const scriptLoaded = await loadRazorpayScript();
-      if (!scriptLoaded) {
-        alert('Failed to load payment gateway. Please try again.');
-        setProcessing(false);
-        return;
-      }
-
-      // Create Razorpay order
-      console.log('Creating Razorpay order for registration:', paymentData.registrationId);
-      const orderResponse = await axios.post(
-        `/registrations/${paymentData.registrationId}/razorpay-order`
-      );
-      
-      console.log('Order response:', orderResponse.data);
-
-      const { order, key_id } = orderResponse.data;
-
-      const options = {
-        key: key_id,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'NIRAL 2026',
-        description: `Registration for ${paymentData.event.title}`,
-        order_id: order.id,
-        handler: async (response) => {
-          try {
-            // Verify payment
-            const verifyResponse = await axios.post(
-              `/registrations/${paymentData.registrationId}/verify-payment`,
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature
-              }
-            );
-
-            if (verifyResponse.data.success) {
-              navigate('/payment-success', {
-                state: {
-                  paymentId: response.razorpay_payment_id,
-                  event: paymentData.event,
-                  amount: paymentData.amount,
-                  registrationId: paymentData.registrationId
-                }
-              });
-            }
-          } catch (error) {
-            alert('Payment verification failed. Please contact support.');
-            setProcessing(false);
-          }
-        },
-        prefill: {
-          name: paymentData.participantName || '',
-          email: paymentData.participantEmail || ''
-        },
-        theme: {
-          color: '#667eea'
-        },
-        modal: {
-          ondismiss: () => {
-            setProcessing(false);
-          }
-        }
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error('Payment error details:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
-      alert(`Payment failed: ${error.response?.data?.message || error.message}`);
-      setProcessing(false);
-    }
-  };
-
   if (!paymentData) {
     return <div>Loading...</div>;
   }
@@ -127,7 +23,7 @@ export default function RazorpayPaymentPage() {
   return (
     <div className="niral-home">
       <Header showBackButton={true} backTo="/participant-home" showNavigation={false} />
-      
+
       <div style={{
         minHeight: '100vh',
         background: 'radial-gradient(circle at top right, #2A0E3F, #12081E 60%)',
@@ -138,7 +34,6 @@ export default function RazorpayPaymentPage() {
         position: 'relative',
         overflow: 'hidden'
       }}>
-        {/* Animated background */}
         <div style={{
           position: 'fixed',
           top: 0,
@@ -149,7 +44,7 @@ export default function RazorpayPaymentPage() {
           animation: 'starField 30s linear infinite',
           zIndex: 0
         }} />
-        
+
         <div style={{
           background: 'rgba(19,10,46,0.85)',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -181,16 +76,16 @@ export default function RazorpayPaymentPage() {
               <span style={{ color: '#0B061A', fontWeight: 'bold', fontSize: '20px' }}>N</span>
             </div>
             <div>
-              <h3 style={{ 
-                margin: '0', 
-                fontSize: '22px', 
+              <h3 style={{
+                margin: '0',
+                fontSize: '22px',
                 fontWeight: '700',
                 background: 'linear-gradient(135deg, #F5B301, #FF8C00)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 letterSpacing: '1px'
               }}>NIRAL Pay</h3>
-              <p style={{ margin: '0', fontSize: '13px', color: '#C9C6D6' }}>Powered by Razorpay</p>
+              <p style={{ margin: '0', fontSize: '13px', color: '#C9C6D6' }}>Scan QR to Pay</p>
             </div>
           </div>
 
@@ -201,16 +96,16 @@ export default function RazorpayPaymentPage() {
             padding: '1.5rem',
             marginBottom: '1.5rem'
           }}>
-            <h4 style={{ 
-              margin: '0 0 1.5rem 0', 
-              fontSize: '18px', 
+            <h4 style={{
+              margin: '0 0 1.5rem 0',
+              fontSize: '18px',
               fontWeight: '600',
               color: '#FFFFFF'
             }}>Payment Summary</h4>
             <div style={{ marginBottom: '1.5rem' }}>
-              <h5 style={{ 
-                margin: '0 0 0.5rem 0', 
-                fontSize: '16px', 
+              <h5 style={{
+                margin: '0 0 0.5rem 0',
+                fontSize: '16px',
                 fontWeight: '600',
                 color: '#FFFFFF'
               }}>
@@ -223,24 +118,91 @@ export default function RazorpayPaymentPage() {
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <span style={{ fontSize: '14px', color: '#C9C6D6' }}>Registration Fee</span>
-                <span style={{ fontSize: '14px', color: '#FFFFFF' }}>₹{paymentData.amount}</span>
+                <span style={{ fontSize: '14px', color: '#FFFFFF' }}>&#8377;{paymentData.amount}</span>
               </div>
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                borderTop: '1px solid rgba(255,255,255,0.08)', 
-                paddingTop: '0.75rem' 
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                borderTop: '1px solid rgba(255,255,255,0.08)',
+                paddingTop: '0.75rem'
               }}>
                 <span style={{ fontSize: '18px', fontWeight: '600', color: '#FFFFFF' }}>Total Amount</span>
-                <span style={{ 
-                  fontSize: '18px', 
+                <span style={{
+                  fontSize: '18px',
                   fontWeight: '700',
                   background: 'linear-gradient(135deg, #F5B301, #FF8C00)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent'
-                }}>₹{paymentData.amount}</span>
+                }}>&#8377;{paymentData.amount}</span>
               </div>
             </div>
+          </div>
+
+          <div style={{
+            background: 'rgba(11,6,26,0.6)',
+            border: '1px solid rgba(255,255,255,0.05)',
+            borderRadius: '12px',
+            padding: '2rem',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+            <div style={{
+              width: '220px',
+              height: '220px',
+              background: '#FFFFFF',
+              borderRadius: '12px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                width: '180px',
+                height: '180px',
+                background: 'repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 12px 12px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{
+                  width: '50px',
+                  height: '50px',
+                  background: '#FFFFFF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <span style={{
+                    fontSize: '10px',
+                    color: '#999',
+                    textAlign: 'center',
+                    lineHeight: '1.2'
+                  }}>QR CODE</span>
+                </div>
+              </div>
+            </div>
+            <p style={{
+              margin: '1rem 0 0 0',
+              fontSize: '14px',
+              color: '#C9C6D6',
+              textAlign: 'center'
+            }}>
+              Scan this QR code with any UPI app to pay
+            </p>
+            <p style={{
+              margin: '0.5rem 0 0 0',
+              fontSize: '13px',
+              color: '#888',
+              textAlign: 'center'
+            }}>
+              Google Pay, PhonePe, Paytm, BHIM, or any UPI app
+            </p>
           </div>
 
           <div style={{
@@ -255,13 +217,12 @@ export default function RazorpayPaymentPage() {
             alignItems: 'center',
             gap: '8px'
           }}>
-            🔒 Secure payment powered by Razorpay with 256-bit SSL encryption
+            After payment, upload the screenshot on the next page for verification.
           </div>
 
           <div style={{ display: 'flex', gap: '1rem' }}>
             <button
               onClick={() => navigate('/participant-home')}
-              disabled={processing}
               style={{
                 flex: 1,
                 padding: '12px 20px',
@@ -269,63 +230,62 @@ export default function RazorpayPaymentPage() {
                 color: '#FF5A5A',
                 border: '1px solid #FF5A5A',
                 borderRadius: '999px',
-                cursor: processing ? 'not-allowed' : 'pointer',
+                cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: '600',
-                transition: 'all 0.3s ease',
-                opacity: processing ? 0.6 : 1
+                transition: 'all 0.3s ease'
               }}
               onMouseEnter={(e) => {
-                if (!processing) {
-                  e.target.style.background = 'rgba(255, 90, 90, 0.1)';
-                  e.target.style.transform = 'translateY(-1px)';
-                  e.target.style.boxShadow = '0 0 25px rgba(255, 90, 90, 0.35)';
-                }
+                e.target.style.background = 'rgba(255, 90, 90, 0.1)';
+                e.target.style.transform = 'translateY(-1px)';
+                e.target.style.boxShadow = '0 0 25px rgba(255, 90, 90, 0.35)';
               }}
               onMouseLeave={(e) => {
-                if (!processing) {
-                  e.target.style.background = 'transparent';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = 'none';
-                }
+                e.target.style.background = 'transparent';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
               }}
             >
               Cancel
             </button>
             <button
-              onClick={handleRazorpayPayment}
-              disabled={processing}
+              onClick={() => {
+                navigate('/payment-success', {
+                  state: {
+                    paymentId: 'QR_PENDING_' + Date.now(),
+                    event: paymentData.event,
+                    amount: paymentData.amount,
+                    registrationId: paymentData.registrationId
+                  }
+                });
+              }}
               style={{
                 flex: 2,
                 padding: '12px 28px',
-                background: processing ? 'rgba(245,179,1,0.6)' : 'linear-gradient(135deg, #F5B301, #FF8C00)',
+                background: 'linear-gradient(135deg, #F5B301, #FF8C00)',
                 color: '#0B061A',
                 border: 'none',
                 borderRadius: '999px',
-                cursor: processing ? 'not-allowed' : 'pointer',
+                cursor: 'pointer',
                 fontSize: '16px',
                 fontWeight: '700',
                 transition: 'all 0.3s ease',
-                boxShadow: processing ? 'none' : '0 0 25px rgba(245,179,1,0.35)'
+                boxShadow: '0 0 25px rgba(245,179,1,0.35)'
               }}
               onMouseEnter={(e) => {
-                if (!processing) {
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 12px 35px rgba(245,179,1,0.5)';
-                }
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 12px 35px rgba(245,179,1,0.5)';
               }}
               onMouseLeave={(e) => {
-                if (!processing) {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 0 25px rgba(245,179,1,0.35)';
-                }
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 0 25px rgba(245,179,1,0.35)';
               }}
             >
-              {processing ? 'Processing...' : `Pay ₹${paymentData.amount}`}
+              I Have Paid
             </button>
           </div>
         </div>
-        
+
         <style>{`
           @keyframes starField {
             from { transform: translateY(0); }
@@ -333,7 +293,7 @@ export default function RazorpayPaymentPage() {
           }
         `}</style>
       </div>
-      
+
       <Footer />
     </div>
   );

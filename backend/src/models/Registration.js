@@ -31,14 +31,10 @@ const registrationSchema = new mongoose.Schema({
   },
   payment_method: {
     type: String,
-    enum: ['FREE', 'MOCK_PAYMENT', 'RAZORPAY', 'UPI', 'CARD'],
+    enum: ['FREE', 'MOCK_PAYMENT', 'UPI', 'CARD'],
     default: 'FREE'
   },
   payment_id: {
-    type: String,
-    default: null
-  },
-  razorpay_order_id: {
     type: String,
     default: null
   },

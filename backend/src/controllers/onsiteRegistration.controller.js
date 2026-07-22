@@ -179,6 +179,12 @@ exports.updateOnsiteRegistrationStatus = async (req, res) => {
     const { status } = req.body;
     const userId = req.user.id;
 
+    const VALID_STATUSES = ['PENDING_PAYMENT', 'PAYMENT_CONFIRMED', 'REJECTED', 'CANCELLED'];
+
+    if (!VALID_STATUSES.includes(status)) {
+      return res.status(400).json({ message: `Invalid status. Allowed: ${VALID_STATUSES.join(', ')}` });
+    }
+
     // Prevent techops from confirming payments - only allow rejection or other status updates
     if (status === 'PAYMENT_CONFIRMED') {
       return res.status(403).json({ 

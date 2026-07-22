@@ -269,7 +269,7 @@ export default function TreasurerDashboard() {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>${filename}</title>
+            <title>NIRAL 2026 Report</title>
             <style>
               body { font-family: Arial, sans-serif; margin: 20px; color: black; }
               table { border-collapse: collapse; width: 100%; margin-top: 20px; }

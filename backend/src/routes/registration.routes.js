@@ -6,8 +6,6 @@ const requireRole = require('../middleware/role.middleware');
 
 router.post('/events/:eventId/register', authenticate, registrationController.registerForEvent);
 router.post('/:registrationId/pay', authenticate, registrationController.processMockPayment);
-router.post('/:registrationId/razorpay-order', authenticate, registrationController.createRazorpayOrder);
-router.post('/:registrationId/verify-payment', authenticate, registrationController.verifyRazorpayPayment);
 router.post('/:registrationId/upload-screenshot', authenticate, registrationController.uploadScreenshotMiddleware, registrationController.uploadPaymentScreenshot);
 router.get('/my-registrations', authenticate, registrationController.getMyRegistrations);
 router.get('/events/:eventId/check', authenticate, registrationController.checkRegistration);

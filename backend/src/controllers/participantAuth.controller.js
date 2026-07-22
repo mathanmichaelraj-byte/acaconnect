@@ -46,6 +46,14 @@ exports.signup = async (req, res) => {
   try {
     const { name, email, password, mobile, college, department, year } = req.body;
 
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Name, email, and password are required" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
     // Check if participant already exists
     const existingParticipant = await Participant.findOne({ email });
     if (existingParticipant && existingParticipant.isVerified) {
@@ -256,6 +264,14 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "Email, OTP, and new password are required" });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
 
     const participant = await Participant.findOne({ email });
     if (!participant) {

@@ -11,7 +11,9 @@ exports.getAllRefreshmentItems = async (req, res) => {
 
 exports.createRefreshmentItem = async (req, res) => {
   try {
-    const item = await RefreshmentItem.create(req.body);
+    const { name, description, unit } = req.body;
+    if (!name) return res.status(400).json({ message: "Name is required" });
+    const item = await RefreshmentItem.create({ name, description, unit });
     res.json(item);
   } catch (error) {
     res.status(500).json({ message: "Failed to create refreshment item", error: error.message });
@@ -20,7 +22,8 @@ exports.createRefreshmentItem = async (req, res) => {
 
 exports.updateRefreshmentItem = async (req, res) => {
   try {
-    const item = await RefreshmentItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { name, description, unit } = req.body;
+    const item = await RefreshmentItem.findByIdAndUpdate(req.params.id, { name, description, unit }, { new: true });
     if (!item) return res.status(404).json({ message: "Refreshment item not found" });
     res.json(item);
   } catch (error) {

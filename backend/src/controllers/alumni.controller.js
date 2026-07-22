@@ -24,7 +24,8 @@ exports.getAllAlumni = async (req, res) => {
 
 exports.updateAlumni = async (req, res) => {
   try {
-    const alumni = await Alumni.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { name, contact, email, linkedin, batch, location, organization, position } = req.body;
+    const alumni = await Alumni.findByIdAndUpdate(req.params.id, { name, contact, email, linkedin, batch, location, organization, position }, { new: true });
     if (!alumni) return res.status(404).json({ message: "Alumni not found" });
     res.json({ message: "Alumni updated successfully", alumni });
   } catch (error) {

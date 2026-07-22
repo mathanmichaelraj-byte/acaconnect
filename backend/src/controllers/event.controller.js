@@ -35,7 +35,6 @@ exports.createEvent = async (req, res) => {
   try {
     console.log('=== EVENT CREATION START ===');
     console.log('User ID:', req.user?.id);
-    console.log('Request body:', req.body);
     console.log('File:', req.file);
     
     // Validate required fields
@@ -195,7 +194,12 @@ exports.genSecApprove = async (req, res) => {
     const targetState = approved ? 'GENSEC_APPROVED' : 'REJECTED';
     
     if (updates) {
-      Object.assign(req.event, updates);
+      const allowedFields = ['title', 'description', 'venue', 'date', 'time', 'duration_hours', 'expected_participants', 'tags'];
+      const sanitized = {};
+      for (const key of allowedFields) {
+        if (updates[key] !== undefined) sanitized[key] = updates[key];
+      }
+      Object.assign(req.event, sanitized);
     }
     req.event.gen_sec_comments = comments;
     await req.event.save();
@@ -228,7 +232,12 @@ exports.chairpersonApprove = async (req, res) => {
     const { approved, comments, updates } = req.body;
     
     if (updates) {
-      Object.assign(req.event, updates);
+      const allowedFields = ['title', 'description', 'venue', 'date', 'time', 'duration_hours', 'expected_participants', 'tags'];
+      const sanitized = {};
+      for (const key of allowedFields) {
+        if (updates[key] !== undefined) sanitized[key] = updates[key];
+      }
+      Object.assign(req.event, sanitized);
     }
     req.event.chairperson_comments = comments;
     await req.event.save();
@@ -361,7 +370,8 @@ exports.getEventTypes = async (req, res) => {
 
 exports.createEventType = async (req, res) => {
   try {
-    const eventType = await EventType.create(req.body);
+    const { name, description, default_requirements } = req.body;
+    const eventType = await EventType.create({ name, description, default_requirements });
     res.json(eventType);
   } catch (error) {
     res.status(500).json({ message: "Failed to create event type", error: error.message });
@@ -370,7 +380,8 @@ exports.createEventType = async (req, res) => {
 
 exports.updateEventType = async (req, res) => {
   try {
-    const eventType = await EventType.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { name, description, default_requirements } = req.body;
+    const eventType = await EventType.findByIdAndUpdate(req.params.id, { name, description, default_requirements }, { new: true });
     if (!eventType) return res.status(404).json({ message: "Event type not found" });
     res.json(eventType);
   } catch (error) {
