@@ -30,24 +30,28 @@ router.get('/venues',
 // Accept AI venue suggestion (Hospitality only)
 router.post('/accept-venue/:eventId', 
   auth, 
-  role(['HOSPITALITY', 'ADMIN']), 
+  role('HOSPITALITY', 'ADMIN'), 
   schedulingController.acceptVenueSuggestion
 );
 
 // Override AI venue suggestion (Hospitality only)
 router.post('/override-venue/:eventId', 
   auth, 
-  role(['HOSPITALITY', 'ADMIN']), 
+  role('HOSPITALITY', 'ADMIN'), 
   schedulingController.overrideVenueSuggestion
 );
 
-// Optimize schedule (rearrange dates/times) - Temporarily no auth for testing
+// Optimize schedule (rearrange dates/times)
 router.post('/optimize', 
+  auth, 
+  role('ADMIN', 'EVENT_TEAM'),
   schedulingController.optimizeSchedule
 );
 
-// Apply optimized schedule - Temporarily no auth for testing
+// Apply optimized schedule
 router.post('/apply-schedule', 
+  auth, 
+  role('ADMIN', 'EVENT_TEAM'),
   schedulingController.applyOptimizedSchedule
 );
 

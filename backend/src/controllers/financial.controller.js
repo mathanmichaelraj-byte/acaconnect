@@ -181,16 +181,30 @@ class FinancialController {
         expenseAnalyticsService.getExpenseAnalytics()
       ]);
 
+      if (!incomeResult.success || !expenseResult.success) {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to fetch financial data',
+          error: {
+            income: incomeResult.success ? null : incomeResult.error,
+            expense: expenseResult.success ? null : expenseResult.error
+          }
+        });
+      }
+
+      const incomeData = incomeResult.data || {};
+      const expenseData = expenseResult.data || {};
+
       const summary = {
-        totalIncome: incomeResult.data.totalIncome,
-        totalExpenses: expenseResult.data.totalExpenses,
-        totalProfit: incomeResult.data.totalIncome - expenseResult.data.totalExpenses,
-        totalRegistrations: incomeResult.data.totalRegistrations,
-        eventsWithIncome: incomeResult.data.eventWiseDetails.length,
-        eventsWithExpenses: expenseResult.data.eventWiseDetails.length,
-        onlineIncome: incomeResult.data.onlineIncome,
-        onsiteIncome: incomeResult.data.onsiteIncome,
-        topExpenseCategory: expenseResult.data.categoryAnalytics[0]?.category || 'N/A'
+        totalIncome: incomeData.totalIncome || 0,
+        totalExpenses: expenseData.totalExpenses || 0,
+        totalProfit: (incomeData.totalIncome || 0) - (expenseData.totalExpenses || 0),
+        totalRegistrations: incomeData.totalRegistrations || 0,
+        eventsWithIncome: (incomeData.eventWiseDetails || []).length,
+        eventsWithExpenses: (expenseData.eventWiseDetails || []).length,
+        onlineIncome: incomeData.onlineIncome || 0,
+        onsiteIncome: incomeData.onsiteIncome || 0,
+        topExpenseCategory: (expenseData.categoryAnalytics || [])[0]?.category || 'N/A'
       };
 
       res.json({

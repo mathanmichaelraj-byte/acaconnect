@@ -70,7 +70,7 @@ app.use("/hr", hrRoutes);
 app.use("/techops", techopsRoutes);
 app.use("/onsite-registrations", onsiteRegistrationRoutes);
 app.use("/certificates", certificateRoutes);
-app.use("/requirements", predicateRequirementRoutes); // Predicate-based enhanced routes
+app.use("/requirements/enhanced", predicateRequirementRoutes); // Predicate-based enhanced routes
 app.use("/financial", financialRoutes);
 app.use("/scheduling", schedulingRoutes);
 app.use("/alumni", alumniRoutes);

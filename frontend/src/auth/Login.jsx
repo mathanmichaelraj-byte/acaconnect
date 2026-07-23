@@ -17,10 +17,8 @@ export default function Login() {
 
       if (res.data.user.role === 'PARTICIPANT') {
         navigate('/participant-home');
-      } else if (res.data.user.role === 'STUDENT') {
-        navigate('/dashboard');
       } else {
-        navigate('/events');
+        navigate('/dashboard');
       }
     } catch (error) {
       alert("Login failed: " + (error.response?.data?.message || "Invalid credentials"));

@@ -115,7 +115,8 @@ def handle_specific_event(query):
     try:
         llm = get_ollama_client()
         return llm.generate(prompt=prompt, system_prompt="You are NIRAL Assistant. Answer in plain text, no markdown. Use ONLY provided data.", max_tokens=300)
-    except:
+    except Exception as e:
+        print(f"LLM error: {e}")
         return context
 
 def rag_chatbot(query):
@@ -144,7 +145,8 @@ def rag_chatbot(query):
     try:
         llm = get_ollama_client()
         return llm.generate(prompt=prompt, system_prompt="You are NIRAL Assistant. Answer briefly in plain text.", max_tokens=300)
-    except:
+    except Exception as e:
+        print(f"LLM error: {e}")
         return "I'm having trouble processing that. Please try asking about NIRAL events, registration, or history."
 
 @app.route('/health', methods=['GET'])
@@ -164,7 +166,7 @@ def chat():
         print(f"Chat error: {e}")
         import traceback
         traceback.print_exc()
-        return jsonify({"success": True, "query": data.get('query', ''), "response": "I'm having trouble processing that. Please try again."}), 200
+        return jsonify({"success": False, "query": data.get('query', ''), "response": "I'm having trouble processing that. Please try again."}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5002))

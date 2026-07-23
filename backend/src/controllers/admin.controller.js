@@ -8,7 +8,7 @@ exports.getDashboardStats = async (req, res) => {
     const totalEvents = await Event.countDocuments();
     const activeUsers = await User.countDocuments();
     const pendingApprovals = await Event.countDocuments({
-      status: { $in: ['BUDGET_PENDING', 'BUDGET_AGGREGATED', 'BUDGET_PREDICTED'] }
+      status: { $in: ['SUBMITTED', 'UNDER_REVIEW'] }
     });
 
     res.json({

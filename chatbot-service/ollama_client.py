@@ -34,7 +34,7 @@ class GroqClient:
                 max_tokens=5
             )
             return True
-        except:
+        except Exception:
             return False
 
 groq_client = None
