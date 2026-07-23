@@ -78,7 +78,7 @@ export default function EventsPage() {
     e.preventDefault();
     try {
       await axios.post('/events', eventForm);
-      alert('Event created successfully!');
+      alert('🎉 Event created successfully!');
       setEventForm({
         title: '', type: '', date: '', time: '', duration_hours: '', venue: '', expected_participants: '', prize_pool: '',
         requirements: {
@@ -89,17 +89,17 @@ export default function EventsPage() {
       setEventTeamActiveView('overview');
       fetchEventTeamStats();
     } catch (error) {
-      alert('Failed to create event: ' + (error.response?.data?.message || 'Unknown error'));
+      alert('❌ Failed to create event: ' + (error.response?.data?.message || 'Unknown error'));
     }
   };
 
   const handleSubmitForApproval = async (eventId) => {
     try {
       await axios.put(`/events/${eventId}/submit`);
-      alert('Event submitted for treasurer approval!');
+      alert('✅ Event submitted for treasurer approval!');
       fetchEventTeamStats();
     } catch (error) {
-      alert('Failed to submit: ' + (error.response?.data?.message || 'Unknown error'));
+      alert('❌ Failed to submit: ' + (error.response?.data?.message || 'Unknown error'));
     }
   };
 
@@ -170,7 +170,7 @@ export default function EventsPage() {
   const renderOverview = () => (
     <div className="card-grid fade-in">
       <div className="card">
-        <h3 className="card-title">System Overview</h3>
+        <h3 className="card-title">📊 System Overview</h3>
         <div className="card-content">
           <p><strong>Total Events:</strong> {stats.totalEvents}</p>
           <p><strong>Active Users:</strong> {stats.activeUsers}</p>
@@ -178,19 +178,19 @@ export default function EventsPage() {
         </div>
       </div>
       <div className="card">
-        <h3 className="card-title">Quick Actions</h3>
+        <h3 className="card-title">⚡ Quick Actions</h3>
         <div className="card-content">
           <button className="btn btn-primary" onClick={fetchAdminEvents} style={{ margin: '0.25rem', width: '100%' }}>
-            View All Events
+            📅 View All Events
           </button>
           <button className="btn btn-success" onClick={fetchUsers} style={{ margin: '0.25rem', width: '100%' }}>
-            Manage Users
+            👥 Manage Users
           </button>
           <button className="btn btn-primary" onClick={fetchEventTypes} style={{ margin: '0.25rem', width: '100%' }}>
-            Manage Event Types
+            🏷️ Manage Event Types
           </button>
           <button className="btn btn-secondary" onClick={() => setAdminActiveView('settings')} style={{ margin: '0.25rem', width: '100%' }}>
-            System Settings
+            ⚙️ System Settings
           </button>
         </div>
       </div>
@@ -200,7 +200,7 @@ export default function EventsPage() {
   const renderUsers = () => (
     <div className="fade-in">
       <div className="nav-header">
-        <h3 className="nav-title">User Management</h3>
+        <h3 className="nav-title">👥 User Management</h3>
         <button className="btn btn-secondary" onClick={() => setAdminActiveView('overview')}>
           ← Back to Overview
         </button>
@@ -233,7 +233,7 @@ export default function EventsPage() {
   const renderAdminEvents = () => (
     <div className="fade-in">
       <div className="nav-header">
-        <h3 className="nav-title">Event Management</h3>
+        <h3 className="nav-title">📅 Event Management</h3>
         <button className="btn btn-secondary" onClick={() => setAdminActiveView('overview')}>
           ← Back to Overview
         </button>
@@ -285,7 +285,7 @@ export default function EventsPage() {
             {adminActiveView === 'eventTypes' && (
               <div className="fade-in">
                 <div className="nav-header">
-                  <h3 className="nav-title">Event Type Management</h3>
+                  <h3 className="nav-title">🏷️ Event Type Management</h3>
                   <button className="btn btn-secondary" onClick={() => {
                     setAdminActiveView('overview');
                     fetchStats();
@@ -301,7 +301,7 @@ export default function EventsPage() {
             {adminActiveView === 'settings' && (
               <div className="fade-in">
                 <div className="nav-header">
-                  <h3 className="nav-title">System Settings</h3>
+                  <h3 className="nav-title">⚙️ System Settings</h3>
                   <button className="btn btn-secondary" onClick={() => {
                     setAdminActiveView('overview');
                     fetchStats();
@@ -310,7 +310,7 @@ export default function EventsPage() {
                   </button>
                 </div>
                 <div className="card">
-                  <h4>Coming Soon!</h4>
+                  <h4>😧 Coming Soon!</h4>
                   <p>Advanced system configuration features</p>
                 </div>
               </div>
@@ -328,7 +328,7 @@ export default function EventsPage() {
             {eventTeamActiveView === 'overview' && (
               <div className="card-grid fade-in">
                 <div className="card">
-                  <h3 className="card-title">My Events</h3>
+                  <h3 className="card-title">📊 My Events</h3>
                   <div className="card-content">
                     <p><strong>Created:</strong> {eventTeamStats.created}</p>
                     <p><strong>Pending Approval:</strong> {eventTeamStats.pending}</p>
@@ -336,13 +336,13 @@ export default function EventsPage() {
                   </div>
                 </div>
                 <div className="card">
-                  <h3 className="card-title">Actions</h3>
+                  <h3 className="card-title">⚡ Actions</h3>
                   <div className="card-content">
                     <button className="btn btn-primary" onClick={() => setEventTeamActiveView('create')} style={{ margin: '0.25rem', width: '100%' }}>
-                      + Create New Event
+                      ➕ Create New Event
                     </button>
                     <button className="btn btn-success" onClick={() => setEventTeamActiveView('events')} style={{ margin: '0.25rem', width: '100%' }}>
-                      View My Events
+                      📋 View My Events
                     </button>
                   </div>
                 </div>
@@ -351,7 +351,7 @@ export default function EventsPage() {
             {eventTeamActiveView === 'create' && (
               <div className="fade-in">
                 <div className="nav-header">
-                  <h3 className="nav-title">Create New Event</h3>
+                  <h3 className="nav-title">➕ Create New Event</h3>
                   <span 
                     onClick={() => {
                       console.log('Clicked back to overview');
@@ -464,9 +464,9 @@ export default function EventsPage() {
                     <div className="form-group" style={{ background: 'rgba(245,179,1,0.1)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(245,179,1,0.3)' }}>
                       <label className="form-label">Prize Distribution</label>
                       <p style={{ margin: '0.5rem 0', color: 'var(--text-muted)' }}>
-                        1st Place: ₹{(eventForm.prize_pool * 0.5).toFixed(2)} (50%)<br/>
-                        2nd Place: ₹{(eventForm.prize_pool * 0.3).toFixed(2)} (30%)<br/>
-                        3rd Place: ₹{(eventForm.prize_pool * 0.2).toFixed(2)} (20%)
+                        🥇 1st Place: ₹{(eventForm.prize_pool * 0.5).toFixed(2)} (50%)<br/>
+                        🥈 2nd Place: ₹{(eventForm.prize_pool * 0.3).toFixed(2)} (30%)<br/>
+                        🥉 3rd Place: ₹{(eventForm.prize_pool * 0.2).toFixed(2)} (20%)
                       </p>
                     </div>
                   )}
@@ -482,7 +482,7 @@ export default function EventsPage() {
                     />
                   </div>
 
-                  <h4 style={{ marginTop: '2rem', marginBottom: '1rem', color: 'var(--accent-gold)' }}>Requirements</h4>
+                  <h4 style={{ marginTop: '2rem', marginBottom: '1rem', color: 'var(--accent-gold)' }}>📋 Requirements</h4>
                   
                   <div className="form-grid">
                     <div className="form-group">
@@ -512,7 +512,7 @@ export default function EventsPage() {
                         checked={eventForm.requirements.refreshments_needed}
                         onChange={(e) => setEventForm({...eventForm, requirements: {...eventForm.requirements, refreshments_needed: e.target.checked}})}
                       />
-                      <span>Refreshments Needed</span>
+                      <span>🍽️ Refreshments Needed</span>
                     </label>
                     <label className="checkbox-label">
                       <input 
@@ -520,7 +520,7 @@ export default function EventsPage() {
                         checked={eventForm.requirements.stationary_needed}
                         onChange={(e) => setEventForm({...eventForm, requirements: {...eventForm.requirements, stationary_needed: e.target.checked}})}
                       />
-                      <span>Stationary Needed</span>
+                      <span>📝 Stationary Needed</span>
                     </label>
                     <label className="checkbox-label">
                       <input 
@@ -528,7 +528,7 @@ export default function EventsPage() {
                         checked={eventForm.requirements.goodies_needed}
                         onChange={(e) => setEventForm({...eventForm, requirements: {...eventForm.requirements, goodies_needed: e.target.checked}})}
                       />
-                      <span>Goodies Needed</span>
+                      <span>🎁 Goodies Needed</span>
                     </label>
                     <label className="checkbox-label">
                       <input 
@@ -536,7 +536,7 @@ export default function EventsPage() {
                         checked={eventForm.requirements.physical_certificate}
                         onChange={(e) => setEventForm({...eventForm, requirements: {...eventForm.requirements, physical_certificate: e.target.checked}})}
                       />
-                      <span>Physical Certificate</span>
+                      <span>📜 Physical Certificate</span>
                     </label>
                     <label className="checkbox-label">
                       <input 
@@ -544,7 +544,7 @@ export default function EventsPage() {
                         checked={eventForm.requirements.trophies_needed}
                         onChange={(e) => setEventForm({...eventForm, requirements: {...eventForm.requirements, trophies_needed: e.target.checked}})}
                       />
-                      <span>Trophies Needed</span>
+                      <span>🏆 Trophies Needed</span>
                     </label>
                   </div>
 
@@ -553,7 +553,7 @@ export default function EventsPage() {
                     className="btn btn-primary"
                     style={{ width: '100%', padding: '1rem', marginTop: '2rem' }}
                   >
-                    Create Event
+                    🚀 Create Event
                   </button>
                 </form>
               </div>
@@ -561,7 +561,7 @@ export default function EventsPage() {
             {eventTeamActiveView === 'events' && (
               <div className="fade-in">
                 <div className="nav-header">
-                  <h3 className="nav-title">My Events</h3>
+                  <h3 className="nav-title">📋 My Events</h3>
                   <span 
                     onClick={() => {
                       console.log('Clicked back to overview from events');
@@ -598,7 +598,7 @@ export default function EventsPage() {
                       {myEvents.length === 0 ? (
                         <tr>
                           <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                            No events created yet. Click "Create New Event" to get started!
+                            📝 No events created yet. Click "Create New Event" to get started!
                           </td>
                         </tr>
                       ) : (
@@ -624,7 +624,7 @@ export default function EventsPage() {
                                   style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
                                   onClick={() => handleSubmitForApproval(event._id)}
                                 >
-                                   Submit
+                                  ✅ Submit
                                 </button>
                               )}
                             </td>
@@ -643,7 +643,7 @@ export default function EventsPage() {
       case "CHAIRPERSON":
         return (
           <div className="card">
-            <h3 className="card-title">{user.role.replace('_', ' ')} Dashboard</h3>
+            <h3 className="card-title">📊 {user.role.replace('_', ' ')} Dashboard</h3>
             <div className="card-content">
               <p>Dashboard functionality for {user.role.replace('_', ' ')} role coming soon...</p>
               <p>This will include role-specific features like:</p>
@@ -680,7 +680,7 @@ export default function EventsPage() {
                 onClick={() => setShowNotifications(!showNotifications)}
                 style={{ position: 'relative' }}
               >
-                Notifications
+                🔔 Notifications
                 {notifications.length > 0 && (
                   <span style={{
                     position: 'absolute',
@@ -743,11 +743,11 @@ export default function EventsPage() {
             </div>
             
             <button className="btn-back" onClick={() => setShowDashboard(true)} style={{ marginRight: '1rem' }}>
-              Dashboard
+              📊 Dashboard
             </button>
             
             <button className="btn-back" onClick={logout}>
-              Logout
+              🚪 Logout
             </button>
           </div>
         </div>
@@ -798,10 +798,10 @@ export default function EventsPage() {
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {new Date(event.date).toLocaleDateString()}
+                          📅 {new Date(event.date).toLocaleDateString()}
                         </span>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {event.time}
+                          🕐 {event.time}
                         </span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
@@ -820,12 +820,12 @@ export default function EventsPage() {
                         </span>
                       </div>
                       <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                        <strong>Venue:</strong> {event.hospitality?.venue_details || event.venue || 'Not allocated'}
+                        📍 <strong>Venue:</strong> {event.hospitality?.venue_details || event.venue || 'Not allocated'}
                       </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
-                        Prize Pool: ₹{event.prize_pool || 0}
+                        💰 Prize Pool: ₹{event.prize_pool || 0}
                       </span>
                       <span style={{ 
                         background: 'var(--bg-secondary)', 

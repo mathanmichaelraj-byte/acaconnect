@@ -108,9 +108,9 @@ export default function AlumniDashboard({ onBackToParent }) {
         <h3 className="nav-title">{editingId ? 'Edit Alumni Member' : 'Add Alumni Member'}</h3>
         <button
           onClick={handleBackToOverview}
-          className="btn btn-ghost btn-sm"
+          style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       </div>
 
@@ -171,9 +171,9 @@ export default function AlumniDashboard({ onBackToParent }) {
         <h3 className="nav-title">Alumni Members ({members.length})</h3>
         <button
           onClick={handleBackToOverview}
-          className="btn btn-ghost btn-sm"
+          style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       </div>
 
@@ -186,32 +186,32 @@ export default function AlumniDashboard({ onBackToParent }) {
           </button>
         </div>
       ) : (
-        <div className="table-container">
+        <div className="table-container" style={{ background: 'rgba(28, 26, 46, 0.85)', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)' }}>
           <table className="table" style={{ width: '100%', borderCollapse: 'collapse', background: 'transparent' }}>
-            <thead>
+            <thead style={{ background: 'rgba(15, 14, 34, 0.8)' }}>
               <tr>
                 {['Name', 'Contact', 'Email', 'Batch', 'Location', 'Organization', 'Position', 'Actions'].map(h => (
-                  <th key={h} style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-secondary)' }}>{h}</th>
+                  <th key={h} style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#B8B6D8' }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {members.map(member => (
                 <tr key={member._id}>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>
+                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>
                     <div>
                       <div style={{ fontWeight: '600' }}>{member.name}</div>
                       {member.linkedin && (
-                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8rem', color: 'var(--accent-primary)' }}>LinkedIn</a>
+                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8rem', color: '#00E5FF' }}>LinkedIn</a>
                       )}
                     </div>
                   </td>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{member.contact}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{member.email}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{member.batch}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{member.location || '-'}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{member.organization || '-'}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{member.position || '-'}</td>
+                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{member.contact}</td>
+                  <td style={{ padding: '1rem', color: '#F5F7FF', fontSize: '0.9rem' }}>{member.email}</td>
+                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{member.batch}</td>
+                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{member.location || '-'}</td>
+                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{member.organization || '-'}</td>
+                  <td style={{ padding: '1rem', color: '#F5F7FF' }}>{member.position || '-'}</td>
                   <td style={{ padding: '1rem' }}>
                     <button className="btn btn-primary" onClick={() => handleEdit(member)} style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', marginRight: '0.5rem' }}>
                       Edit

@@ -292,9 +292,19 @@ export default function LogisticsDashboard() {
         <h3 className="nav-title">Event Requirements</h3>
         <button 
           onClick={handleBackToOverview}
-          className="btn btn-ghost btn-sm"
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#00E5FF', 
+            fontSize: '0.85rem', 
+            cursor: 'pointer',
+            padding: '0.25rem 0',
+            pointerEvents: 'auto',
+            zIndex: 999999,
+            position: 'relative'
+          }}
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       </div>
       <div className="events-grid">
@@ -377,7 +387,7 @@ export default function LogisticsDashboard() {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">Submit Expense - {selectedEvent?.title}</h3>
-        <button onClick={() => setActiveView('requirements')} className="btn btn-ghost btn-sm">Back to Requirements</button>
+        <button onClick={() => setActiveView('requirements')} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer' }}>← Back to Requirements</button>
       </div>
       <div className="card">
         <form onSubmit={handleSubmitExpense} className="form-container">
@@ -430,31 +440,31 @@ export default function LogisticsDashboard() {
             {/* OCR Status Display */}
             {ocrStatus === 'processing' && (
               <div style={{ marginTop: '0.5rem', color: 'var(--accent-gold)', fontSize: '0.85rem' }}>
-                Scanning image for GST number...
+                🔄 Scanning image for GST number...
               </div>
             )}
             
             {ocrStatus === 'completed' && expenseData.gst_verified && (
               <div style={{ marginTop: '0.5rem', color: '#4ade80', fontSize: '0.85rem' }}>
-                GST Number Found: {expenseData.gst_number}
+                ✅ GST Number Found: {expenseData.gst_number}
               </div>
             )}
             
             {ocrStatus === 'completed' && !expenseData.gst_verified && (
               <div style={{ marginTop: '0.5rem', color: '#fbbf24', fontSize: '0.85rem' }}>
-                No GST number detected in image
+                ⚠️ No GST number detected in image
               </div>
             )}
             
             {ocrStatus === 'error' && (
               <div style={{ marginTop: '0.5rem', color: '#ef4444', fontSize: '0.85rem' }}>
-                Could not scan file (proceeding without GST validation)
+                ❌ Could not scan file (proceeding without GST validation)
               </div>
             )}
             
             {expenseData.bill_attachment && expenseData.bill_attachment.type === 'application/pdf' && (
               <div style={{ marginTop: '0.5rem', color: '#00E5FF', fontSize: '0.85rem' }}>
-                PDF uploaded - GST auto-detection not available for PDFs
+                📄 PDF uploaded - GST auto-detection not available for PDFs
               </div>
             )}
           </div>
@@ -489,9 +499,19 @@ export default function LogisticsDashboard() {
         <h3 className="nav-title">Submitted Expenses</h3>
         <button 
           onClick={() => setActiveView('overview')}
-          className="btn btn-ghost btn-sm"
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#00E5FF', 
+            fontSize: '0.85rem', 
+            cursor: 'pointer',
+            padding: '0.25rem 0',
+            pointerEvents: 'auto',
+            zIndex: 999999,
+            position: 'relative'
+          }}
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       </div>
       <div className="events-grid">

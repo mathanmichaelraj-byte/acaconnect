@@ -47,7 +47,7 @@ export default function GenSecDashboard() {
         comments,
         updates
       });
-      alert(approved ? 'Event approved!' : 'Event rejected');
+      alert(approved ? '✅ Event approved!' : '❌ Event rejected');
       setSelectedEvent(null);
       setComments('');
       setEditMode(false);
@@ -60,12 +60,12 @@ export default function GenSecDashboard() {
   const renderEventDetails = () => (
     <div className="card" style={{ marginTop: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h3 className="card-title">Event Details</h3>
+        <h3 className="card-title">📋 Event Details</h3>
         <button
           className="btn btn-secondary"
           onClick={() => setEditMode(!editMode)}
         >
-          {editMode ? 'View Mode' : 'Edit Mode'}
+          {editMode ? '👁️ View Mode' : '✏️ Edit Mode'}
         </button>
       </div>
       <div className="card-content">
@@ -118,13 +118,13 @@ export default function GenSecDashboard() {
             <p><strong>Prize Pool:</strong> ₹{selectedEvent.prize_pool || 0}</p>
             <div style={{ marginTop: '1rem' }}>
               <p><strong>Requirements:</strong></p>
-              <p>Volunteers: {selectedEvent.requirements?.volunteers_needed || 0}</p>
-              <p>Rooms: {selectedEvent.requirements?.rooms_needed || 0}</p>
-              <p>Refreshments: {selectedEvent.requirements?.refreshments_needed ? 'Yes' : 'No'}</p>
-              <p>Stationary: {selectedEvent.requirements?.stationary_needed ? 'Yes' : 'No'}</p>
-              <p>Goodies: {selectedEvent.requirements?.goodies_needed ? 'Yes' : 'No'}</p>
-              <p>Physical Certificate: {selectedEvent.requirements?.physical_certificate ? 'Yes' : 'No'}</p>
-              <p>Trophies: {selectedEvent.requirements?.trophies_needed ? 'Yes' : 'No'}</p>
+              <p>👥 Volunteers: {selectedEvent.requirements?.volunteers_needed || 0}</p>
+              <p>🏢 Rooms: {selectedEvent.requirements?.rooms_needed || 0}</p>
+              <p>🍽️ Refreshments: {selectedEvent.requirements?.refreshments_needed ? 'Yes' : 'No'}</p>
+              <p>📝 Stationary: {selectedEvent.requirements?.stationary_needed ? 'Yes' : 'No'}</p>
+              <p>🎁 Goodies: {selectedEvent.requirements?.goodies_needed ? 'Yes' : 'No'}</p>
+              <p>📜 Physical Certificate: {selectedEvent.requirements?.physical_certificate ? 'Yes' : 'No'}</p>
+              <p>🏆 Trophies: {selectedEvent.requirements?.trophies_needed ? 'Yes' : 'No'}</p>
             </div>
           </>
         )}
@@ -153,14 +153,14 @@ export default function GenSecDashboard() {
             style={{ flex: 1 }}
             onClick={() => handleApproval(true)}
           >
-            Approve {editMode && '& Update'}
+            ✅ Approve {editMode && '& Update'}
           </button>
           <button
             className="btn btn-danger"
             style={{ flex: 1 }}
             onClick={() => handleApproval(false)}
           >
-            Reject
+            ❌ Reject
           </button>
         </div>
       </div>
@@ -170,23 +170,76 @@ export default function GenSecDashboard() {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1 className="dashboard-title">General Secretary Dashboard</h1>
+        <h1 className="dashboard-title">📝 General Secretary Dashboard</h1>
         <button className="btn btn-logout" onClick={logout}>
-          Sign Out
+          🚪 Logout
         </button>
       </div>
 
       <div className="card fade-in">
-        <h3 className="card-title">Pending Approvals ({events.length})</h3>
-        <div className="table-container">
-          <table className="table" style={{ width: '100%' }}>
-            <thead>
+        <h3 className="card-title">📊 Pending Approvals ({events.length})</h3>
+        <div className="table-container" style={{
+          background: 'rgba(28, 26, 46, 0.85)',
+          borderRadius: '18px',
+          overflow: 'hidden',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.08)'
+        }}>
+          <table className="table" style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            background: 'transparent'
+          }}>
+            <thead style={{
+              background: 'rgba(15, 14, 34, 0.8)'
+            }}>
               <tr>
-                <th>Event Name</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Participants</th>
-                <th>Actions</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Event Name</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Type</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Date</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Participants</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -195,25 +248,25 @@ export default function GenSecDashboard() {
                   <td colSpan="5" style={{ 
                     textAlign: 'center', 
                     padding: '2rem', 
-                    color: 'var(--text-secondary)'
+                    color: '#B8B6D8'
                   }}>
-                    No pending approvals
+                    ✅ No pending approvals
                   </td>
                 </tr>
               ) : (
                 events.map(event => (
                   <tr key={event._id}>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.expected_participants}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.expected_participants}</td>
                     <td style={{ padding: '1rem' }}>
                       <button
                         className="btn btn-primary"
                         style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
                         onClick={() => handleReview(event)}
                       >
-                        Review
+                        👁️ Review
                       </button>
                     </td>
                   </tr>
@@ -227,15 +280,60 @@ export default function GenSecDashboard() {
       {selectedEvent && renderEventDetails()}
       
       <div className="card fade-in" style={{ marginTop: '2rem' }}>
-        <h3 className="card-title">Published Events ({publishedEvents.length})</h3>
-        <div className="table-container">
-          <table className="table" style={{ width: '100%' }}>
-            <thead>
+        <h3 className="card-title">📚 Published Events ({publishedEvents.length})</h3>
+        <div className="table-container" style={{
+          background: 'rgba(28, 26, 46, 0.85)',
+          borderRadius: '18px',
+          overflow: 'hidden',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.08)'
+        }}>
+          <table className="table" style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            background: 'transparent'
+          }}>
+            <thead style={{
+              background: 'rgba(15, 14, 34, 0.8)'
+            }}>
               <tr>
-                <th>Event Name</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Actions</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Event Name</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Type</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Date</th>
+                <th style={{
+                  padding: '1rem',
+                  textAlign: 'left',
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: '#B8B6D8'
+                }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -244,7 +342,7 @@ export default function GenSecDashboard() {
                   <td colSpan="4" style={{ 
                     textAlign: 'center', 
                     padding: '2rem', 
-                    color: 'var(--text-secondary)'
+                    color: '#B8B6D8'
                   }}>
                     No published events
                   </td>
@@ -252,16 +350,16 @@ export default function GenSecDashboard() {
               ) : (
                 publishedEvents.map(event => (
                   <tr key={event._id}>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
                     <td style={{ padding: '1rem' }}>
                       <button
                         className="btn btn-secondary"
                         style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
                         onClick={() => setSelectedEventForParticipants(event)}
                       >
-                        Participants
+                        👥 Participants
                       </button>
                     </td>
                   </tr>

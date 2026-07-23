@@ -80,17 +80,17 @@ export default function PaymentModal({ event, onClose, onSuccess }) {
               cursor: 'pointer'
             }}
           >
-            x
+            ✕
           </button>
         </div>
 
         <div style={{ marginBottom: '2rem' }}>
           <h4 style={{ color: 'var(--text-primary)', fontSize: '18px', marginBottom: '1rem' }}>{event.title}</h4>
           <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '0.5rem' }}>
-            {new Date(event.date).toLocaleDateString()} | {event.time}
+            📅 {new Date(event.date).toLocaleDateString()} | 🕐 {event.time}
           </div>
           <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '1rem' }}>
-            Duration: {event.duration_hours} hours
+            📍 Duration: {event.duration_hours} hours
           </div>
           
           <div style={{

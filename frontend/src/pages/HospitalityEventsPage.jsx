@@ -51,7 +51,7 @@ export default function HospitalityEventsPage() {
           <div className="nav-right">
             <div style={{ position: 'relative', marginRight: '1rem' }}>
               <button className="btn-back" onClick={() => setShowNotifications(!showNotifications)} style={{ position: 'relative' }}>
-                Notifications
+                🔔 Notifications
                 {notifications.length > 0 && (
                   <span style={{
                     position: 'absolute', top: '-5px', right: '-5px', background: 'var(--accent-danger)',
@@ -93,11 +93,11 @@ export default function HospitalityEventsPage() {
             </div>
             
             <button className="btn-back" onClick={() => setShowDashboard(true)} style={{ marginRight: '1rem' }}>
-              Dashboard
+              📊 Dashboard
             </button>
             
             <button className="btn-back" onClick={logout}>
-              Logout
+              🚪 Logout
             </button>
           </div>
         </div>
@@ -141,10 +141,10 @@ export default function HospitalityEventsPage() {
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {new Date(event.date).toLocaleDateString()}
+                          📅 {new Date(event.date).toLocaleDateString()}
                         </span>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {event.time}
+                          🕐 {event.time}
                         </span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -163,15 +163,15 @@ export default function HospitalityEventsPage() {
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {event.expected_participants} participants
+                          👥 {event.expected_participants} participants
                         </span>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {event.requirements?.rooms_needed || 0} rooms needed
+                          🏢 {event.requirements?.rooms_needed || 0} rooms needed
                         </span>
                       </div>
                       {(event.hospitality?.venue_allocated || event.venue) && (
                         <div style={{ color: 'var(--text-primary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
-                          {event.hospitality?.venue_allocated ? 
+                          📍 {event.hospitality?.venue_allocated ? 
                             <><strong>Allocated Venue:</strong> {event.hospitality.venue_details}</> : 
                             <><strong>Requested Venue:</strong> {event.venue}</>
                           }
@@ -180,7 +180,7 @@ export default function HospitalityEventsPage() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
-                        Prize Pool: ₹{event.prize_pool || 0}
+                        💰 Prize Pool: ₹{event.prize_pool || 0}
                       </span>
                       <span style={{ 
                         background: 'var(--bg-secondary)', color: 'var(--text-primary)', 

@@ -122,7 +122,7 @@ export default function PhotographyDashboard({ onBackToParent }) {
             {uploadFiles.map((file, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem' }}>
                 <img src={URL.createObjectURL(file)} alt="" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} />
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', minWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', minWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
                 <input type="text" className="form-input" placeholder="Photo name" value={fileNames[i] || ''} onChange={e => { const u = [...fileNames]; u[i] = e.target.value; setFileNames(u); }} style={{ flex: 1 }} />
               </div>
             ))}
@@ -143,10 +143,10 @@ export default function PhotographyDashboard({ onBackToParent }) {
   const renderPhotoGrid = (photos) => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
       {photos.map(p => (
-        <div key={p._id} className="card" style={{ overflow: 'hidden' }}>
+        <div key={p._id} style={{ background: 'rgba(28, 26, 46, 0.85)', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
           <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
           <div style={{ padding: '0.75rem' }}>
-            <p style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{p.name}</p>
+            <p style={{ color: '#F5F7FF', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{p.name}</p>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <a href={`http://localhost:5000/uploads/photos/${p.filename}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', textDecoration: 'none', flex: 1, textAlign: 'center' }}>View</a>
               <button className="btn btn-danger" onClick={() => handleDelete(p._id)} style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', flex: 1 }}>Delete</button>
@@ -188,8 +188,8 @@ export default function PhotographyDashboard({ onBackToParent }) {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">{selectedEvent ? selectedEvent.title : 'Select a Finished Event'}</h3>
-        <button className="btn btn-ghost btn-sm" onClick={() => { if (selectedEvent) { setSelectedEvent(null); setUploadFiles([]); setFileNames([]); } else handleBackToOverview(); }}>
-          {selectedEvent ? 'Back to Events' : 'Back to Overview'}
+        <button onClick={() => { if (selectedEvent) { setSelectedEvent(null); setUploadFiles([]); setFileNames([]); } else handleBackToOverview(); }} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+          {selectedEvent ? '← Back to Events' : '← Back to Overview'}
         </button>
       </div>
       {!selectedEvent ? (
@@ -220,8 +220,8 @@ export default function PhotographyDashboard({ onBackToParent }) {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">{selectedCategory ? selectedCategory.name : 'Photo Categories'}</h3>
-        <button className="btn btn-ghost btn-sm" onClick={() => { if (selectedCategory) { setSelectedCategory(null); setUploadFiles([]); setFileNames([]); } else handleBackToOverview(); }}>
-          {selectedCategory ? 'Back to Categories' : 'Back to Overview'}
+        <button onClick={() => { if (selectedCategory) { setSelectedCategory(null); setUploadFiles([]); setFileNames([]); } else handleBackToOverview(); }} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+          {selectedCategory ? '← Back to Categories' : '← Back to Overview'}
         </button>
       </div>
       {!selectedCategory ? (
@@ -264,18 +264,18 @@ export default function PhotographyDashboard({ onBackToParent }) {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">All Photos ({allPhotos.length})</h3>
-        <button className="btn btn-ghost btn-sm" onClick={handleBackToOverview}>Back to Overview</button>
+        <button onClick={handleBackToOverview} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>← Back to Overview</button>
       </div>
       {allPhotos.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: '2rem' }}><p style={{ color: 'var(--text-muted)' }}>No photos uploaded yet</p></div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
           {allPhotos.map(p => (
-            <div key={p._id} className="card" style={{ overflow: 'hidden' }}>
+            <div key={p._id} style={{ background: 'rgba(28, 26, 46, 0.85)', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
               <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
               <div style={{ padding: '0.75rem' }}>
-                <p style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 0.25rem' }}>{p.name}</p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', margin: '0 0 0.5rem' }}>
+                <p style={{ color: '#F5F7FF', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 0.25rem' }}>{p.name}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', margin: '0 0 0.5rem' }}>
                   {p.upload_type === 'event' ? p.event_id?.title : p.category_id?.name || 'Unknown'}
                 </p>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>

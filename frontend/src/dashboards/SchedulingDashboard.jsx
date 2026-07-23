@@ -44,19 +44,25 @@ export default function SchedulingDashboard() {
   };
 
   return (
-    <div className="container" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       <h2 style={{ marginBottom: '1.5rem' }}>Event Scheduling System</h2>
       
       <button 
         onClick={generateSchedule}
         disabled={loading || events.length === 0}
-        className="btn btn-primary"
         style={{
+          padding: '12px 24px',
+          background: loading ? '#666' : 'linear-gradient(135deg, #F5B301, #FF8C00)',
+          color: '#0B061A',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: loading || events.length === 0 ? 'not-allowed' : 'pointer',
+          fontWeight: '600',
           marginBottom: '2rem',
-          cursor: loading || events.length === 0 ? 'not-allowed' : 'pointer'
+          fontSize: '16px'
         }}
       >
-        {loading ? 'Generating...' : `Auto-Generate Schedule (${events.length} events)`}
+        {loading ? '⏳ Generating...' : `🎯 Auto-Generate Schedule (${events.length} events)`}
       </button>
 
       {schedule && (
@@ -66,20 +72,25 @@ export default function SchedulingDashboard() {
           {/* Successfully Scheduled */}
           <div style={{ marginBottom: '2rem' }}>
             <h4 style={{ color: '#4ade80', marginBottom: '1rem' }}>
-              Successfully Scheduled ({schedule.schedule.filter(s => s.venue).length})
+              ✅ Successfully Scheduled ({schedule.schedule.filter(s => s.venue).length})
             </h4>
             <div style={{ display: 'grid', gap: '1rem' }}>
               {schedule.schedule.filter(s => s.venue).map((assignment, idx) => (
-                <div key={idx} className="card" style={{ padding: '1rem' }}>
+                <div key={idx} style={{
+                  background: 'rgba(27,14,42,0.75)',
+                  padding: '1rem',
+                  borderRadius: '8px',
+                  border: '1px solid #4ade80'
+                }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <strong style={{ fontSize: '16px' }}>{assignment.event.title}</strong>
-                      <div style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '14px' }}>
-                        {assignment.event.expected_participants} participants
-                        {assignment.event.prize_pool > 0 && ` | Rs. ${assignment.event.prize_pool}`}
+                      <div style={{ color: '#888', marginTop: '0.5rem', fontSize: '14px' }}>
+                        👥 {assignment.event.expected_participants} participants
+                        {assignment.event.prize_pool > 0 && ` | 🏆 ₹${assignment.event.prize_pool}`}
                       </div>
                       <div style={{ color: '#4ade80', marginTop: '0.5rem', fontSize: '14px' }}>
-                        {assignment.venueName} ({assignment.utilization}% utilized)
+                        📍 {assignment.venueName} ({assignment.utilization}% utilized)
                       </div>
                     </div>
                     <span style={{
@@ -102,14 +113,19 @@ export default function SchedulingDashboard() {
           {schedule.schedule.filter(s => !s.venue).length > 0 && (
             <div>
               <h4 style={{ color: '#ff5a5a', marginBottom: '1rem' }}>
-                Could Not Schedule ({schedule.schedule.filter(s => !s.venue).length})
+                ⚠️ Could Not Schedule ({schedule.schedule.filter(s => !s.venue).length})
               </h4>
               <div style={{ display: 'grid', gap: '1rem' }}>
                 {schedule.schedule.filter(s => !s.venue).map((assignment, idx) => (
-                  <div key={idx} className="card" style={{ padding: '1rem', border: '1px solid #ff5a5a' }}>
+                  <div key={idx} style={{
+                    background: 'rgba(255,90,90,0.1)',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    border: '1px solid #ff5a5a'
+                  }}>
                     <strong>{assignment.event.title}</strong>
                     <div style={{ color: '#ff5a5a', marginTop: '0.5rem', fontSize: '14px' }}>
-                      {assignment.error}
+                      ⚠️ {assignment.error}
                     </div>
                   </div>
                 ))}
@@ -120,10 +136,12 @@ export default function SchedulingDashboard() {
           {/* Validation Errors */}
           {schedule.validation && !schedule.validation.valid && (
             <div style={{ marginTop: '2rem' }}>
-              <h4 style={{ color: '#ff5a5a', marginBottom: '1rem' }}>Validation Errors</h4>
+              <h4 style={{ color: '#ff5a5a', marginBottom: '1rem' }}>❌ Validation Errors</h4>
               {schedule.validation.errors.map((error, idx) => (
-                <div key={idx} className="card" style={{
+                <div key={idx} style={{
+                  background: 'rgba(255,90,90,0.1)',
                   padding: '0.75rem',
+                  borderRadius: '4px',
                   marginBottom: '0.5rem',
                   fontSize: '14px'
                 }}>
@@ -136,10 +154,12 @@ export default function SchedulingDashboard() {
       )}
 
       {events.length === 0 && (
-        <div className="card" style={{ 
+        <div style={{ 
           textAlign: 'center', 
           padding: '3rem', 
-          color: 'var(--text-secondary)'
+          color: '#888',
+          background: 'rgba(27,14,42,0.5)',
+          borderRadius: '8px'
         }}>
           <p>No published events found. Events must be published before scheduling.</p>
         </div>

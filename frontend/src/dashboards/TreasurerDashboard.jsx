@@ -977,7 +977,7 @@ export default function TreasurerDashboard() {
                       onClick={() => setSelectedEventForParticipants(event)}
                       style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
                     >
-                      Participants
+                      👥 Participants
                     </button>
                   )}
                 </td>
@@ -1937,7 +1937,7 @@ export default function TreasurerDashboard() {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Export CSV
+            📊 Export CSV
           </button>
           <button 
             className="btn btn-secondary"
@@ -1968,7 +1968,7 @@ export default function TreasurerDashboard() {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Export PDF
+            📄 Export PDF
           </button>
           <button 
             onClick={handleBackToOverview}
@@ -2196,7 +2196,7 @@ export default function TreasurerDashboard() {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Export CSV
+            📊 Export CSV
           </button>
           <button 
             className="btn btn-secondary"
@@ -2227,7 +2227,7 @@ export default function TreasurerDashboard() {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Export PDF
+            📄 Export PDF
           </button>
           <button 
             onClick={handleBackToOverview}
@@ -2420,9 +2420,9 @@ export default function TreasurerDashboard() {
                     </td>
                     <td style={{ padding: '1rem' }}>
                       {event.hasBillAttachment ? (
-                        <span style={{ color: '#4CAF50', fontSize: '0.9rem' }}>Attached</span>
+                        <span style={{ color: '#4CAF50', fontSize: '0.9rem' }}>✓ Attached</span>
                       ) : (
-                        <span style={{ color: '#FF6B6B', fontSize: '0.9rem' }}>Missing</span>
+                        <span style={{ color: '#FF6B6B', fontSize: '0.9rem' }}>✗ Missing</span>
                       )}
                     </td>
                   </tr>
@@ -2498,7 +2498,7 @@ export default function TreasurerDashboard() {
           {/* Critical Alerts */}
           {budgetVariance.alerts.critical.length > 0 && (
             <div className="card" style={{ marginBottom: '2rem', border: '2px solid #EF4444' }}>
-              <h3 className="card-title" style={{ color: '#EF4444' }}>Critical Budget Overruns</h3>
+              <h3 className="card-title" style={{ color: '#EF4444' }}>🚨 Critical Budget Overruns</h3>
               <div className="card-content">
                 {budgetVariance.alerts.critical.map(event => (
                   <div key={event.eventId} style={{
@@ -2625,7 +2625,7 @@ export default function TreasurerDashboard() {
                           {event.alertLevel.toUpperCase()}
                         </span>
                       ) : (
-                        <span style={{ color: '#4CAF50', fontSize: '0.9rem' }}>On Budget</span>
+                        <span style={{ color: '#4CAF50', fontSize: '0.9rem' }}>✓ On Budget</span>
                       )}
                     </td>
                   </tr>
@@ -2965,7 +2965,7 @@ export default function TreasurerDashboard() {
                       <h5 style={{ marginBottom: '0.5rem', color: 'var(--text-primary)' }}>GST Information:</h5>
                       <div>
                         <div style={{ color: '#fbbf24', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-                          <strong>No GST Number</strong>
+                          ⚠️ <strong>No GST Number</strong>
                         </div>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontStyle: 'italic' }}>
                           <strong>Reason:</strong> {event.logistics.no_gst_reason}

@@ -66,7 +66,7 @@ export default function ParticipantsModal({ event, onClose }) {
               padding: '0.5rem'
             }}
           >
-            x
+            ✕
           </button>
         </div>
 

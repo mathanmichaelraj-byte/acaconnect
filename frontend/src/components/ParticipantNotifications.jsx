@@ -59,11 +59,11 @@ const ParticipantNotifications = ({ isOpen, onClose }) => {
 
   const getNotificationIcon = (type) => {
     switch (type) {
-      case 'attendance': return '';
-      case 'event_update': return '';
-      case 'registration': return '';
-      case 'announcement': return '';
-      default: return '';
+      case 'attendance': return '✅';
+      case 'event_update': return '📅';
+      case 'registration': return '🎫';
+      case 'announcement': return '📢';
+      default: return '📝';
     }
   };
 
@@ -171,7 +171,7 @@ const ParticipantNotifications = ({ isOpen, onClose }) => {
                 padding: '0.5rem'
               }}
             >
-              x
+              ✕
             </button>
           </div>
         </div>

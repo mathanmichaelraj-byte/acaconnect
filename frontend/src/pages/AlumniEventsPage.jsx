@@ -50,7 +50,7 @@ export default function AlumniEventsPage() {
           <div className="nav-right">
             <div style={{ position: 'relative', marginRight: '1rem' }}>
               <button className="btn-back" onClick={() => setShowNotifications(!showNotifications)} style={{ position: 'relative' }}>
-                Notifications
+                🔔 Notifications
                 {notifications.length > 0 && (
                   <span style={{
                     position: 'absolute', top: '-5px', right: '-5px', background: 'var(--accent-danger)',
@@ -92,11 +92,11 @@ export default function AlumniEventsPage() {
             </div>
             
             <button className="btn-back" onClick={() => setShowDashboard(true)} style={{ marginRight: '1rem' }}>
-              Dashboard
+              📊 Dashboard
             </button>
             
             <button className="btn-back" onClick={logout}>
-              Logout
+              🚪 Logout
             </button>
           </div>
         </div>
@@ -140,10 +140,10 @@ export default function AlumniEventsPage() {
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {new Date(event.date).toLocaleDateString()}
+                          📅 {new Date(event.date).toLocaleDateString()}
                         </span>
                         <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {event.time}
+                          🕐 {event.time}
                         </span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -160,13 +160,13 @@ export default function AlumniEventsPage() {
                       </div>
                       {event.hospitality?.venue_allocated && (
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                          <strong>Venue:</strong> {event.hospitality.venue_details}
+                          📍 <strong>Venue:</strong> {event.hospitality.venue_details}
                         </div>
                       )}
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
-                        Prize Pool: ₹{event.prize_pool || 0}
+                        💰 Prize Pool: ₹{event.prize_pool || 0}
                       </span>
                       <span style={{ 
                         background: 'var(--bg-secondary)', color: 'var(--text-primary)', 

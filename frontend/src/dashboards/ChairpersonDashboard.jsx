@@ -169,14 +169,37 @@ export default function ChairpersonDashboard() {
         <h3 className="nav-title">Pending Final Approvals</h3>
         <button 
           onClick={handleBackToOverview}
-          className="btn btn-ghost btn-sm"
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#00E5FF', 
+            fontSize: '0.85rem', 
+            cursor: 'pointer',
+            padding: '0.25rem 0',
+            pointerEvents: 'auto',
+            zIndex: 10,
+            position: 'relative'
+          }}
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       </div>
-      <div className="table-container">
-        <table className="table" style={{ width: '100%' }}>
-          <thead>
+      <div className="table-container" style={{
+        background: 'rgba(28, 26, 46, 0.85)',
+        borderRadius: '18px',
+        overflow: 'hidden',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.08)'
+      }}>
+        <table className="table" style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          background: 'transparent'
+        }}>
+          <thead style={{
+            background: 'rgba(15, 14, 34, 0.8)'
+          }}>
             <tr>
               <th>Event</th>
               <th>Type</th>
@@ -191,13 +214,13 @@ export default function ChairpersonDashboard() {
           <tbody>
             {events.filter(e => e.status === 'GENSEC_APPROVED').map(event => (
               <tr key={event._id}>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.expected_participants}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.prize_pool || 0}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.registration_fee || 0}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.total_budget || 'Not set'}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.expected_participants}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.prize_pool || 0}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.registration_fee || 0}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.total_budget || 'Not set'}</td>
                 <td style={{ padding: '1rem' }}><span className="status-badge status-pending">PENDING FINAL APPROVAL</span></td>
                 <td style={{ padding: '1rem' }}>
                   <button className="btn btn-info" onClick={() => handleViewEvent(event)} style={{ margin: '0.25rem' }}>
@@ -227,14 +250,37 @@ export default function ChairpersonDashboard() {
         <h3 className="nav-title">Published Events</h3>
         <button 
           onClick={handleBackToOverview}
-          className="btn btn-ghost btn-sm"
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#00E5FF', 
+            fontSize: '0.85rem', 
+            cursor: 'pointer',
+            padding: '0.25rem 0',
+            pointerEvents: 'auto',
+            zIndex: 10,
+            position: 'relative'
+          }}
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       </div>
-      <div className="table-container">
-        <table className="table" style={{ width: '100%' }}>
-          <thead>
+      <div className="table-container" style={{
+        background: 'rgba(28, 26, 46, 0.85)',
+        borderRadius: '18px',
+        overflow: 'hidden',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.08)'
+      }}>
+        <table className="table" style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          background: 'transparent'
+        }}>
+          <thead style={{
+            background: 'rgba(15, 14, 34, 0.8)'
+          }}>
             <tr>
               <th>Event</th>
               <th>Type</th>
@@ -249,13 +295,13 @@ export default function ChairpersonDashboard() {
           <tbody>
             {events.filter(e => e.status === 'PUBLISHED').map(event => (
               <tr key={event._id}>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.expected_participants}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.prize_pool || 0}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.registration_fee || 0}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.total_budget || 'Not set'}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.expected_participants}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.prize_pool || 0}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.registration_fee || 0}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.total_budget || 'Not set'}</td>
                 <td style={{ padding: '1rem' }}><span className="status-badge status-published">PUBLISHED</span></td>
                 <td style={{ padding: '1rem' }}>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -263,7 +309,7 @@ export default function ChairpersonDashboard() {
                       View Details
                     </button>
                     <button className="btn btn-secondary" onClick={() => setSelectedEventForParticipants(event)} style={{ margin: '0' }}>
-                      Participants
+                      👥 Participants
                     </button>
                     <button 
                       className="btn btn-danger" 
@@ -286,13 +332,13 @@ export default function ChairpersonDashboard() {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">Published Events</h3>
-        <button onClick={handleBackToOverview} className="btn btn-ghost btn-sm">
-          Back to Overview
+        <button onClick={handleBackToOverview} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+          ← Back to Overview
         </button>
       </div>
-      <div className="table-container">
-        <table className="table" style={{ width: '100%' }}>
-          <thead>
+      <div className="table-container" style={{ background: 'rgba(28, 26, 46, 0.85)', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <table className="table" style={{ width: '100%', borderCollapse: 'collapse', background: 'transparent' }}>
+          <thead style={{ background: 'rgba(15, 14, 34, 0.8)' }}>
             <tr>
               <th>Event</th><th>Type</th><th>Date</th><th>Participants</th><th>Prize Pool</th><th>Total Budget</th><th>Status</th><th>Actions</th>
             </tr>
@@ -300,12 +346,12 @@ export default function ChairpersonDashboard() {
           <tbody>
             {events.filter(e => e.status === 'PUBLISHED').map(event => (
               <tr key={event._id}>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.expected_participants}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.prize_pool || 0}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>₹{event.total_budget || 'Not set'}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.expected_participants}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.prize_pool || 0}</td>
+                <td style={{ padding: '1rem', color: '#F5F7FF' }}>₹{event.total_budget || 'Not set'}</td>
                 <td style={{ padding: '1rem' }}><span className="status-badge status-published">PUBLISHED</span></td>
                 <td style={{ padding: '1rem' }}>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -313,7 +359,7 @@ export default function ChairpersonDashboard() {
                       View Details
                     </button>
                     <button className="btn btn-secondary" onClick={() => setSelectedEventForParticipants(event)} style={{ margin: '0' }}>
-                      Participants
+                      👥 Participants
                     </button>
                     <button className="btn btn-danger" onClick={() => handleDeleteEvent(event._id)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', margin: '0' }}>
                       Delete
@@ -349,21 +395,21 @@ export default function ChairpersonDashboard() {
         <div className="fade-in">
           <div className="nav-header">
             <h3 className="nav-title">{workflowView.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} Events</h3>
-            <button onClick={() => setWorkflowView(null)} className="btn btn-ghost btn-sm">
-              Back to Workflow Overview
+            <button onClick={() => setWorkflowView(null)} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+              ← Back to Workflow Overview
             </button>
           </div>
-          <div className="table-container">
-            <table className="table" style={{ width: '100%' }}>
-              <thead>
+          <div className="table-container" style={{ background: 'rgba(28, 26, 46, 0.85)', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <table className="table" style={{ width: '100%', borderCollapse: 'collapse', background: 'transparent' }}>
+              <thead style={{ background: 'rgba(15, 14, 34, 0.8)' }}>
                 <tr><th>Event</th><th>Type</th><th>Date</th><th>Status</th></tr>
               </thead>
               <tbody>
                 {getEventsForView().map(event => (
                   <tr key={event._id}>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.title}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.type}</td>
-                    <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{new Date(event.date).toLocaleDateString()}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.title}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{event.type}</td>
+                    <td style={{ padding: '1rem', color: '#F5F7FF' }}>{new Date(event.date).toLocaleDateString()}</td>
                     <td style={{ padding: '1rem' }}><span className="status-badge">{event.status}</span></td>
                   </tr>
                 ))}
@@ -378,38 +424,38 @@ export default function ChairpersonDashboard() {
       <div className="fade-in">
         <div className="nav-header">
           <h3 className="nav-title">Workflow Status Overview</h3>
-          <button onClick={handleBackToOverview} className="btn btn-ghost btn-sm">
-            Back to Overview
+          <button onClick={handleBackToOverview} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+            ← Back to Overview
           </button>
         </div>
         <div className="card-grid">
           <div className="card">
             <h3 className="card-title">Event Team Status</h3>
             <div className="card-content">
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('eventteam-draft')}><strong>Draft Events:</strong> {workflowStats.draft || 0}</p>
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('eventteam-submitted')}><strong>Submitted Events:</strong> {workflowStats.submitted || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('eventteam-draft')}><strong>Draft Events:</strong> {workflowStats.draft || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('eventteam-submitted')}><strong>Submitted Events:</strong> {workflowStats.submitted || 0}</p>
             </div>
           </div>
           <div className="card">
             <h3 className="card-title">Treasurer Status</h3>
             <div className="card-content">
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('treasurer-pending')}><strong>Pending Review:</strong> {workflowStats.treasurerPending || 0}</p>
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('treasurer-approved')}><strong>Approved by Treasurer:</strong> {workflowStats.treasurerApproved || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('treasurer-pending')}><strong>Pending Review:</strong> {workflowStats.treasurerPending || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('treasurer-approved')}><strong>Approved by Treasurer:</strong> {workflowStats.treasurerApproved || 0}</p>
             </div>
           </div>
           <div className="card">
             <h3 className="card-title">General Secretary Status</h3>
             <div className="card-content">
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('gensec-pending')}><strong>Pending Review:</strong> {workflowStats.genSecPending || 0}</p>
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('gensec-approved')}><strong>Approved by Gen Sec:</strong> {workflowStats.genSecApproved || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('gensec-pending')}><strong>Pending Review:</strong> {workflowStats.genSecPending || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('gensec-approved')}><strong>Approved by Gen Sec:</strong> {workflowStats.genSecApproved || 0}</p>
             </div>
           </div>
           <div className="card">
             <h3 className="card-title">Chairperson Status</h3>
             <div className="card-content">
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('chairperson-pending')}><strong>Pending Final Approval:</strong> {workflowStats.chairpersonPending || 0}</p>
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('chairperson-published')}><strong>Published Events:</strong> {workflowStats.published || 0}</p>
-              <p style={{ cursor: 'pointer', color: 'var(--accent-primary)' }} onClick={() => setWorkflowView('chairperson-rejected')}><strong>Rejected Events:</strong> {workflowStats.rejected || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('chairperson-pending')}><strong>Pending Final Approval:</strong> {workflowStats.chairpersonPending || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('chairperson-published')}><strong>Published Events:</strong> {workflowStats.published || 0}</p>
+              <p style={{ cursor: 'pointer', color: '#00E5FF' }} onClick={() => setWorkflowView('chairperson-rejected')}><strong>Rejected Events:</strong> {workflowStats.rejected || 0}</p>
             </div>
           </div>
         </div>
@@ -421,8 +467,8 @@ export default function ChairpersonDashboard() {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">Event Details</h3>
-        <button onClick={() => setActiveView(previousView)} className="btn btn-ghost btn-sm">
-          Back to {previousView === 'pending' ? 'Pending' : 'Published'}
+        <button onClick={() => setActiveView(previousView)} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+          ← Back to {previousView === 'pending' ? 'Pending' : 'Published'}
         </button>
       </div>
       <div className="card">
@@ -600,8 +646,8 @@ export default function ChairpersonDashboard() {
     <div className="fade-in">
       <div className="nav-header">
         <h3 className="nav-title">Edit Event</h3>
-        <button onClick={() => setActiveView(previousView)} className="btn btn-ghost btn-sm">
-          Back to {previousView === 'pending' ? 'Pending' : 'Published'}
+        <button onClick={() => setActiveView(previousView)} style={{ background: 'none', border: 'none', color: '#00E5FF', fontSize: '0.85rem', cursor: 'pointer', padding: '0.25rem 0', pointerEvents: 'auto', zIndex: 10, position: 'relative' }}>
+          ← Back to {previousView === 'pending' ? 'Pending' : 'Published'}
         </button>
       </div>
       <div className="card">
@@ -617,11 +663,11 @@ export default function ChairpersonDashboard() {
           )}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Event Name:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Event Name:</label>
               <input type="text" value={editingEvent.title} onChange={(e) => setEditingEvent({...editingEvent, title: e.target.value})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Type:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Type:</label>
               <select value={editingEvent.type} onChange={(e) => setEditingEvent({...editingEvent, type: e.target.value})} className="form-input">
                 <option value="Technical">Technical</option>
                 <option value="Non-Technical">Non-Technical</option>
@@ -631,47 +677,47 @@ export default function ChairpersonDashboard() {
               </select>
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Date:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Date:</label>
               <input type="date" value={editingEvent.date?.split('T')[0]} onChange={(e) => setEditingEvent({...editingEvent, date: e.target.value})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Time:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Time:</label>
               <input type="time" value={editingEvent.time} onChange={(e) => setEditingEvent({...editingEvent, time: e.target.value})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Duration (hours):</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Duration (hours):</label>
               <input type="number" value={editingEvent.duration_hours} onChange={(e) => setEditingEvent({...editingEvent, duration_hours: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Expected Participants:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Expected Participants:</label>
               <input type="number" value={editingEvent.expected_participants} onChange={(e) => setEditingEvent({...editingEvent, expected_participants: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Description:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Description:</label>
               <textarea value={editingEvent.description} onChange={(e) => setEditingEvent({...editingEvent, description: e.target.value})} className="form-input" rows="3" />
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Volunteers Needed:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Volunteers Needed:</label>
               <input type="number" value={editingEvent.volunteers_needed} onChange={(e) => setEditingEvent({...editingEvent, volunteers_needed: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Refreshments:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Refreshments:</label>
               <input type="number" value={editingEvent.refreshments_needed} onChange={(e) => setEditingEvent({...editingEvent, refreshments_needed: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Stationary:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Stationary:</label>
               <input type="number" value={editingEvent.stationary_needed} onChange={(e) => setEditingEvent({...editingEvent, stationary_needed: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Goodies:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Goodies:</label>
               <input type="number" value={editingEvent.goodies_needed} onChange={(e) => setEditingEvent({...editingEvent, goodies_needed: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Certificates:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Certificates:</label>
               <input type="number" value={editingEvent.certificates_needed} onChange={(e) => setEditingEvent({...editingEvent, certificates_needed: parseInt(e.target.value)})} className="form-input" />
             </div>
             <div>
-              <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>Trophies:</label>
+              <label style={{ color: '#F5F7FF', display: 'block', marginBottom: '0.5rem' }}>Trophies:</label>
               <input type="number" value={editingEvent.trophies_needed} onChange={(e) => setEditingEvent({...editingEvent, trophies_needed: parseInt(e.target.value)})} className="form-input" />
             </div>
           </div>
