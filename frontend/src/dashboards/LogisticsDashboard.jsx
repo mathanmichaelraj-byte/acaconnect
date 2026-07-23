@@ -363,7 +363,7 @@ export default function LogisticsDashboard() {
                     Submit Expense
                   </button>
                 ) : (
-                  <div className="status-badge status-approved">Completed</div>
+                  <div className="status-badge success">Completed</div>
                 )}
               </div>
             </div>
@@ -525,7 +525,7 @@ export default function LogisticsDashboard() {
                 </div>
               </div>
               <div className="card-actions" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                <div className="status-badge status-approved">Expense Submitted</div>
+                <div className="status-badge success">Expense Submitted</div>
                 <button 
                   className="btn btn-danger"
                   onClick={() => handleDeleteExpense(event._id)}

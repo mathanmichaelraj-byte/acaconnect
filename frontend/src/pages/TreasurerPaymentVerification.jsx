@@ -143,7 +143,7 @@ export default function TreasurerPaymentVerification() {
                   />
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
-                      className="btn btn-success"
+                      className="btn-success"
                       onClick={() => handleVerify(reg._id, true)}
                       disabled={processing}
                       style={{ flex: 1 }}
@@ -151,7 +151,7 @@ export default function TreasurerPaymentVerification() {
                       {processing ? 'Processing...' : 'Approve'}
                     </button>
                     <button
-                      className="btn btn-danger"
+                      className="btn-danger"
                       onClick={() => handleVerify(reg._id, false)}
                       disabled={processing}
                       style={{ flex: 1 }}
@@ -159,7 +159,7 @@ export default function TreasurerPaymentVerification() {
                       Reject
                     </button>
                     <button
-                      className="btn btn-secondary"
+                      className="btn-secondary"
                       onClick={() => {
                         setSelectedReg(null);
                         setComments('');

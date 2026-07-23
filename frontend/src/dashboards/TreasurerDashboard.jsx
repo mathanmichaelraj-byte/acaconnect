@@ -709,9 +709,49 @@ export default function TreasurerDashboard() {
         <h3 className="card-title">Budget Allocation</h3>
         <div className="card-content">
           <div style={{ marginBottom: '1.5rem' }}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-              Review the event requirements above and enter the approved budget amounts below.
-            </p>
+            <button
+              className="btn btn-primary"
+              disabled={predictingBudget}
+              onClick={async () => {
+                try {
+                  setPredictingBudget(true);
+                  setBudgetPrediction(null);
+                  const response = await axios.post('/ml/predict-budget', {
+                    event_type: selectedEvent.type,
+                    expected_participants: selectedEvent.expected_participants,
+                    duration_hours: selectedEvent.duration_hours,
+                    prize_pool: selectedEvent.prize_pool || 0,
+                    requirements: selectedEvent.requirements
+                  });
+                  if (response.data.success) {
+                    setBudgetPrediction(response.data.prediction);
+                    setBudgetForm(prev => ({ ...prev, total_budget: response.data.prediction.total_expense }));
+                  }
+                } catch (error) {
+                  console.error('Budget prediction failed:', error);
+                  alert('Budget prediction service unavailable');
+                } finally {
+                  setPredictingBudget(false);
+                }
+              }}
+              style={{ width: '100%' }}
+            >
+              {predictingBudget ? 'Predicting...' : 'Predict Budget (ML)'}
+            </button>
+            {budgetPrediction && (
+              <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(0, 229, 255, 0.08)', border: '1px solid rgba(0, 229, 255, 0.25)', borderRadius: '10px' }}>
+                <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', fontSize: '0.95rem' }}>ML Predicted Breakdown</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.85rem' }}>
+                  {budgetPrediction.expense_refreshments > 0 && <p style={{ color: 'var(--text-muted)', margin: 0 }}>Refreshments: <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>₹{budgetPrediction.expense_refreshments.toLocaleString()}</span></p>}
+                  {budgetPrediction.expense_stationery > 0 && <p style={{ color: 'var(--text-muted)', margin: 0 }}>Stationery: <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>₹{budgetPrediction.expense_stationery.toLocaleString()}</span></p>}
+                  {budgetPrediction.expense_certificates > 0 && <p style={{ color: 'var(--text-muted)', margin: 0 }}>Certificates: <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>₹{budgetPrediction.expense_certificates.toLocaleString()}</span></p>}
+                  {budgetPrediction.expense_goodies > 0 && <p style={{ color: 'var(--text-muted)', margin: 0 }}>Goodies: <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>₹{budgetPrediction.expense_goodies.toLocaleString()}</span></p>}
+                  {budgetPrediction.expense_trophies > 0 && <p style={{ color: 'var(--text-muted)', margin: 0 }}>Trophies: <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>₹{budgetPrediction.expense_trophies.toLocaleString()}</span></p>}
+                  {budgetPrediction.expense_other > 0 && <p style={{ color: 'var(--text-muted)', margin: 0 }}>Other: <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>₹{budgetPrediction.expense_other.toLocaleString()}</span></p>}
+                </div>
+                <p style={{ color: 'var(--accent-gold)', fontWeight: '700', marginTop: '0.75rem', marginBottom: 0, fontSize: '1rem' }}>Predicted Total: ₹{budgetPrediction.total_expense.toLocaleString()}</p>
+              </div>
+            )}
           </div>
           {selectedEvent?.prize_pool_required && (
             <div className="form-group">
@@ -1243,7 +1283,7 @@ export default function TreasurerDashboard() {
                   />
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
-                      className="btn btn-success"
+                      className="btn-success"
                       onClick={() => handleVerifyPayment(reg._id, true)}
                       disabled={processing}
                       style={{ flex: 1 }}
@@ -1251,7 +1291,7 @@ export default function TreasurerDashboard() {
                       {processing ? 'Processing...' : 'Approve'}
                     </button>
                     <button
-                      className="btn btn-danger"
+                      className="btn-danger"
                       onClick={() => handleVerifyPayment(reg._id, false)}
                       disabled={processing}
                       style={{ flex: 1 }}
@@ -1259,7 +1299,7 @@ export default function TreasurerDashboard() {
                       Reject
                     </button>
                     <button
-                      className="btn btn-secondary"
+                      className="btn-secondary"
                       onClick={() => {
                         setSelectedReg(null);
                         setVerificationComments('');
@@ -1662,7 +1702,7 @@ export default function TreasurerDashboard() {
                   />
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
-                      className="btn btn-success"
+                      className="btn-success"
                       onClick={() => handleConfirmOnsitePayment(reg._id, true)}
                       disabled={processingOnsite}
                       style={{ flex: 1 }}
@@ -1670,7 +1710,7 @@ export default function TreasurerDashboard() {
                       {processingOnsite ? 'Processing...' : 'Confirm Payment'}
                     </button>
                     <button
-                      className="btn btn-danger"
+                      className="btn-danger"
                       onClick={() => handleConfirmOnsitePayment(reg._id, false)}
                       disabled={processingOnsite}
                       style={{ flex: 1 }}
@@ -1678,7 +1718,7 @@ export default function TreasurerDashboard() {
                       Reject
                     </button>
                     <button
-                      className="btn btn-secondary"
+                      className="btn-secondary"
                       onClick={() => {
                         setSelectedOnsiteReg(null);
                         setOnsiteComments('');
