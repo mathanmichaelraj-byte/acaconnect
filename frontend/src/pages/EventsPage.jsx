@@ -783,7 +783,7 @@ export default function EventsPage() {
                     {event.cover_photo && (
                       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
                         <img 
-                          src={`http://localhost:5000/${event.cover_photo}`} 
+                          src={`\${API_BASE_URL}/${event.cover_photo}`} 
                           alt="Event Cover" 
                           style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
                         />

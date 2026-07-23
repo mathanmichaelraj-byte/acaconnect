@@ -209,17 +209,6 @@ exports.getVolunteerPool = async (req, res) => {
   }
 };
 
-// Get volunteer pool
-exports.getVolunteerPool = async (req, res) => {
-  try {
-    const Volunteer = require('../models/Volunteer');
-    const volunteers = await Volunteer.find({ is_active: true }).sort({ name: 1 });
-    res.json({ success: true, volunteers });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch volunteers', error: error.message });
-  }
-};
-
 // Add volunteer to pool
 exports.addVolunteerToPool = async (req, res) => {
   try {

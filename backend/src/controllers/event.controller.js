@@ -123,7 +123,6 @@ exports.createEvent = async (req, res) => {
 
 exports.submitForApproval = async (req, res) => {
   try {
-    // Direct FSM transition without middleware validation
     const event = await FSMService.transitionEvent(
       req.event._id, 
       'SUBMITTED', 
@@ -131,19 +130,11 @@ exports.submitForApproval = async (req, res) => {
       'Event submitted for approval'
     );
     
-    // Then move to UNDER_REVIEW
-    const finalEvent = await FSMService.transitionEvent(
-      req.event._id, 
-      'UNDER_REVIEW', 
-      req.user.role, 
-      'Moved to review queue'
-    );
-    
-    res.json({ message: "Event submitted for treasurer approval", event: finalEvent });
+    res.json({ message: "Event submitted for treasurer approval", event });
 
     // Notify treasurer about new submission
     try {
-      await NotificationService.notifyRole('TREASURER', `New event "${req.event.title}" submitted for approval`, req.event._id);
+      await NotificationService.notifyRole('TREASURER', `New event "${event.title}" submitted for approval`, event._id);
     } catch (e) { console.error('Notification error:', e); }
   } catch (error) {
     res.status(500).json({ message: "Submission failed", error: error.message });
@@ -243,23 +234,14 @@ exports.chairpersonApprove = async (req, res) => {
     await req.event.save();
     
     if (approved) {
-      // First approve, then publish
-      await FSMService.transitionEvent(
+      const event = await FSMService.transitionEvent(
         req.event._id, 
         'CHAIRPERSON_APPROVED', 
         req.user.role, 
         comments
       );
       
-      // Then immediately publish
-      const event = await FSMService.transitionEvent(
-        req.event._id, 
-        'PUBLISHED', 
-        req.user.role, 
-        'Event published by Chairperson'
-      );
-      
-      res.json({ message: "Event approved and published successfully", event });
+      res.json({ message: "Event approved by Chairperson. Awaiting admin publication.", event });
 
       // Notify event creator and all participants about publish
       try {

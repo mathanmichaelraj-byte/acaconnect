@@ -172,7 +172,7 @@ export default function DesignDashboard({ onBackToParent }) {
               </td>
               <td style={{ padding: '1rem' }}>
                 <a
-                  href={`http://localhost:5000/uploads/designs/${f.filename}`}
+                  href={`\${API_BASE_URL}/uploads/designs/${f.filename}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"

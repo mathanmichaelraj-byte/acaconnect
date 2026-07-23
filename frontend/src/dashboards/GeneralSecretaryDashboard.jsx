@@ -250,7 +250,7 @@ export default function GeneralSecretaryDashboard() {
           {selectedEvent.cover_photo && (
             <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
               <img 
-                src={`http://localhost:5000/${selectedEvent.cover_photo}`} 
+                src={`\${API_BASE_URL}/${selectedEvent.cover_photo}`} 
                 alt="Event Cover" 
                 style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px' }}
               />
@@ -408,7 +408,7 @@ export default function GeneralSecretaryDashboard() {
           {editingEvent.cover_photo && (
             <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
               <img 
-                src={`http://localhost:5000/${editingEvent.cover_photo}`} 
+                src={`\${API_BASE_URL}/${editingEvent.cover_photo}`} 
                 alt="Event Cover" 
                 style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px' }}
               />

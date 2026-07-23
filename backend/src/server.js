@@ -1,4 +1,11 @@
 require("dotenv").config();
+
+// Validate critical environment variables
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
+  console.error('FATAL: JWT_SECRET is missing or too short (minimum 16 characters). Set it in .env');
+  process.exit(1);
+}
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -49,7 +56,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+const authMiddleware = require("./middleware/auth.middleware");
+
+// Protect upload directories with authentication for sensitive files
+const sensitiveUploads = ['bills', 'certificates', 'payment-screenshots'];
+sensitiveUploads.forEach(dir => {
+  app.use(`/uploads/${dir}`, authMiddleware, express.static(path.join(__dirname, '..', 'uploads', dir)));
+});
+
+// Serve public upload directories (events, designs, photos) without auth
+const publicUploads = ['events', 'designs', 'photos'];
+publicUploads.forEach(dir => {
+  app.use(`/uploads/${dir}`, express.static(path.join(__dirname, '..', 'uploads', dir)));
+});
 
 app.use("/auth", authRoutes);
 app.use("/participant-auth", participantAuthRoutes);

@@ -974,7 +974,7 @@ export default function TreasurerDashboard() {
       {selectedEvent?.cover_photo && (
         <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
           <img 
-            src={`http://localhost:5000/${selectedEvent.cover_photo}`} 
+            src={`\${API_BASE_URL}/${selectedEvent.cover_photo}`} 
             alt="Event Cover" 
             style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '18px', objectFit: 'cover' }}
           />
@@ -1207,7 +1207,7 @@ export default function TreasurerDashboard() {
                     Payment Screenshot:
                   </p>
                   <img 
-                    src={`http://localhost:5000/${reg.payment_screenshot}`}
+                    src={`\${API_BASE_URL}/${reg.payment_screenshot}`}
                     alt="Payment Screenshot"
                     style={{ 
                       width: '100%', 
@@ -1217,7 +1217,7 @@ export default function TreasurerDashboard() {
                       background: '#000',
                       cursor: 'pointer'
                     }}
-                    onClick={() => window.open(`http://localhost:5000/${reg.payment_screenshot}`, '_blank')}
+                    onClick={() => window.open(`\${API_BASE_URL}/${reg.payment_screenshot}`, '_blank')}
                   />
                 </div>
               )}
@@ -2938,7 +2938,7 @@ export default function TreasurerDashboard() {
                     <div style={{ marginTop: '1rem' }}>
                       <button 
                         className="btn btn-secondary"
-                        onClick={() => window.open(`http://localhost:5000/${event.logistics.bill_attachment}`, '_blank')}
+                        onClick={() => window.open(`\${API_BASE_URL}/${event.logistics.bill_attachment}`, '_blank')}
                         style={{ width: '100%' }}
                       >
                         View Bill Attachment

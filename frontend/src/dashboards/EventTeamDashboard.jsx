@@ -1334,7 +1334,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
               <div style={{ marginTop: '1rem' }}>
                 <strong>Cover Photo:</strong>
                 <img 
-                  src={`http://localhost:5000/${selectedEvent.cover_photo.replace(/\\/g, '/')}`} 
+                  src={`\${API_BASE_URL}/${selectedEvent.cover_photo.replace(/\\/g, '/')}`} 
                   alt="Event Cover" 
                   style={{ width: '100%', maxWidth: '300px', height: 'auto', marginTop: '0.5rem', borderRadius: '8px' }}
                   onError={(e) => {

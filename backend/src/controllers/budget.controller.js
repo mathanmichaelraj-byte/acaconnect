@@ -21,8 +21,7 @@ exports.generateBudget = async (req, res) => {
       const total = await calculateBudget(event._id);
       budget = await Budget.create({
         event_id: event._id,
-        aggregated_amount: total,
-        created_by: req.user.id
+        aggregated_amount: total
       });
     }
 

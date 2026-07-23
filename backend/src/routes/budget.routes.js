@@ -13,6 +13,7 @@ router.post(
 router.get(
   "/:eventId",
   auth,
+  role("TREASURER", "ADMIN", "GENERAL_SECRETARY", "CHAIRPERSON"),
   controller.getBudget
 );
 

@@ -1,14 +1,25 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 
 export default function ParticipantLogin() {
-  const { login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'PARTICIPANT') {
+        navigate('/participant-home', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,7 +27,7 @@ export default function ParticipantLogin() {
     try {
       const res = await axios.post("/participant-auth/login", { email, password });
       login(res.data.token, res.data.user);
-      navigate('/participant-home');
+      navigate('/participant-home', { replace: true });
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
     } finally {
