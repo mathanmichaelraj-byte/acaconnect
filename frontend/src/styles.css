@@ -10,12 +10,19 @@
   --bg-surface-alt: #f1f5f9;
   --bg-muted: #e2e8f0;
 
+  /* Aliases used by staff dashboards */
+  --bg-main: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-glass: #ffffff;
+
   /* Accent */
   --accent-primary: #2563eb;
   --accent-primary-hover: #1d4ed8;
   --accent-primary-light: #dbeafe;
   --accent-secondary: #0ea5e9;
   --accent-cyan: #06b6d4;
+  --accent-gold: #d97706;
+  --accent-danger: #ef4444;
 
   /* Text */
   --text-primary: #1e293b;
@@ -26,6 +33,7 @@
   /* Borders */
   --border-default: #e2e8f0;
   --border-strong: #cbd5e1;
+  --border-soft: #e2e8f0;
 
   /* Semantic */
   --success: #22c55e;
@@ -1647,12 +1655,438 @@ a:hover { color: var(--accent-primary-hover); }
 }
 
 /* ================================================================
+   STAFF DASHBOARD SHARED CLASSES
+   ================================================================ */
+
+/* Card grid used by all staff dashboards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.card-content {
+  color: var(--text-secondary);
+  font-size: 0.925rem;
+  line-height: 1.7;
+}
+
+.card-content p {
+  margin-bottom: 0.4rem;
+}
+
+.card-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Nav header row (title + back button) */
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nav-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Form helpers used by EventTeamDashboard */
+.form-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding: 0.4rem 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.status-published  { background: #dcfce7; color: #15803d; }
+.status-approved   { background: #dcfce7; color: #15803d; }
+.status-pending    { background: #fef3c7; color: #b45309; }
+.status-created    { background: #dbeafe; color: #1d4ed8; }
+.status-rejected   { background: #fee2e2; color: #b91c1c; }
+
+/* Fade-in animation */
+.fade-in {
+  animation: fadeIn 250ms ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Events grid (used in expense view) */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* btn-link */
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+}
+.btn-link:hover { color: var(--accent-primary-hover); }
+
+/* ================================================================
    SCROLLBAR
    ================================================================ */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-surface-alt); }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ================================================================
+   APP CONTAINER
+   ================================================================ */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================================================================
+   NIRAL HOME / EVENTS PAGES LAYOUT
+   ================================================================ */
+.niral-home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-body);
+}
+
+.niral-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  box-shadow: var(--shadow-sm);
+}
+
+.niral-nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+  height: var(--nav-height);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface-alt);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.btn-back:hover {
+  background: var(--bg-muted);
+}
+
+.dashboard-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ================================================================
+   LANDING PAGE
+   ================================================================ */
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-section {
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--accent-primary-light) 0%, var(--bg-body) 50%, #f0fdf4 100%);
+}
+
+.hero-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+
+.hero-description {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  transition: all var(--transition-fast);
+}
+.btn-hero:hover {
+  background: var(--accent-primary-hover);
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.feature-card-landing {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.feature-card-landing:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.how-it-works {
+  padding: 4rem 1.5rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-surface-alt);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+
+.roles-section {
+  padding: 4rem 1.5rem;
+  background: var(--bg-body);
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.role-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.role-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-primary-light);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.25rem;
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--accent-primary);
+  border-radius: var(--radius-lg);
+  color: var(--text-inverse);
+}
+.cta-content h2 { color: var(--text-inverse); }
+.cta-content p { color: rgba(255,255,255,0.9); }
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--text-inverse);
+  color: var(--accent-primary);
+  transition: all var(--transition-fast);
+}
+.btn-cta:hover {
+  opacity: 0.9;
+}
+
+.landing-footer {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  padding: 2rem 0;
+  text-align: center;
+}
+.landing-footer a {
+  color: var(--text-inverse);
+  opacity: 0.8;
+}
+.landing-footer a:hover {
+  opacity: 1;
+}
+.landing-footer p {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin: 0.25rem 0 0;
+}
 
 /* ================================================================
    UTILITY CLASSES

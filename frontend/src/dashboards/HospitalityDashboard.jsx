@@ -275,7 +275,7 @@ export default function HospitalityDashboard() {
                     Allocate Venue
                   </button>
                 ) : (
-                  <div className="status-badge success">Completed</div>
+                  <div className="status-badge status-approved">Completed</div>
                 )}
               </div>
             </div>
@@ -453,7 +453,7 @@ export default function HospitalityDashboard() {
                 </div>
               </div>
               <div className="card-actions" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                <div className="status-badge success">Venue Allocated</div>
+                <div className="status-badge status-approved">Venue Allocated</div>
                 <button 
                   className="btn btn-danger"
                   onClick={() => handleDeleteVenueAllocation(event._id)}
