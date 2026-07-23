@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from '../api/axios';
 import ParticipantsModal from '../components/ParticipantsModal';
+import API_BASE_URL from '../api/config';
 
 export default function ChairpersonDashboard() {
   const [stats, setStats] = useState({ pendingApproval: 0, published: 0, rejected: 0 });
@@ -430,7 +431,7 @@ export default function ChairpersonDashboard() {
           {selectedEvent.cover_photo && (
             <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
               <img 
-                src={`\${API_BASE_URL}/${selectedEvent.cover_photo}`} 
+                src={`${API_BASE_URL}/${selectedEvent.cover_photo}`} 
                 alt="Event Cover" 
                 style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px' }}
               />
@@ -609,7 +610,7 @@ export default function ChairpersonDashboard() {
           {editingEvent.cover_photo && (
             <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
               <img 
-                src={`\${API_BASE_URL}/${editingEvent.cover_photo}`} 
+                src={`${API_BASE_URL}/${editingEvent.cover_photo}`} 
                 alt="Event Cover" 
                 style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px' }}
               />

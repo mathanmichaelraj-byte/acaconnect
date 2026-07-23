@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
+import API_BASE_URL from '../api/config';
 
 export default function TreasurerPaymentVerification() {
   const navigate = useNavigate();
@@ -107,7 +108,7 @@ export default function TreasurerPaymentVerification() {
                     Payment Screenshot:
                   </p>
                   <img 
-                    src={`\${API_BASE_URL}/${reg.payment_screenshot}`}
+                    src={`${API_BASE_URL}/${reg.payment_screenshot}`}
                     alt="Payment Screenshot"
                     style={{ 
                       width: '100%', 
@@ -117,7 +118,7 @@ export default function TreasurerPaymentVerification() {
                       background: '#000',
                       cursor: 'pointer'
                     }}
-                    onClick={() => window.open(`\${API_BASE_URL}/${reg.payment_screenshot}`, '_blank')}
+                    onClick={() => window.open(`${API_BASE_URL}/${reg.payment_screenshot}`, '_blank')}
                   />
                 </div>
               )}

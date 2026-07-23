@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../api/axios';
+import API_BASE_URL from '../api/config';
 
 export default function DesignDashboard({ onBackToParent }) {
   const [activeView, setActiveView] = useState('overview');
@@ -172,7 +173,7 @@ export default function DesignDashboard({ onBackToParent }) {
               </td>
               <td style={{ padding: '1rem' }}>
                 <a
-                  href={`\${API_BASE_URL}/uploads/designs/${f.filename}`}
+                  href={`${API_BASE_URL}/uploads/designs/${f.filename}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"

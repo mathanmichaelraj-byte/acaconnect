@@ -7,6 +7,7 @@ import EventTeamDashboard from '../dashboards/EventTeamDashboard';
 import TreasurerDashboard from '../dashboards/TreasurerDashboard';
 import GenSecDashboard from '../dashboards/GenSecDashboard';
 import ChairpersonDashboard from '../dashboards/ChairpersonDashboard';
+import API_BASE_URL from '../api/config';
 
 export default function EventsPage() {
   const { user, logout } = useContext(AuthContext);
@@ -783,7 +784,7 @@ export default function EventsPage() {
                     {event.cover_photo && (
                       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
                         <img 
-                          src={`\${API_BASE_URL}/${event.cover_photo}`} 
+                          src={`${API_BASE_URL}/${event.cover_photo}`} 
                           alt="Event Cover" 
                           style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
                         />

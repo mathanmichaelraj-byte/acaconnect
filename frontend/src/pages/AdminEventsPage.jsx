@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import AdminDashboard from '../dashboards/AdminDashboard';
+import API_BASE_URL from '../api/config';
 
 export default function AdminEventsPage() {
   const { user, logout } = useContext(AuthContext);
@@ -159,7 +160,7 @@ export default function AdminEventsPage() {
                     {event.cover_photo && (
                       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
                         <img 
-                          src={`\${API_BASE_URL}/${event.cover_photo}`} 
+                          src={`${API_BASE_URL}/${event.cover_photo}`} 
                           alt="Event Cover" 
                           style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
                         />
@@ -253,7 +254,7 @@ export default function AdminEventsPage() {
                       <div key={event._id} style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-soft)', borderRadius: '18px', padding: '1.5rem', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
                         {event.cover_photo && (
                           <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                            <img src={`\${API_BASE_URL}/${event.cover_photo}`} alt="Event Cover" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }} />
+                            <img src={`${API_BASE_URL}/${event.cover_photo}`} alt="Event Cover" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }} />
                           </div>
                         )}
                         <h3 style={{ fontSize: '1.3rem', fontWeight: '600', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{event.title}</h3>
