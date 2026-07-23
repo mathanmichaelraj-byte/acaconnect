@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from '../api/axios';
 import ParticipantsModal from '../components/ParticipantsModal';
-import API_BASE_URL from '../api/config';
 
 export default function EventTeamDashboard({ onBackToParent }) {
   const { logout } = useContext(AuthContext);
@@ -1335,7 +1334,7 @@ export default function EventTeamDashboard({ onBackToParent }) {
               <div style={{ marginTop: '1rem' }}>
                 <strong>Cover Photo:</strong>
                 <img 
-                  src={`${API_BASE_URL}/${selectedEvent.cover_photo.replace(/\\/g, '/')}`} 
+                  src={`\${API_BASE_URL}/${selectedEvent.cover_photo.replace(/\\/g, '/')}`} 
                   alt="Event Cover" 
                   style={{ width: '100%', maxWidth: '300px', height: 'auto', marginTop: '0.5rem', borderRadius: '8px' }}
                   onError={(e) => {

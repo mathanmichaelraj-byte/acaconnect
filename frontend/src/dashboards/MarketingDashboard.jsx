@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../api/axios';
-import API_BASE_URL from '../api/config';
 
 export default function MarketingDashboard({ onBackToParent }) {
   const [activeView, setActiveView] = useState('overview');
@@ -25,7 +24,7 @@ export default function MarketingDashboard({ onBackToParent }) {
 
   const handleDownload = (file) => {
     const link = document.createElement('a');
-    link.href = `${API_BASE_URL}/uploads/designs/${file.filename}`;
+    link.href = `\${API_BASE_URL}/uploads/designs/${file.filename}`;
     link.download = file.original_name || file.name;
     document.body.appendChild(link);
     link.click();
@@ -63,7 +62,7 @@ export default function MarketingDashboard({ onBackToParent }) {
               </td>
               <td style={{ padding: '1rem' }}>
                 <a
-                  href={`${API_BASE_URL}/uploads/designs/${f.filename}`}
+                  href={`\${API_BASE_URL}/uploads/designs/${f.filename}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"

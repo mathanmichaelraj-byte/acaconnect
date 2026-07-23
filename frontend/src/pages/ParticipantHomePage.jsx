@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import PaymentModal from '../components/PaymentModal';
 import Footer from '../components/Footer';
-import API_BASE_URL from '../api/config';
 
 // Notification Dropdown Component
 const NotificationDropdown = ({ onClose }) => {
@@ -562,7 +561,7 @@ export default function ParticipantHomePage() {
                   {event.cover_photo && (
                     <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
                       <img
-                        src={`${API_BASE_URL}/${event.cover_photo}`}
+                        src={`\${API_BASE_URL}/${event.cover_photo}`}
                         alt="Event Cover"
                         style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
                       />
@@ -661,7 +660,7 @@ export default function ParticipantHomePage() {
                     <div key={event._id} className="event-card" style={{ opacity: 0.75 }}>
                       {event.cover_photo && (
                         <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                          <img src={`${API_BASE_URL}/${event.cover_photo}`} alt="Event Cover" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
+                          <img src={`\${API_BASE_URL}/${event.cover_photo}`} alt="Event Cover" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
                         </div>
                       )}
                       <div className="event-header">
@@ -827,7 +826,7 @@ export default function ParticipantHomePage() {
                       });
                       return Object.entries(grouped).map(([label, items]) => (
                         <div key={label} className="event-card" style={{ cursor: 'pointer' }} onClick={() => setSelectedAlbum({ label, items })}>
-                          <img src={`${API_BASE_URL}/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: '220px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }} />
+                          <img src={`\${API_BASE_URL}/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: '220px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }} />
                           <h3 style={{ fontSize: '1.2rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{label}</h3>
                           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: '0' }}>{items.length} photo{items.length !== 1 ? 's' : ''}</p>
                         </div>
@@ -844,8 +843,8 @@ export default function ParticipantHomePage() {
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
                   {selectedAlbum.items.map(p => (
-                    <div key={p._id} className="event-card" style={{ cursor: 'pointer', padding: 0, overflow: 'hidden' }} onClick={() => window.open(`${API_BASE_URL}/uploads/photos/${p.filename}`, '_blank')}>
-                      <img src={`${API_BASE_URL}/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                    <div key={p._id} className="event-card" style={{ cursor: 'pointer', padding: 0, overflow: 'hidden' }} onClick={() => window.open(`\${API_BASE_URL}/uploads/photos/${p.filename}`, '_blank')}>
+                      <img src={`\${API_BASE_URL}/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                       <div style={{ padding: '0.75rem' }}>
                         <p style={{ color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: '600', margin: '0' }}>{p.name}</p>
                       </div>
@@ -917,7 +916,7 @@ export default function ParticipantHomePage() {
                     {reg.event_id?.cover_photo && (
                       <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
                         <img
-                          src={`${API_BASE_URL}/${reg.event_id.cover_photo}`}
+                          src={`\${API_BASE_URL}/${reg.event_id.cover_photo}`}
                           alt="Event Cover"
                           style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
                         />
