@@ -99,7 +99,7 @@ export default function HomePage() {
                     <div key={event._id} className="feature-card" style={{ textAlign: 'left' }}>
                       {event.cover_photo && (
                         <img
-                          src={`\${API_BASE_URL}/${event.cover_photo}`}
+                          src={`http://localhost:5000/${event.cover_photo}`}
                           alt="Event Cover"
                           style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}
                         />
@@ -219,7 +219,7 @@ export default function HomePage() {
                 <div key={event._id} className="feature-card" style={{ textAlign: 'left' }}>
                   {event.cover_photo && (
                     <img
-                      src={`\${API_BASE_URL}/${event.cover_photo}`}
+                      src={`http://localhost:5000/${event.cover_photo}`}
                       alt="Event Cover"
                       style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}
                     />
@@ -277,7 +277,7 @@ export default function HomePage() {
                           onMouseEnter={e => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
                           onMouseLeave={e => e.currentTarget.style.boxShadow = 'var(--shadow-sm)'}
                         >
-                          <img src={`\${API_BASE_URL}/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
+                          <img src={`http://localhost:5000/uploads/photos/${items[0].filename}`} alt={label} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
                           <div className="card-body">
                             <h3 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{label}</h3>
                             <p style={{ margin: 0, fontSize: '0.875rem' }}>{items.length} photo{items.length !== 1 ? 's' : ''}</p>
@@ -296,8 +296,8 @@ export default function HomePage() {
                 </div>
                 <div className="features-grid">
                   {selectedAlbum.items.map(p => (
-                    <div key={p._id} className="card" style={{ cursor: 'pointer' }} onClick={() => window.open(`\${API_BASE_URL}/uploads/photos/${p.filename}`, '_blank')}>
-                      <img src={`\${API_BASE_URL}/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                    <div key={p._id} className="card" style={{ cursor: 'pointer' }} onClick={() => window.open(`http://localhost:5000/uploads/photos/${p.filename}`, '_blank')}>
+                      <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
                       <div className="card-body" style={{ padding: '0.85rem 1rem' }}>
                         <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem' }}>{p.name}</p>
                       </div>

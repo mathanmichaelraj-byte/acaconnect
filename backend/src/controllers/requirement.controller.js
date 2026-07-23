@@ -9,17 +9,18 @@ exports.addRequirement = async (req, res) => {
     return res.status(400).json({ message: "Requirements not allowed now" });
   }
 
-  const { name, quantity, unit, priority, notes } = req.body;
+    const { name, quantity, unit, estimated_cost, team_type, notes } = req.body;
 
-  const requirement = await EventRequirement.create({
-    name,
-    quantity,
-    unit,
-    priority,
-    notes,
-    event_id: event.id,
-    created_by: req.user.id
-  });
+    const requirement = await EventRequirement.create({
+      name,
+      quantity,
+      unit,
+      estimated_cost,
+      team_type,
+      notes,
+      event_id: event._id,
+      created_by: req.user.id
+    });
 
   res.json(requirement);
 };

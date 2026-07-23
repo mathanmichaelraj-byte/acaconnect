@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios, { API_BASE_URL } from '../api/axios';
+import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -17,7 +17,10 @@ const MyRegistrations = () => {
 
   const fetchRegistrations = async () => {
     try {
-      const response = await axios.get('/registrations/my-registrations');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/registrations/my-registrations', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       console.log('All registrations:', response.data.registrations);
       // Filter to only show completed payments
       const completedRegistrations = response.data.registrations.filter(
@@ -97,7 +100,7 @@ const MyRegistrations = () => {
                   {reg.event_id.cover_photo && (
                     <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
                       <img
-                        src={`${API_BASE_URL}/${reg.event_id.cover_photo}`}
+                        src={`http://localhost:5000/${reg.event_id.cover_photo}`}
                         alt="Event Cover"
                         style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
                       />

@@ -47,17 +47,7 @@ import SchedulingDashboard from "./dashboards/SchedulingDashboard";
 
 function ProtectedRoute({ children }) {
   const { user } = useContext(AuthContext);
-  return user ? children : <Navigate to="/login" replace />;
-}
-
-function GuestRoute({ children }) {
-  const { user } = useContext(AuthContext);
-  if (!user) return children;
-  // Already logged in — redirect to appropriate page
-  if (user.role === 'PARTICIPANT') {
-    return <Navigate to="/participant-home" replace />;
-  }
-  return <Navigate to="/dashboard" replace />;
+  return user ? children : <Navigate to="/login" />;
 }
 
 function EventsRouter() {
@@ -156,10 +146,10 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+            <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/participant-login" element={<GuestRoute><ParticipantLogin /></GuestRoute>} />
-            <Route path="/participant-signup" element={<GuestRoute><ParticipantSignup /></GuestRoute>} />
+            <Route path="/participant-login" element={<ParticipantLogin />} />
+            <Route path="/participant-signup" element={<ParticipantSignup />} />
             <Route path="/participant-home" element={
               <ProtectedRoute>
                 <ParticipantHomePage />

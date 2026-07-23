@@ -24,7 +24,7 @@ export default function MarketingDashboard({ onBackToParent }) {
 
   const handleDownload = (file) => {
     const link = document.createElement('a');
-    link.href = `\${API_BASE_URL}/uploads/designs/${file.filename}`;
+    link.href = `http://localhost:5000/uploads/designs/${file.filename}`;
     link.download = file.original_name || file.name;
     document.body.appendChild(link);
     link.click();
@@ -62,7 +62,7 @@ export default function MarketingDashboard({ onBackToParent }) {
               </td>
               <td style={{ padding: '1rem' }}>
                 <a
-                  href={`\${API_BASE_URL}/uploads/designs/${f.filename}`}
+                  href={`http://localhost:5000/uploads/designs/${f.filename}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"

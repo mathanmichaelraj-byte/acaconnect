@@ -13,7 +13,6 @@ router.post(
 router.get(
   "/:eventId",
   auth,
-  role("LOGISTICS", "HR", "HOSPITALITY", "ADMIN", "TREASURER", "EVENT_TEAM"),
   controller.getRequirements
 );
 

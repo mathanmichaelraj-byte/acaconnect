@@ -144,11 +144,11 @@ export default function PhotographyDashboard({ onBackToParent }) {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
       {photos.map(p => (
         <div key={p._id} className="card" style={{ overflow: 'hidden' }}>
-          <img src={`\${API_BASE_URL}/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
+          <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
           <div style={{ padding: '0.75rem' }}>
             <p style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 0.5rem' }}>{p.name}</p>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <a href={`\${API_BASE_URL}/uploads/photos/${p.filename}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', textDecoration: 'none', flex: 1, textAlign: 'center' }}>View</a>
+              <a href={`http://localhost:5000/uploads/photos/${p.filename}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', textDecoration: 'none', flex: 1, textAlign: 'center' }}>View</a>
               <button className="btn btn-danger" onClick={() => handleDelete(p._id)} style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', flex: 1 }}>Delete</button>
             </div>
           </div>
@@ -272,14 +272,14 @@ export default function PhotographyDashboard({ onBackToParent }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
           {allPhotos.map(p => (
             <div key={p._id} className="card" style={{ overflow: 'hidden' }}>
-              <img src={`\${API_BASE_URL}/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
+              <img src={`http://localhost:5000/uploads/photos/${p.filename}`} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
               <div style={{ padding: '0.75rem' }}>
                 <p style={{ color: 'var(--text-primary)', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 0.25rem' }}>{p.name}</p>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', margin: '0 0 0.5rem' }}>
                   {p.upload_type === 'event' ? p.event_id?.title : p.category_id?.name || 'Unknown'}
                 </p>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <a href={`\${API_BASE_URL}/uploads/photos/${p.filename}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', textDecoration: 'none', flex: 1, textAlign: 'center' }}>View</a>
+                  <a href={`http://localhost:5000/uploads/photos/${p.filename}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', textDecoration: 'none', flex: 1, textAlign: 'center' }}>View</a>
                   <button className="btn btn-danger" onClick={() => handleDelete(p._id)} style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', flex: 1 }}>Delete</button>
                 </div>
               </div>
