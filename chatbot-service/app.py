@@ -218,8 +218,7 @@ Present the rules in a clear, friendly way."""
                     try:
                         llm = get_ollama_client()
                         return llm.generate(prompt=prompt, system_prompt="You are NIRAL Assistant. Answer in a friendly, conversational tone. Use plain text, no markdown. Keep it concise.")
-                    except Exception as e:
-                        print(f"LLM error: {e}")
+                    except:
                         return "Rules for " + event_title + ":\n\n" + "\n\n".join(relevant_contexts[:3])
         
         context = build_event_context(event)
@@ -228,8 +227,7 @@ Present the rules in a clear, friendly way."""
         try:
             llm = get_ollama_client()
             return llm.generate(prompt=prompt, system_prompt="You are NIRAL Assistant. Answer in a friendly tone using ONLY the data provided. No markdown.")
-        except Exception as e:
-            print(f"LLM error: {e}")
+        except:
             return context
     
     # For all other queries - use DB data + Groq
@@ -249,8 +247,8 @@ Answer the user's specific question using ONLY the data above. Be friendly and c
             system_prompt="You are NIRAL Assistant, a friendly chatbot for NIRAL 2026 technical symposium. Answer naturally in a conversational tone. Use ONLY the provided data. Do not use markdown formatting like ** or #. Keep responses concise.",
             max_tokens=300
         )
-    except Exception as e:
-        print(f"LLM error: {e}")
+    except:
+        # Fallback to raw data if Groq fails
         return context
 
 def rag_chatbot(query):
@@ -364,8 +362,7 @@ Provide a clear, direct answer in 2-3 sentences."""
                     prompt=prompt,
                     system_prompt="You are NIRAL Assistant. Answer briefly and accurately using plain text without markdown formatting."
                 )
-            except Exception as e:
-                print(f"LLM error: {e}")
+            except:
                 return "NIRAL began in the early 2010s as a student-driven initiative by the MCA students of the Department of Information Science and Technology (IST), College of Engineering Guindy (CEG), Anna University, Chennai."
     
     # Use LLM for other PDF content queries

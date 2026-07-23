@@ -27,9 +27,11 @@ export default function Login() {
       login(res.data.token, res.data.user);
 
       if (res.data.user.role === 'PARTICIPANT') {
-        navigate('/participant-home', { replace: true });
+        navigate('/participant-home');
+      } else if (res.data.user.role === 'STUDENT') {
+        navigate('/dashboard');
       } else {
-        navigate('/dashboard', { replace: true });
+        navigate('/events');
       }
     } catch (error) {
       alert("Login failed: " + (error.response?.data?.message || "Invalid credentials"));

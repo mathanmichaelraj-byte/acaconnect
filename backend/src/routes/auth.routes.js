@@ -72,7 +72,7 @@ router.post("/login", loginLimiter, async (req, res) => {
       }
 
       const token = jwt.sign(
-        { id: user._id, role: user.role_id?.name },
+        { id: user._id, role: user.role_id.name },
         process.env.JWT_SECRET,
         { expiresIn: '8h' }
       );
@@ -83,7 +83,7 @@ router.post("/login", loginLimiter, async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role_id?.name
+          role: user.role_id.name
         }
       });
     }
